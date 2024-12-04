@@ -2,7 +2,7 @@ using System.Windows.Input;
 
 namespace Interfaccia_C_.ViewModel;
 
-public class RegisterPageViewModel : ContentView
+public class RegisterPageViewModel
 {
     public ICommand GoToLoginCommand { get; }
     public RegisterPageViewModel()
