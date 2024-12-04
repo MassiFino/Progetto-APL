@@ -7,9 +7,27 @@
     Shell.FlyoutBehavior="Flyout"
     Title="Interfaccia_C_">
 
+   
+    <!-- Pagina di Login come pagina iniziale -->
+    <ShellContent
+        Title="Login"
+        ContentTemplate="{DataTemplate local:LoginPage}"
+        Route="LoginPage"
+        IsVisible="True" />
+    <!-- Imposta la LoginPage come visibile all'avvio -->
+
+    <!-- Pagina Home (MainPage), che sarà visibile dopo il login -->
     <ShellContent
         Title="Home"
         ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Route="MainPage"
+        IsVisible="False" />
+    <!-- Imposta la MainPage inizialmente invisibile -->
+
+    <!-- Pagina di Registrazione -->
+    <ShellContent
+        Title="Register"
+        ContentTemplate="{DataTemplate local:RegisterPage}"
+        Route="RegisterPage" />
 
 </Shell>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Interfaccia_C_.RegisterPage"
+             xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel"
+             Title="Register">
+
+    <ContentPage.Content>
+        <Grid>
+            <!-- Sfondo gradiente -->
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="AliceBlue" Offset="0.0" />
+                    <GradientStop Color="AliceBlue" Offset="1.0" />
+                </LinearGradientBrush>
+            </Grid.Background>
+
+            <!-- Box centrale -->
+            <ScrollView VerticalOptions="Center">
+                <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="White" Padding="20"
+                        HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="400"
+                        StrokeShape="RoundRectangle 20">
+                    <VerticalStackLayout Spacing="20" Padding="30" VerticalOptions="Center">
+
+                        <!-- Image -->
+                        <Image Source="designer.jpeg" 
+                               HeightRequest="150" 
+                               WidthRequest="150" 
+                               HorizontalOptions="Center" />
+
+                        <!-- Titolo -->
+                        <Label Text="Create an Account" 
+                               FontSize="28" 
+                               FontAttributes="Bold" 
+                               TextColor="Black" 
+                               HorizontalTextAlignment="Center" />
+
+                        <!-- Campi di input -->
+                        <Border Stroke="LightGray" 
+                                StrokeShape="RoundRectangle 25" 
+                                BackgroundColor="White" 
+                                Padding="10">
+                            <HorizontalStackLayout Spacing="10">
+                                <Image Source="account.png" 
+                                       HeightRequest="20" 
+                                       WidthRequest="20" 
+                                       VerticalOptions="Center" />
+                                <Entry Placeholder="Name" 
+                                       Text="{Binding Name}" 
+                                       />
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <Border Stroke="LightGray" 
+                                StrokeShape="RoundRectangle 25" 
+                                BackgroundColor="White" 
+                                Padding="10">
+                            <HorizontalStackLayout Spacing="10">
+                                <Image Source="email.png" 
+                                       HeightRequest="20" 
+                                       WidthRequest="20" 
+                                       VerticalOptions="Center" />
+                                <Entry Placeholder="Email" 
+                                       Text="{Binding Email}" 
+                                       Keyboard="Email" 
+                                        />
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <Border Stroke="LightGray" 
+                                StrokeShape="RoundRectangle 25" 
+                                BackgroundColor="White" 
+                                Padding="10">
+                            <HorizontalStackLayout Spacing="10">
+                                <Image Source="lucchetto.png" 
+                                       HeightRequest="20" 
+                                       WidthRequest="20" 
+                                       VerticalOptions="Center" />
+                                <Entry Placeholder="Password" 
+                                       Text="{Binding Password}" 
+                                       IsPassword="True"   />
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <Border Stroke="LightGray" 
+                                StrokeShape="RoundRectangle 25" 
+                                BackgroundColor="White" 
+                                Padding="10">
+                            <HorizontalStackLayout Spacing="10">
+                                <Image Source="lucchetto.png" 
+                                       HeightRequest="20" 
+                                       WidthRequest="20" 
+                                       VerticalOptions="Center" />
+                                <Entry Placeholder="Confirm Password" 
+                                       Text="{Binding ConfirmPassword}" 
+                                       IsPassword="True" />       
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <!-- Bottone di registrazione -->
+                        <Button Text="Sign Up" 
+                                Command="{Binding RegisterCommand}" 
+                                BackgroundColor="#007BFF" 
+                                TextColor="White" 
+                                CornerRadius="25" 
+                                HeightRequest="50" />
+                        <!-- Link al login -->
+                        <HorizontalStackLayout HorizontalOptions="Center">
+                            <Label Text="Already have an account?" 
+                                   TextColor="Gray" />
+                            <Label Text="Login here" TextColor="#50b3f2">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding GoToLoginCommand}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+
+                    </VerticalStackLayout>
+                </Border>
+            </ScrollView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>
