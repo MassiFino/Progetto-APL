@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using System.Text.Json;
+using System.Diagnostics;
 
 
 namespace Interfaccia_C_.ViewModel
@@ -73,8 +74,8 @@ namespace Interfaccia_C_.ViewModel
             // Prepara l'oggetto per la richiesta di login
             var loginRequest = new
             {
-                Username = this.Username,
-                Password = this.Password
+                username = this.Username,
+                password = this.Password
             };
 
             // Serializza l'oggetto in JSON
@@ -82,7 +83,12 @@ namespace Interfaccia_C_.ViewModel
             var json = JsonSerializer.Serialize(loginRequest);
             //mando l'oggetto json tramite richiesta http
 
+            Debug.WriteLine("Contenuto della richiesta: " + json);
+
             var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            Debug.WriteLine(await content.ReadAsStringAsync());
+
 
             try
             {

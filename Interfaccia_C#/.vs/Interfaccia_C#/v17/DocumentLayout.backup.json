@@ -31,7 +31,7 @@
               "RelativeDocumentMoniker": "..\\..\\..\\..\\Program Files (x86)\\Nuget\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
               "ToolTip": "C:\\Program Files (x86)\\Nuget\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
               "RelativeToolTip": "..\\..\\..\\..\\Program Files (x86)\\Nuget\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAAbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
               "WhenOpened": "2024-12-04T18:06:59.373Z",
               "EditorCaption": ""
@@ -46,8 +46,7 @@
               "RelativeToolTip": "ViewModel\\LoginPageViewModel.cs",
               "ViewState": "AgIAAD8AAAAAAAAAAAAAAEYAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-04T17:43:50.58Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-04T17:43:50.58Z"
             },
             {
               "$type": "Document",
