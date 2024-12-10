@@ -1,9 +1,15 @@
-﻿namespace Interfaccia_C_;
+﻿using Interfaccia_C_.ViewModels;
 
-public partial class AppShell : Shell
+namespace Interfaccia_C_
 {
-	public AppShell()
-	{
-		InitializeComponent();
-	}
+    public partial class AppShell : Shell
+    {
+        private readonly AppShellViewModel _viewModel;
+
+        public AppShell()
+        {
+            InitializeComponent();
+            _viewModel = new AppShellViewModel(this);
+        }
+    }
 }

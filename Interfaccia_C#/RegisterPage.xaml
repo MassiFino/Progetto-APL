@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Interfaccia_C_.RegisterPage"
              xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel"
-             Title="Register">
+             BackgroundColor="White"
+             Padding="0">
 
     <ContentPage.Content>
         <Grid>
@@ -47,6 +48,8 @@
                                        VerticalOptions="Center" />
                                 <Entry Placeholder="Name" 
                                        Text="{Binding Name}" 
+                                        WidthRequest="240"
+                                        TextColor="Black" 
                                        />
                             </HorizontalStackLayout>
                         </Border>
@@ -63,7 +66,9 @@
                                 <Entry Placeholder="Email" 
                                        Text="{Binding Email}" 
                                        Keyboard="Email" 
-                                        />
+                                        WidthRequest="240"
+                                        TextColor="Black" 
+                                       />
                             </HorizontalStackLayout>
                         </Border>
 
@@ -72,13 +77,16 @@
                                 BackgroundColor="White" 
                                 Padding="10">
                             <HorizontalStackLayout Spacing="10">
-                                <Image Source="lucchetto.png" 
+                                <Image Source="lucchetto3.png" 
                                        HeightRequest="20" 
                                        WidthRequest="20" 
                                        VerticalOptions="Center" />
                                 <Entry Placeholder="Password" 
                                        Text="{Binding Password}" 
-                                       IsPassword="True"   />
+                                       IsPassword="True"   
+                                       WidthRequest="240"
+                                       TextColor="Black" 
+                                       />
                             </HorizontalStackLayout>
                         </Border>
 
@@ -87,7 +95,7 @@
                                 BackgroundColor="White" 
                                 Padding="10">
                             <HorizontalStackLayout Spacing="10">
-                                <Image Source="lucchetto.png" 
+                                <Image Source="lucchetto1.png" 
                                        HeightRequest="20" 
                                        WidthRequest="20" 
                                        VerticalOptions="Center" />

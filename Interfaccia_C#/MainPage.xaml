@@ -1,19 +1,124 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Interfaccia_C_.MainPage">
+             xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel"
+             x:Class="Interfaccia_C_.MainPage"
+             x:DataType="vm:MainPageViewModel"
+             Title="Hotel Offers">
 
     <ScrollView>
-        <VerticalStackLayout
-            Padding="30,0"
-            Spacing="25">
+        <VerticalStackLayout Margin="10" Spacing="15">
 
-            <Label
-                Text="Hello, World!"
-                Style="{StaticResource Headline}"
-                SemanticProperties.HeadingLevel="Level1" />
+            <!-- Sezione Ricerca -->
+            <VerticalStackLayout Spacing="10">
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                    <!-- Campo di Ricerca città -->
+                    <Entry Placeholder="Cerca città" WidthRequest="200" HeightRequest="40" />
+
+                    <!-- Campo di Ricerca Data -->
+                    <DatePicker Format="dd/MM/yyyy" WidthRequest="150" HeightRequest="40" />
+
+                    <!-- Picker per il tipo di hotel -->
+                    <Picker WidthRequest="150" 
+                            HeightRequest="40" 
+                            TextColor="Black" 
+                            SelectedIndex="-1">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Seleziona tipo di hotel</x:String>
+                                <x:String>Qualsiasi</x:String>
+                                <x:String>Hotel di lusso</x:String>
+                                <x:String>Hotel economici</x:String>
+                                <x:String>Hotel vicino al mare</x:String>
+                                <x:String>Hotel con piscina</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+
+                    <!-- Bottone di ricerca -->
+                    <Button Text="Cerca" WidthRequest="100" HeightRequest="40" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- Sezione Offerte Imperdibili -->
+            <Label Text="Offerte imperdibili hotel in corso" 
+                   FontSize="20" 
+                   FontAttributes="Bold" 
+                   Margin="0,10,0,5" />
+
+            <CollectionView ItemsSource="{Binding OfferteImperdibili}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="Gray" 
+                                StrokeThickness="1" 
+                                Padding="10" 
+                                Margin="5" 
+                                BackgroundColor="White" 
+                                WidthRequest="250" 
+                                HeightRequest="350">
+                            <VerticalStackLayout>
+                                <Image Source="{Binding Immagine}" 
+                                       HeightRequest="150" 
+                                       Aspect="AspectFill" />
+
+                                <Label Text="{Binding NomeHotel}" 
+                                       FontAttributes="Bold" 
+                                       Margin="0,5,0,0" />
+
+                                <Label Text="{Binding Prezzo}" 
+                                       TextColor="Green" />
+
+                                <Button Text="Guarda l'offerta" 
+                                        Margin="0,10,0,0" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <!-- Sezione Mete più gettonate -->
+            <Label Text="Mete più gettonate" 
+                   FontSize="20" 
+                   FontAttributes="Bold" 
+                   Margin="0,10,0,5" />
+
+            <CollectionView ItemsSource="{Binding MeteGettonate}">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="2" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="Gray" 
+                                StrokeThickness="1" 
+                                Padding="10" 
+                                Margin="5" 
+                                BackgroundColor="White"
+                                WidthRequest="180" 
+                                HeightRequest="250">
+                            <VerticalStackLayout>
+                                <Image Source="{Binding Immagine}" 
+                                       HeightRequest="120" 
+                                       Aspect="AspectFill" />
+
+                                <Label Text="{Binding NomeMeta}" 
+                                       FontAttributes="Bold" 
+                                       Margin="0,5,0,0" />
+
+                                <Label Text="{Binding NumeroHotel}" />
+
+                                <Label Text="{Binding PrezzoMedio}" 
+                                       TextColor="Green" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
         </VerticalStackLayout>
     </ScrollView>
-
 </ContentPage>
