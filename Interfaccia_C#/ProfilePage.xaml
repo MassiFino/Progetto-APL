@@ -3,19 +3,26 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Interfaccia_C_.ProfilePage"
              xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel"
-               BackgroundColor="White"
-   Padding="0">
+             BackgroundColor="White"
+             Padding="0">
+
+    <ContentPage.BindingContext>
+        <vm:ProfileViewModel />
+    </ContentPage.BindingContext>
 
     <ScrollView>
         <StackLayout Padding="20">
 
             <!-- Testata Profilo -->
-            <Border Padding="15" BackgroundColor="#f0f0f0" >
+            <Border Padding="15" BackgroundColor="#f0f0f0">
                 <StackLayout Orientation="Horizontal" Spacing="10">
-                    <Image Source="profile_placeholder.png" WidthRequest="80" HeightRequest="80" />
+                    <!-- Immagine del profilo, bindata alla proprietà ProfileImage del ViewModel -->
+                    <Image Source="{Binding ProfileImage}" WidthRequest="80" HeightRequest="80" />
                     <StackLayout VerticalOptions="CenterAndExpand">
-                        <Label Text="Nome Utente" FontAttributes="Bold" FontSize="18" />
-                        <Label Text="email@example.com" FontSize="14" TextColor="Gray" />
+                        <!-- Nome utente, bindato alla proprietà UserName -->
+                        <Label Text="{Binding UserName}" FontAttributes="Bold" FontSize="18" />
+                        <!-- Email, bindata alla proprietà Email -->
+                        <Label Text="{Binding Email}" FontSize="14" TextColor="Gray" />
                     </StackLayout>
                 </StackLayout>
             </Border>
@@ -24,8 +31,10 @@
             <CollectionView ItemsSource="{Binding Bookings}" Margin="0,20,0,0">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Border Padding="15" BackgroundColor="#f5f5f5" >
+                        <Border Padding="15" BackgroundColor="#f5f5f5">
                             <StackLayout>
+                                <!-- Immagine della prenotazione, bindata alla proprietà BookingImage -->
+                                <Image Source="{Binding BookingImage}" WidthRequest="50" HeightRequest="50" />
                                 <Label Text="{Binding HotelName}" FontAttributes="Bold" FontSize="18" />
                                 <Label Text="{Binding StayPeriod}" FontSize="14" />
                                 <Label Text="{Binding Price, StringFormat='€ {0:F2}'}" FontSize="16" TextColor="Green" />

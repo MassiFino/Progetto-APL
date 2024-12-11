@@ -15,6 +15,7 @@ namespace Interfaccia_C_.ViewModel
 {
     public  class MainPageViewModel
     {
+     public ICommand GuardaOffertaCommand { get; set; }
 
     }
 }

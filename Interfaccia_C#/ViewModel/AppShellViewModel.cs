@@ -1,5 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
-
+/*
 namespace Interfaccia_C_.ViewModels
 {
     /// <summary>
@@ -48,3 +48,4 @@ namespace Interfaccia_C_.ViewModels
         }
     }
 }
+*\

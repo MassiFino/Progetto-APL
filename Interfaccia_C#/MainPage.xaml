@@ -4,8 +4,9 @@
              xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel"
              x:Class="Interfaccia_C_.MainPage"
              x:DataType="vm:MainPageViewModel"
-             Title="Hotel Offers">
-
+             Title="Hotel Offers"
+             BackgroundColor="White"
+             Padding="0">
     <ScrollView>
         <VerticalStackLayout Margin="10" Spacing="15">
 
@@ -71,9 +72,10 @@
 
                                 <Label Text="{Binding Prezzo}" 
                                        TextColor="Green" />
-
-                                <Button Text="Guarda l'offerta" 
-                                        Margin="0,10,0,0" />
+                            <Button Text="Guarda l'offerta" 
+                                    Command="{Binding GuardaOffertaCommand}" 
+                                    CommandParameter="{Binding .}" 
+                                    Margin="0,10,0,0" />
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>
