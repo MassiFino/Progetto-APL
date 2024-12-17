@@ -74,8 +74,8 @@ namespace Interfaccia_C_.ViewModel
             // Prepara l'oggetto per la richiesta di login
             var loginRequest = new
             {
-                username = this.Username,
-                password = this.Password
+                Username = this.Username,
+                Password = this.Password
             };
 
             // Serializza l'oggetto in JSON
@@ -93,7 +93,7 @@ namespace Interfaccia_C_.ViewModel
             try
             {
                 // URL del server (modifica l'indirizzo in base alla tua configurazione)
-                var url = "http://localhost:8000/login";
+                var url = "http://localhost:9000/login";
 
                 // Invia la richiesta POST
                 var response = await _httpClient.PostAsync(url, content);
