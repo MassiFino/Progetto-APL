@@ -1,5 +1,5 @@
 ﻿using Microsoft.Maui.Controls;
-/*
+
 namespace Interfaccia_C_.ViewModels
 {
     /// <summary>
@@ -9,6 +9,7 @@ namespace Interfaccia_C_.ViewModels
     /// </summary>
     public class AppShellViewModel
     {
+        
         private readonly Shell _shell;
 
         /// <summary>
@@ -17,7 +18,7 @@ namespace Interfaccia_C_.ViewModels
         /// </summary>
         /// <param name="shell">L'istanza di Shell principale dell'applicazione.</param>
         public AppShellViewModel(Shell shell)
-        {
+        {/*
             _shell = shell;
 
             // Registriamo l'evento Navigated per rilevare ogni cambio di navigazione
@@ -44,8 +45,7 @@ namespace Interfaccia_C_.ViewModels
             {
                 // Altrimenti, abilita la barra laterale
                 _shell.FlyoutBehavior = FlyoutBehavior.Flyout;
-            }
+            }*/
         }
     }
 }
-*\

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Interfaccia_C_.HotelPage"
+             xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel"
+             BackgroundColor="AliceBlue"
+             Padding="0">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="10">
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

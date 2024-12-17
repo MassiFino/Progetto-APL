@@ -3,12 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Interfaccia_C_.ProfilePage"
              xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel"
-             BackgroundColor="White"
+             BackgroundColor="AliceBlue"
              Padding="0">
 
-    <ContentPage.BindingContext>
-        <vm:ProfileViewModel />
-    </ContentPage.BindingContext>
 
     <ScrollView>
         <StackLayout Padding="20">

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Interfaccia_C_.RegisterPage"
              xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel"
-             BackgroundColor="White"
+             BackgroundColor="AliceBlue"
              Padding="0">
 
     <ContentPage.Content>
@@ -23,12 +23,16 @@
                         StrokeShape="RoundRectangle 20">
                     <VerticalStackLayout Spacing="20" Padding="30" VerticalOptions="Center">
 
-                        <!-- Image -->
-                        <Image Source="designer.jpeg" 
-                               HeightRequest="150" 
-                               WidthRequest="150" 
-                               HorizontalOptions="Center" />
-
+                        <Border 
+                            StrokeThickness="1" 
+                            HeightRequest="150"     
+                            WidthRequest="150" 
+                            HorizontalOptions="Center">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="25" />
+                            </Border.StrokeShape>
+                            <Image Source="designer.jpg" />
+                        </Border>
                         <!-- Titolo -->
                         <Label Text="Create an Account" 
                                FontSize="28" 
@@ -104,14 +108,27 @@
                                        IsPassword="True" />       
                             </HorizontalStackLayout>
                         </Border>
+                        <!-- Label per il titolo -->
+                        <Label Text="Profile Picture"
+           FontSize="16"
+           TextColor="Gray"
+           HorizontalTextAlignment="Center" />
 
-                        <!-- Bottone di registrazione -->
-                        <Button Text="Sign Up" 
-                                Command="{Binding RegisterCommand}" 
-                                BackgroundColor="#007BFF" 
-                                TextColor="White" 
-                                CornerRadius="25" 
-                                HeightRequest="50" />
+                        <!-- Bottone di caricamento -->
+                        <Button Text="Upload Image"
+            Command="{Binding UploadImageCommand}"
+            BackgroundColor="#007BFF"
+            TextColor="White"
+            CornerRadius="25"
+            HeightRequest="40"
+            HorizontalOptions="Center" />
+
+                        <!-- Conferma caricamento -->
+                        <Label Text="{Binding UploadStatusMessage}"
+           FontSize="14"
+           TextColor="Green"
+           IsVisible="{Binding IsUploadComplete}"
+           HorizontalTextAlignment="Center" />
                         <!-- Link al login -->
                         <HorizontalStackLayout HorizontalOptions="Center">
                             <Label Text="Already have an account?" 

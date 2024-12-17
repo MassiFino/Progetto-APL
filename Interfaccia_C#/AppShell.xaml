@@ -26,10 +26,9 @@
         Title="Register"
         ContentTemplate="{DataTemplate local:RegisterPage}"
         Route="RegisterPage" />
-    
     <!-- Pagina Profilo -->
     <ShellContent
-        Title="Profil"
+        Title="Profile"
         ContentTemplate="{DataTemplate local:ProfilePage}"
         Route="ProfilePage" />
 
