@@ -460,3 +460,15 @@ C:\Users\Massi\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\
 C:\Users\Massi\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\qualifiers.txt
 C:\Users\Massi\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\qualifiers.txt.intermediate
 C:\Users\Massi\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\MultipleQualifiersPerDimensionFound.txt
+C:\Users\Massi\Progetto-APL\Interfaccia_C#\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\account.scale-100.png
+C:\Users\Massi\Progetto-APL\Interfaccia_C#\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\designer.scale-100.jpg
+C:\Users\Massi\Progetto-APL\Interfaccia_C#\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\email.scale-100.png
+C:\Users\Massi\Progetto-APL\Interfaccia_C#\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lucchetto1.scale-100.png
+C:\Users\Massi\Progetto-APL\Interfaccia_C#\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lucchetto2.scale-100.png
+C:\Users\Massi\Progetto-APL\Interfaccia_C#\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\lucchetto3.scale-100.png
+C:\Users\Massi\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\account.scale-100.png
+C:\Users\Massi\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\designer.scale-100.jpg
+C:\Users\Massi\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\email.scale-100.png
+C:\Users\Massi\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\lucchetto1.scale-100.png
+C:\Users\Massi\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\lucchetto2.scale-100.png
+C:\Users\Massi\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\lucchetto3.scale-100.png

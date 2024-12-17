@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\Massi\\Progetto-APL\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl\\interfaccia_c#\\viewmodel\\loginpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\viewmodel\\loginpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl\\interfaccia_c#\\appshell.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\appshell.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
@@ -13,10 +17,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl\\interfaccia_c#\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl\\interfaccia_c#\\viewmodel\\loginpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\viewmodel\\loginpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl\\interfaccia_c#\\loginpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -30,37 +30,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AppShell.xaml",
-              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\AppShell.xaml",
-              "RelativeDocumentMoniker": "Interfaccia_C#\\AppShell.xaml",
-              "ToolTip": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\AppShell.xaml",
-              "RelativeToolTip": "Interfaccia_C#\\AppShell.xaml",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAkwBgAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-12-05T09:51:42.843Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "MainPage.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\MainPage.xaml.cs",
-              "RelativeDocumentMoniker": "Interfaccia_C#\\MainPage.xaml.cs",
-              "ToolTip": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\MainPage.xaml.cs",
-              "RelativeToolTip": "Interfaccia_C#\\MainPage.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-05T09:50:39.766Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "MainPage.xaml",
               "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\MainPage.xaml",
               "RelativeDocumentMoniker": "Interfaccia_C#\\MainPage.xaml",
@@ -68,8 +42,7 @@
               "RelativeToolTip": "Interfaccia_C#\\MainPage.xaml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-12-05T09:50:20.189Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-05T09:50:20.189Z"
             },
             {
               "$type": "Document",
@@ -85,16 +58,40 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "LoginPageViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\ViewModel\\LoginPageViewModel.cs",
               "RelativeDocumentMoniker": "Interfaccia_C#\\ViewModel\\LoginPageViewModel.cs",
               "ToolTip": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\ViewModel\\LoginPageViewModel.cs",
               "RelativeToolTip": "Interfaccia_C#\\ViewModel\\LoginPageViewModel.cs",
-              "ViewState": "AgIAAGEAAAAAAAAAAAAwwHAAAAAUAAAAAAAAAA==",
+              "ViewState": "AgIAAHoAAAAAAAAAAAAkwH4AAABVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-04T18:33:54.797Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "MainPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\MainPage.xaml.cs",
+              "RelativeDocumentMoniker": "Interfaccia_C#\\MainPage.xaml.cs",
+              "ToolTip": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\MainPage.xaml.cs",
+              "RelativeToolTip": "Interfaccia_C#\\MainPage.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-05T09:50:39.766Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AppShell.xaml",
+              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\AppShell.xaml",
+              "RelativeDocumentMoniker": "Interfaccia_C#\\AppShell.xaml",
+              "ToolTip": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\AppShell.xaml",
+              "RelativeToolTip": "Interfaccia_C#\\AppShell.xaml",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAkwBgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-12-05T09:51:42.843Z"
             }
           ]
         }
