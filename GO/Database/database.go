@@ -4,9 +4,9 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+
 	_ "github.com/go-sql-driver/mysql"
 )
-
 
 func ConnectDB(username, password, host, port, dbName string) (*sql.DB, error) {
 	// Inizializzazione della gestione del database per il driver go-sql-driver/mysql
@@ -29,7 +29,6 @@ func ConnectDB(username, password, host, port, dbName string) (*sql.DB, error) {
 	return db, nil
 }
 
-
 func CheckUserCredentials(db *sql.DB, username, password string) (bool, error) {
 	var storedPassword string
 
@@ -51,4 +50,31 @@ func CheckUserCredentials(db *sql.DB, username, password string) (bool, error) {
 	}
 
 	return false, nil
+}
+
+func CheckUserExists(db *sql.DB, username, email string) (bool, error) {
+	query := "SELECT Username FROM users WHERE Username = ? OR Email = ?"
+	var existingUsername string
+	err := db.QueryRow(query, username, email).Scan(&existingUsername)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			// Nessun utente trovato
+			return false, nil
+		}
+		log.Println("Errore nella query:", err)
+		return false, err
+	}
+
+	return true, nil
+}
+
+func RegisterUser(db *sql.DB, username, password, email string) error {
+	query := "INSERT INTO users (Username, Password, Email) VALUES (?, ?, ?)"
+	_, err := db.Exec(query, username, password, email)
+	if err != nil {
+		log.Println("Errore nella query:", err)
+		return err
+	}
+
+	return nil
 }

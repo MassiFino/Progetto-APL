@@ -2,6 +2,8 @@ import os
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import requests
+from user_owner import SignIn, SignUp
+from utilis import connect_go
 
 app = FastAPI()
 
@@ -9,20 +11,42 @@ class LoginRequest(BaseModel):
     Username: str
     Password: str
 
-# Indirizzo del server Go
-go_server_url = "http://go-server:8080/Signup"
+
+class SignupRequest(BaseModel):
+    Username: str
+    Email: str
+    Password: str
+
+
 
 @app.post("/login")
 def login(request: LoginRequest):
     payload = {"Username": request.Username, "Password": request.Password}
-    print("Tentativo di connessione al server Go:", go_server_url)
     print("Payload inviato:", payload)
 
+    # Validazione tramite SigIn
+    success, messaggio = SignIn(payload)
+    if not success:
+        raise HTTPException(status_code=400, detail=messaggio)
+
     try:
-        response = requests.post(go_server_url, json=payload)
-        print("Risposta ricevuta dal server Go:", response.status_code, response.text)
-        response.raise_for_status()  # Verifica che lo status code sia 2xx
-        return {"status": "success", "go_response": response.json()}
-    except requests.RequestException as e:
-        print(f"Errore nella comunicazione con il server Go: {e}")
-        raise HTTPException(status_code=502, detail=f"Errore comunicazione con server Go: {str(e)}")
+        response = connect_go("login", payload)
+        return response
+    except ConnectionError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+@app.post("/signup")
+def signup(request: SignupRequest):
+    payload = {"Username": request.Username, "Email": request.Email, "Password": request.Password}
+    print("Payload inviato:", payload)
+
+    # Validazione tramite SigIn
+    success, messaggio = SignUp(payload)
+    if not success:
+        raise HTTPException(status_code=400, detail=messaggio)
+
+    try:
+        response = connect_go("signup", payload)
+        return response
+    except ConnectionError as e:
+        raise HTTPException(status_code=502, detail=str(e))

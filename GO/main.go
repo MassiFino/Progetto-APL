@@ -4,20 +4,29 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
-	"progetto-go/types"
 	"progetto-go/database"
+	"progetto-go/types"
 )
 
 var db *sql.DB // Variabile globale per la connessione al database
 
-func SignUpHandler(w http.ResponseWriter, r *http.Request) {
+func initializeDatabase() *sql.DB {
+	db, err := database.ConnectDB("root", "1234", "db", "3306", "bookroom_db")
+	if err != nil {
+		log.Fatalf("Errore durante la connessione al database: %v", err)
+	}
+	return db
+}
+
+func LogInHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
 		return
 	}
 
-	var req types.SignUpRequest
+	var req types.LogInRequest
 
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -26,15 +35,6 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Printf("Dati ricevuti: %+v\n", req)
-
-	// Connessione al database (se non già connesso)
-	if db == nil {
-		db, err = database.ConnectDB("root", "1234", "db", "3306", "bookroom_db")
-		if err != nil {
-			http.Error(w, "Errore di connessione al database", http.StatusInternalServerError)
-			return
-		}
-	}
 
 	// Verifica le credenziali dell'utente
 	valid, err := database.CheckUserCredentials(db, req.Username, req.Password)
@@ -53,15 +53,58 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status": "success", "message": "Login effettuato con successo!"}`))
 }
 
-func main() {
-	http.HandleFunc("/Signup", SignUpHandler)
+func SignUPHandler(w http.ResponseWriter, r *http.Request) {
 
-	// Avvia il server sulla porta 8080
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.SignUpRequest
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Printf("Dati ricevuti: %+v\n", req)
+
+	// Verifica se l'utente esiste già
+	exists, err := database.CheckUserExists(db, req.Username, req.Email)
+	if err != nil {
+		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
+		return
+	}
+
+	if exists {
+		http.Error(w, "Utente già esistente", http.StatusConflict)
+		return
+	}
+
+	// Registra l'utente
+	err = database.RegisterUser(db, req.Username, req.Password, req.Email)
+	if err != nil {
+		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
+		return
+	}
+
+	// Registrazione riuscita
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status": "success", "message": "Registrazione effettuata con successo!"}`))
+}
+
+func main() {
+	db = initializeDatabase() // Inizializza la connessione al database
+	defer db.Close()          // Chiude la connessione al termine del server
+
+	http.HandleFunc("/login", LogInHandler)
+	http.HandleFunc("/signup", SignUPHandler)
+
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)
 
-	err := http.ListenAndServe(":"+port, nil)
-	if err != nil {
-		fmt.Println("Errore durante l'avvio del server:", err)
+	if err := http.ListenAndServe(":"+port, nil); err != nil {
+		log.Fatalf("Errore durante l'avvio del server: %v", err)
 	}
 }

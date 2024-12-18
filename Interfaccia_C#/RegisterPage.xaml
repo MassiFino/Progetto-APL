@@ -113,15 +113,25 @@
            FontSize="16"
            TextColor="Gray"
            HorizontalTextAlignment="Center" />
-
-                        <!-- Bottone di caricamento -->
-                        <Button Text="Upload Image"
+                        <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                            <!-- Bottone di caricamento -->
+                            <Button Text="Upload Image"
             Command="{Binding UploadImageCommand}"
             BackgroundColor="#007BFF"
             TextColor="White"
             CornerRadius="25"
             HeightRequest="40"
-            HorizontalOptions="Center" />
+            WidthRequest="150" />
+
+                            <!-- Bottone per la registrazione -->
+                            <Button Text="Register"
+            Command="{Binding RegisterCommand}"
+            BackgroundColor="#28A745"
+            TextColor="White"
+            CornerRadius="25"
+            HeightRequest="40"
+            WidthRequest="150" />
+                        </HorizontalStackLayout>
 
                         <!-- Conferma caricamento -->
                         <Label Text="{Binding UploadStatusMessage}"
