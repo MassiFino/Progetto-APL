@@ -68,9 +68,22 @@ func CheckUserExists(db *sql.DB, username, email string) (bool, error) {
 	return true, nil
 }
 
-func RegisterUser(db *sql.DB, username, password, email string) error {
-	query := "INSERT INTO users (Username, Password, Email) VALUES (?, ?, ?)"
-	_, err := db.Exec(query, username, password, email)
+func RegisterUser(db *sql.DB, username, password, email string, pImage *string) error {
+
+	var query string
+	var err error
+
+	// Query per inserire un nuovo utente
+	if pImage == nil {
+		// Query senza il campo ProfileImage
+		query = "INSERT INTO users (Username, Password, Email) VALUES (?, ?, ?)"
+		_, err = db.Exec(query, username, password, email)
+	} else {
+		// Query con il campo ProfileImage
+		query = "INSERT INTO users (Username, Password, Email, ProfileImage) VALUES (?, ?, ?, ?)"
+		_, err = db.Exec(query, username, password, email, *pImage)
+	}
+
 	if err != nil {
 		log.Println("Errore nella query:", err)
 		return err

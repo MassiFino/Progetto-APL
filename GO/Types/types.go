@@ -11,9 +11,10 @@ type LogInResponse struct {
 }
 
 type SignUpRequest struct {
-	Username string `json:"Username"`
-	Password string `json:"Password"`
-	Email    string `json:"Email"`
+	Username string  `json:"Username"`
+	Password string  `json:"Password"`
+	Email    string  `json:"Email"`
+	PImage   *string `json:"PImage"`
 }
 
 type SignUpResponse struct {

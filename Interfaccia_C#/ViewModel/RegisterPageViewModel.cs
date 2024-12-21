@@ -138,14 +138,30 @@ namespace Interfaccia_C_.ViewModel
                 // Se l'utente ha selezionato un file
                 if (result != null)
                 {
+
+                    var localPath = Path.Combine(FileSystem.AppDataDirectory, "ProfilePictures");
+
+                    // Crea la directory "ProfilePictures" se non esiste
+                    Directory.CreateDirectory(localPath);
+
+                    // Ottieni il percorso della cartella locale dell'app
+                    var filePath = Path.Combine(localPath, result.FileName);
+
+                    // Copia il file nella cartella locale
+                    using (var stream = await result.OpenReadAsync())
+                    using (var localFile = File.Create(filePath))
+                    {
+                        await stream.CopyToAsync(localFile);
+                    }
                     // Imposta il percorso dell'immagine selezionata nella proprietà
-                    ProfileImage = result.FullPath;
+                    ProfileImage = filePath;
 
                     // Imposta il nome del file caricato come messaggio di conferma
                     UploadStatusMessage = $"File Uploaded: {result.FileName}";
 
                     // Imposta la visibilità del messaggio di conferma a true
                     IsUploadComplete = true;
+
                 }
                 else
                 {
@@ -188,7 +204,8 @@ namespace Interfaccia_C_.ViewModel
             {
                 Username = this.Name,
                 Email = this.Email,
-                Password = this.Password
+                Password = this.Password,
+                PImage = ProfileImage
             };
 
             var jsonPayload = JsonSerializer.Serialize(payload);

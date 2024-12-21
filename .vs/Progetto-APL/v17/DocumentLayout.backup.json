@@ -7,12 +7,12 @@
       "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\viewmodel\\registerpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl\\interfaccia_c#\\viewmodel\\loginpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\viewmodel\\loginpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl\\interfaccia_c#\\registerpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\registerpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl\\interfaccia_c#\\viewmodel\\loginpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\viewmodel\\loginpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl\\interfaccia_c#\\loginpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -38,12 +38,11 @@
               "RelativeToolTip": "Interfaccia_C#\\LoginPage.xaml",
               "ViewState": "AgIAAE4AAAAAAAAAAAAAAFkAAAAyAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-12-18T16:48:02.616Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-18T16:48:02.616Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "LoginPageViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\ViewModel\\LoginPageViewModel.cs",
               "RelativeDocumentMoniker": "Interfaccia_C#\\ViewModel\\LoginPageViewModel.cs",
@@ -51,18 +50,17 @@
               "RelativeToolTip": "Interfaccia_C#\\ViewModel\\LoginPageViewModel.cs",
               "ViewState": "AgIAAEwAAAAAAAAAAAAwwFoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-18T16:11:54.693Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-18T16:11:54.693Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "RegisterPage.xaml",
               "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\RegisterPage.xaml",
               "RelativeDocumentMoniker": "Interfaccia_C#\\RegisterPage.xaml",
               "ToolTip": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\RegisterPage.xaml",
               "RelativeToolTip": "Interfaccia_C#\\RegisterPage.xaml",
-              "ViewState": "AgIAAHkAAAAAAAAAAAAkwH8AAAAtAAAAAAAAAA==",
+              "ViewState": "AgIAAGgAAAAAAAAAAAAkwHcAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2024-12-18T16:05:11.849Z",
               "EditorCaption": ""
@@ -75,7 +73,7 @@
               "RelativeDocumentMoniker": "Interfaccia_C#\\ViewModel\\RegisterPageViewModel.cs",
               "ToolTip": "C:\\Users\\Massi\\Progetto-APL\\Interfaccia_C#\\ViewModel\\RegisterPageViewModel.cs",
               "RelativeToolTip": "Interfaccia_C#\\ViewModel\\RegisterPageViewModel.cs",
-              "ViewState": "AgIAANAAAAAAAAAAAAAqwLwAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAAI8AAAAAAAAAAAAAAJgAAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-18T16:05:15.33Z",
               "EditorCaption": ""

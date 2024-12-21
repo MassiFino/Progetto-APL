@@ -83,7 +83,7 @@ func SignUPHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Registra l'utente
-	err = database.RegisterUser(db, req.Username, req.Password, req.Email)
+	err = database.RegisterUser(db, req.Username, req.Password, req.Email, req.PImage)
 	if err != nil {
 		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
 		return

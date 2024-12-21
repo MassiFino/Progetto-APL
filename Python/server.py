@@ -4,6 +4,7 @@ from pydantic import BaseModel
 import requests
 from user_owner import SignIn, SignUp
 from utilis import connect_go
+from typing import Optional
 
 app = FastAPI()
 
@@ -16,6 +17,7 @@ class SignupRequest(BaseModel):
     Username: str
     Email: str
     Password: str
+    PImage: Optional[str] = None  # Campo opzionale
 
 
 
@@ -37,7 +39,7 @@ def login(request: LoginRequest):
 
 @app.post("/signup")
 def signup(request: SignupRequest):
-    payload = {"Username": request.Username, "Email": request.Email, "Password": request.Password}
+    payload = {"Username": request.Username, "Email": request.Email, "Password": request.Password, "PImage": request.PImage}
     print("Payload inviato:", payload)
 
     # Validazione tramite SigIn
@@ -46,7 +48,8 @@ def signup(request: SignupRequest):
         raise HTTPException(status_code=400, detail=messaggio)
 
     try:
-        response = connect_go("signup", payload)
+        #print("Payload inviato:", request.dict())
+        response = connect_go("signup", request.dict())
         return response
     except ConnectionError as e:
         raise HTTPException(status_code=502, detail=str(e))
