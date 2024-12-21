@@ -105,40 +105,41 @@
                                        VerticalOptions="Center" />
                                 <Entry Placeholder="Confirm Password" 
                                        Text="{Binding ConfirmPassword}" 
+                                       TextColor="Black"
                                        IsPassword="True" />       
                             </HorizontalStackLayout>
                         </Border>
                         <!-- Label per il titolo -->
                         <Label Text="Profile Picture"
-           FontSize="16"
-           TextColor="Gray"
-           HorizontalTextAlignment="Center" />
+                           FontSize="16"
+                           TextColor="Gray"
+                           HorizontalTextAlignment="Center" />  
                         <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
                             <!-- Bottone di caricamento -->
                             <Button Text="Upload Image"
-            Command="{Binding UploadImageCommand}"
-            BackgroundColor="#007BFF"
-            TextColor="White"
-            CornerRadius="25"
-            HeightRequest="40"
-            WidthRequest="150" />
-
-                            <!-- Bottone per la registrazione -->
-                            <Button Text="Register"
-            Command="{Binding RegisterCommand}"
-            BackgroundColor="#28A745"
-            TextColor="White"
-            CornerRadius="25"
-            HeightRequest="40"
-            WidthRequest="150" />
-                        </HorizontalStackLayout>
+                                Command="{Binding UploadImageCommand}"
+                                BackgroundColor="#007BFF"
+                                TextColor="White"
+                                CornerRadius="25"
+                                HeightRequest="40"
+                                WidthRequest="150" />
 
                         <!-- Conferma caricamento -->
-                        <Label Text="{Binding UploadStatusMessage}"
-           FontSize="14"
-           TextColor="Green"
-           IsVisible="{Binding IsUploadComplete}"
-           HorizontalTextAlignment="Center" />
+                            <Label Text="{Binding UploadStatusMessage}"
+                               FontSize="14"
+                               TextColor="Green"
+                               IsVisible="{Binding IsUploadComplete}"
+                               HorizontalTextAlignment="Center" />
+
+                        </HorizontalStackLayout>
+                        <!-- Bottone per la registrazione -->
+                        <Button Text="Register"
+                            Command="{Binding RegisterCommand}"
+                            BackgroundColor="#28A745"
+                            TextColor="White"
+                            CornerRadius="25"
+                            HeightRequest="40"
+                            WidthRequest="150" />   
                         <!-- Link al login -->
                         <HorizontalStackLayout HorizontalOptions="Center">
                             <Label Text="Already have an account?" 

@@ -11,20 +11,21 @@
         <VerticalStackLayout Margin="10" Spacing="15">
 
             <!-- Sezione Ricerca -->
-            <VerticalStackLayout Spacing="10">
+            <VerticalStackLayout Spacing="10" >
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
                     <!-- Campo di Ricerca città -->
-                    <Entry Placeholder="Cerca città" WidthRequest="200" HeightRequest="40" />
+                    <Entry Placeholder="Cerca città" WidthRequest="200" HeightRequest="40" TextColor="Black" />
 
                     <!-- Campo di Ricerca Data -->
-                    <DatePicker Format="dd/MM/yyyy" WidthRequest="150" HeightRequest="40" />
-
+                    <DatePicker Format="dd/MM/yyyy" WidthRequest="150" HeightRequest="40" TextColor="Black" />
+                           
                     <!-- Picker per il tipo di hotel -->
                     <Picker WidthRequest="150" 
                             HeightRequest="40" 
                             TextColor="Black" 
-                            SelectedIndex="-1">
-                        <Picker.ItemsSource>
+                            SelectedIndex="-1"
+                            >
+                        <Picker.ItemsSource TextColor="Black" >
                             <x:Array Type="{x:Type x:String}">
                                 <x:String>Seleziona tipo di hotel</x:String>
                                 <x:String>Qualsiasi</x:String>

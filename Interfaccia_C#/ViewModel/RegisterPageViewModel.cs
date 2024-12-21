@@ -139,13 +139,18 @@ namespace Interfaccia_C_.ViewModel
                 if (result != null)
                 {
 
-                    var localPath = Path.Combine(FileSystem.AppDataDirectory, "ProfilePictures");
+                    // Ottieni la cartella principale del progetto
+                    string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName;
+
+                    // Percorso della cartella "Progetto-APL" dove vuoi salvare i file
+                    var localPath = Path.Combine(projectDirectory, "images", "ProfilePictures");
 
                     // Crea la directory "ProfilePictures" se non esiste
                     Directory.CreateDirectory(localPath);
 
-                    // Ottieni il percorso della cartella locale dell'app
+                    // Ottieni il percorso completo del file da salvare
                     var filePath = Path.Combine(localPath, result.FileName);
+
 
                     // Copia il file nella cartella locale
                     using (var stream = await result.OpenReadAsync())
