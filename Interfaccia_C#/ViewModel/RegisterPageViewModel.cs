@@ -11,10 +11,10 @@ namespace Interfaccia_C_.ViewModel
 {
     public class RegisterPageViewModel : INotifyPropertyChanged
     {
-        // Evento per la notifica delle modifiche delle proprietà
+        // Evento per la notifica delle modifiche delle proprietï¿½
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // Metodo per notificare la modifica delle proprietà
+        // Metodo per notificare la modifica delle proprietï¿½
         private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -65,14 +65,14 @@ namespace Interfaccia_C_.ViewModel
         }
 
 
-        // Proprietà per il comando di navigazione alla LoginPage
+        // Proprietï¿½ per il comando di navigazione alla LoginPage
         public ICommand GoToLoginCommand { get; }
 
-        // Proprietà per il comando di registrazione
+        // Proprietï¿½ per il comando di registrazione
         public ICommand RegisterCommand { get; }
 
 
-        // Proprietà per la gestione dell'immagine del profilo
+        // Proprietï¿½ per la gestione dell'immagine del profilo
         private string _profileImage;
         public string ProfileImage
         {
@@ -84,7 +84,7 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-        // Proprietà per il nome del file caricato (messaggio di conferma)
+        // Proprietï¿½ per il nome del file caricato (messaggio di conferma)
         private string _uploadStatusMessage;
         public string UploadStatusMessage
         {
@@ -96,7 +96,7 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-        // Proprietà per il controllo della visibilità del messaggio di conferma
+        // Proprietï¿½ per il controllo della visibilitï¿½ del messaggio di conferma
         private bool _isUploadComplete;
         public bool IsUploadComplete
         {
@@ -108,7 +108,7 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-        // Proprietà per il comando di caricamento immagine
+        // Proprietï¿½ per il comando di caricamento immagine
         public ICommand UploadImageCommand { get; }
 
         // Costruttore
@@ -140,17 +140,19 @@ namespace Interfaccia_C_.ViewModel
                 {
 
                     // Ottieni la cartella principale del progetto
-                    string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.FullName;
+                    string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName;
+                    // Definisci una variabile unica che contiene il percorso combinato
 
                     // Percorso della cartella "Progetto-APL" dove vuoi salvare i file
-                    var localPath = Path.Combine(projectDirectory, "images", "ProfilePictures");
+                    var localPath = Path.Combine(projectDirectory, "Pictures", "ProfilePictures");
 
                     // Crea la directory "ProfilePictures" se non esiste
                     Directory.CreateDirectory(localPath);
 
-                    // Ottieni il percorso completo del file da salvare
+                    // Costruisci il percorso completo del file
                     var filePath = Path.Combine(localPath, result.FileName);
 
+                    var Pat= Path.Combine("Pictures", "ProfilePictures", result.FileName);
 
                     // Copia il file nella cartella locale
                     using (var stream = await result.OpenReadAsync())
@@ -158,13 +160,13 @@ namespace Interfaccia_C_.ViewModel
                     {
                         await stream.CopyToAsync(localFile);
                     }
-                    // Imposta il percorso dell'immagine selezionata nella proprietà
-                    ProfileImage = filePath;
+                    // Imposta il percorso dell'immagine selezionata nella proprietï¿½
+                    ProfileImage = Pat;
 
                     // Imposta il nome del file caricato come messaggio di conferma
                     UploadStatusMessage = $"File Uploaded: {result.FileName}";
 
-                    // Imposta la visibilità del messaggio di conferma a true
+                    // Imposta la visibilitï¿½ del messaggio di conferma a true
                     IsUploadComplete = true;
 
                 }
@@ -229,7 +231,7 @@ namespace Interfaccia_C_.ViewModel
                 if (response.IsSuccessStatusCode)
                 {
                     await Shell.Current.DisplayAlert("Successo", "Registrazione completata con successo!", "OK");
-                    await Shell.Current.GoToAsync("//MainPage"); // se è avvenuta con successo vai alla main page
+                    await Shell.Current.GoToAsync("//MainPage"); // se ï¿½ avvenuta con successo vai alla main page
                 }
                 else
                 {
@@ -239,7 +241,7 @@ namespace Interfaccia_C_.ViewModel
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Errore", $"Si è verificato un errore: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Errore", $"Si ï¿½ verificato un errore: {ex.Message}", "OK");
             }
         }
 

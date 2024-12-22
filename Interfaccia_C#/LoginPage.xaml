@@ -57,7 +57,7 @@
                            HeightRequest="20" 
                            WidthRequest="20" 
                            VerticalOptions="Center" />
-                <Entry Placeholder="Username" 
+                <Entry Placeholder="E-mail" 
                            WidthRequest="240"
                            Text="{Binding Username}" 
                            Keyboard="Text" 

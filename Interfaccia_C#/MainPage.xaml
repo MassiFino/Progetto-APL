@@ -7,27 +7,30 @@
              Title="Hotel Offers"
              BackgroundColor="White"
              Padding="0">
-    <ScrollView>
-        <VerticalStackLayout Margin="10" Spacing="15">
 
-            <!-- Sezione Ricerca -->
-            <VerticalStackLayout Spacing="10" >
+    <VerticalStackLayout Margin="10" Spacing="15">
+        <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="AliceBlue" Padding="20"
+        HorizontalOptions="Center" VerticalOptions="Center"
+        StrokeShape="RoundRectangle 20">
+            <VerticalStackLayout Spacing="10">
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
                     <!-- Campo di Ricerca città -->
                     <Entry Placeholder="Cerca città" WidthRequest="200" HeightRequest="40" TextColor="Black" />
 
-                    <!-- Campo di Ricerca Data -->
-                    <DatePicker Format="dd/MM/yyyy" WidthRequest="150" HeightRequest="40" TextColor="Black" />
-                           
+                <DatePicker Format="dd/MM/yyyy" 
+                    WidthRequest="150" 
+                    HeightRequest="40" 
+                    TextColor="Black" 
+                    Date="{Binding SelectedDate}" />
+
                     <!-- Picker per il tipo di hotel -->
                     <Picker WidthRequest="150" 
-                            HeightRequest="40" 
-                            TextColor="Black" 
-                            SelectedIndex="-1"
-                            >
-                        <Picker.ItemsSource TextColor="Black" >
+                        HeightRequest="40" 
+                        TextColor="Black" 
+                        SelectedIndex="{Binding SelectedHotelTypeIndex, Mode=TwoWay}">
+                        <Picker.ItemsSource>
                             <x:Array Type="{x:Type x:String}">
-                                <x:String>Seleziona tipo di hotel</x:String>
+                                <x:String>Seleziona tipo</x:String>
                                 <x:String>Qualsiasi</x:String>
                                 <x:String>Hotel di lusso</x:String>
                                 <x:String>Hotel economici</x:String>
@@ -36,11 +39,35 @@
                             </x:Array>
                         </Picker.ItemsSource>
                     </Picker>
-
                     <!-- Bottone di ricerca -->
                     <Button Text="Cerca" WidthRequest="100" HeightRequest="40" />
                 </HorizontalStackLayout>
+
+                <!-- Sezione Filtri con Bordo Smussato -->
+                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+                    <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                        <Label Text="Free wifi" TextColor="Black" />
+                        <Switch IsToggled="{Binding IsInternetEnabled}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                        <Label Text="Free Parking" TextColor="Black" />
+                        <Switch IsToggled="{Binding IsParkingEnabled}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                        <Label Text="Gym" TextColor="Black" />
+                        <Switch IsToggled="{Binding IsGymEnabled}" />
+                    </StackLayout>
+                    <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                        <Label Text="Spa" TextColor="Black" />
+                        <Switch IsToggled="{Binding IsSpaEnabled}" />
+                    </StackLayout>
+                </StackLayout>
             </VerticalStackLayout>
+        </Border>
+        
+        <ScrollView>
+        <VerticalStackLayout Margin="10" Spacing="15">
+
 
             <!-- Sezione Offerte Imperdibili -->
             <Label Text="Offerte imperdibili hotel in corso" 
@@ -124,4 +151,5 @@
 
         </VerticalStackLayout>
     </ScrollView>
+    </VerticalStackLayout>
 </ContentPage>
