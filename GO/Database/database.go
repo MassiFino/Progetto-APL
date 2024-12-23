@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"progetto-go/types"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -90,4 +91,24 @@ func RegisterUser(db *sql.DB, username, password, email string, pImage *string) 
 	}
 
 	return nil
+}
+
+// Funzione che recupera i dati dell'utente dal database in base all'email
+func GetUser(db *sql.DB, username string) (*types.UserResponse, error) {
+	var user types.UserResponse
+
+	query := "SELECT Username, Email, ProfileImage,role FROM users WHERE Username = ?"
+	row := db.QueryRow(query, username)
+
+	err := row.Scan(&user.Username, &user.Email, &user.PImage, &user.Role)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			// Utente non trovato
+			return nil, nil
+		}
+		return nil, fmt.Errorf("errore durante la ricerca dell'utente: %v", err)
+	}
+	// Log dei dati dell'utente recuperati
+	fmt.Println("Dati dell'utente recuperati:", user)
+	return &user, nil
 }

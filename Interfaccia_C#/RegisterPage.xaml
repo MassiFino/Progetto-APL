@@ -100,21 +100,41 @@
                                 Padding="10">
                             <HorizontalStackLayout Spacing="10">
                                 <Image Source="lucchetto1.png" 
-                                       HeightRequest="20" 
-                                       WidthRequest="20" 
-                                       VerticalOptions="Center" />
+                                  HeightRequest="20" 
+                                  WidthRequest="20" 
+                                  VerticalOptions="Center" />
                                 <Entry Placeholder="Confirm Password" 
-                                       Text="{Binding ConfirmPassword}" 
-                                       TextColor="Black"
-                                       IsPassword="True" />       
+                                  Text="{Binding ConfirmPassword}" 
+                                  TextColor="Black"
+                                  IsPassword="True" />
                             </HorizontalStackLayout>
                         </Border>
+                        <!-- Selezione del Tipo di Utente -->
+                        <Label Text="Tipo di Utente:" FontAttributes="Bold" FontSize="16" TextColor="Black" HorizontalOptions="Center" />
+
+                        <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Spacing="30">
+                            <!-- Sezione per il RadioButton di User -->
+                            <StackLayout Orientation="Vertical" HorizontalOptions="Center" Spacing="5">
+                                <!-- Etichetta sopra il RadioButton per User -->
+                                <Label Text="User" FontSize="14" TextColor="Black" HorizontalOptions="Center" />
+                                <!-- RadioButton per User -->
+                                <RadioButton GroupName="UserType" IsChecked="{Binding IsUser}" HorizontalOptions="Center" />
+                            </StackLayout>
+
+                            <!-- Sezione per il RadioButton di Host -->
+                            <StackLayout Orientation="Vertical" HorizontalOptions="Center" Spacing="5">
+                                <!-- Etichetta sopra il RadioButton per Host -->
+                                <Label Text="Host" FontSize="14" TextColor="Black" HorizontalOptions="Center" />
+                                <!-- RadioButton per Host -->
+                                <RadioButton GroupName="UserType" IsChecked="{Binding IsHost}" HorizontalOptions="Center" />
+                            </StackLayout>
+                        </StackLayout>
+
                         <!-- Label per il titolo -->
                         <Label Text="Profile Picture"
                            FontSize="16"
                            TextColor="Gray"
                            HorizontalTextAlignment="Center" />  
-                        <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
                             <!-- Bottone di caricamento -->
                             <Button Text="Upload Image"
                                 Command="{Binding UploadImageCommand}"
@@ -130,16 +150,15 @@
                                TextColor="Green"
                                IsVisible="{Binding IsUploadComplete}"
                                HorizontalTextAlignment="Center" />
-
-                        </HorizontalStackLayout>
+                        
                         <!-- Bottone per la registrazione -->
                         <Button Text="Register"
-                            Command="{Binding RegisterCommand}"
-                            BackgroundColor="#28A745"
-                            TextColor="White"
-                            CornerRadius="25"
-                            HeightRequest="40"
-                            WidthRequest="150" />   
+                              Command="{Binding RegisterCommand}"
+                              BackgroundColor="#28A745"
+                              TextColor="White"
+                              CornerRadius="25"
+                              HeightRequest="40"
+                              WidthRequest="150" />     
                         <!-- Link al login -->
                         <HorizontalStackLayout HorizontalOptions="Center">
                             <Label Text="Already have an account?" 

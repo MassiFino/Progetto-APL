@@ -94,13 +94,48 @@ func SignUPHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status": "success", "message": "Registrazione effettuata con successo!"}`))
 }
 
+func getUserDataHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+	// Definiamo una struttura per l'email che riceviamo nel corpo della richiesta
+	var req types.UserRequest
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+	fmt.Printf("Dati ricevuti: %+v\n", req)
+	// Recupera i dati dell'utente dal database usando la funzione GetUser
+	user, err := database.GetUser(db, req.Username)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore durante la ricerca dell'utente: %v", err), http.StatusInternalServerError)
+		return
+	}
+	fmt.Println("Dati dell'utente recuperati:", user)
+
+	// Se l'utente non viene trovato, restituisci un errore
+	if user == nil {
+		http.Error(w, "Utente non trovato", http.StatusNotFound)
+		return
+	}
+
+	// Rispondi con i dati dell'utente in formato JSON
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(user)
+	if err != nil {
+		http.Error(w, "Errore durante la codifica della risposta JSON", http.StatusInternalServerError)
+	}
+}
 func main() {
 	db = initializeDatabase() // Inizializza la connessione al database
 	defer db.Close()          // Chiude la connessione al termine del server
 
 	http.HandleFunc("/login", LogInHandler)
 	http.HandleFunc("/signup", SignUPHandler)
-
+	http.HandleFunc("/getUserData", getUserDataHandler)
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)
 

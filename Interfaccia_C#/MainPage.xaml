@@ -17,31 +17,27 @@
                     <!-- Campo di Ricerca città -->
                     <Entry Placeholder="Cerca città" WidthRequest="200" HeightRequest="40" TextColor="Black" />
 
-                <DatePicker Format="dd/MM/yyyy" 
+                  
+                        <!-- DatePicker per il check-in -->
+                     <DatePicker Format="dd/MM/yyyy" 
                     WidthRequest="150" 
                     HeightRequest="40" 
                     TextColor="Black" 
-                    Date="{Binding SelectedDate}" />
+                    Date="{Binding CheckInDate}" />
+                 
 
-                    <!-- Picker per il tipo di hotel -->
-                    <Picker WidthRequest="150" 
-                        HeightRequest="40" 
-                        TextColor="Black" 
-                        SelectedIndex="{Binding SelectedHotelTypeIndex, Mode=TwoWay}">
-                        <Picker.ItemsSource>
-                            <x:Array Type="{x:Type x:String}">
-                                <x:String>Seleziona tipo</x:String>
-                                <x:String>Qualsiasi</x:String>
-                                <x:String>Hotel di lusso</x:String>
-                                <x:String>Hotel economici</x:String>
-                                <x:String>Hotel vicino al mare</x:String>
-                                <x:String>Hotel con piscina</x:String>
-                            </x:Array>
-                        </Picker.ItemsSource>
-                    </Picker>
+                        <!-- DatePicker per il check-out -->
+                    <DatePicker Format="dd/MM/yyyy" 
+                    WidthRequest="150" 
+                    HeightRequest="40" 
+                    TextColor="Black" 
+                    Date="{Binding CheckOutDate}" />
+                  
+
                     <!-- Bottone di ricerca -->
                     <Button Text="Cerca" WidthRequest="100" HeightRequest="40" />
                 </HorizontalStackLayout>
+
 
                 <!-- Sezione Filtri con Bordo Smussato -->
                 <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">

@@ -21,3 +21,14 @@ type SignUpResponse struct {
 	Success bool   `json:"status"`
 	Message string `json:"message"`
 }
+
+type UserRequest struct {
+	Username string `json:"username"`
+}
+
+type UserResponse struct {
+	Username string `json:"Username"`
+	Email    string `json:"Email"`
+	PImage   string `json:"PImage"`
+	Role     string `json:"Role"`
+}
