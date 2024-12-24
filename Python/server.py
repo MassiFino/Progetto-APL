@@ -19,7 +19,8 @@ class SignupRequest(BaseModel):
     Email: str
     Password: str
     PImage: Optional[str] = None  # Campo opzionale
-
+    Role: str
+    
 class UserData(BaseModel):
     st: str
 
@@ -43,7 +44,7 @@ def login(request: LoginRequest):
 
 @app.post("/signup")
 def signup(request: SignupRequest):
-    payload = {"Username": request.Username, "Email": request.Email, "Password": request.Password, "PImage": request.PImage}
+    payload = {"Username": request.Username, "Email": request.Email, "Password": request.Password, "PImage": request.PImage, "Role": request.Role}
     print("Payload inviato:", payload)
     global current_username  # Dichiarazione esplicita della variabile globale
 

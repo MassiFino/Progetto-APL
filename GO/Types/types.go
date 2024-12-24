@@ -15,6 +15,7 @@ type SignUpRequest struct {
 	Password string  `json:"Password"`
 	Email    string  `json:"Email"`
 	PImage   *string `json:"PImage"`
+	Role     string  `json:"Role"`
 }
 
 type SignUpResponse struct {

@@ -109,27 +109,27 @@
                                   IsPassword="True" />
                             </HorizontalStackLayout>
                         </Border>
-                        <!-- Selezione del Tipo di Utente -->
-                        <Label Text="Tipo di Utente:" FontAttributes="Bold" FontSize="16" TextColor="Black" HorizontalOptions="Center" />
 
+                        <!-- Layout principale -->
                         <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Spacing="30">
-                            <!-- Sezione per il RadioButton di User -->
+                            <!-- Opzione User -->
                             <StackLayout Orientation="Vertical" HorizontalOptions="Center" Spacing="5">
-                                <!-- Etichetta sopra il RadioButton per User -->
                                 <Label Text="User" FontSize="14" TextColor="Black" HorizontalOptions="Center" />
-                                <!-- RadioButton per User -->
-                                <RadioButton GroupName="UserType" IsChecked="{Binding IsUser}" HorizontalOptions="Center" />
+                                <RadioButton GroupName="UserType" 
+                         IsChecked="{Binding IsUserSelected, Mode=TwoWay}" 
+                         HorizontalOptions="Center" 
+                         Value="User"/>
                             </StackLayout>
 
-                            <!-- Sezione per il RadioButton di Host -->
+                            <!-- Opzione Host -->
                             <StackLayout Orientation="Vertical" HorizontalOptions="Center" Spacing="5">
-                                <!-- Etichetta sopra il RadioButton per Host -->
                                 <Label Text="Host" FontSize="14" TextColor="Black" HorizontalOptions="Center" />
-                                <!-- RadioButton per Host -->
-                                <RadioButton GroupName="UserType" IsChecked="{Binding IsHost}" HorizontalOptions="Center" />
+                                <RadioButton GroupName="UserType" 
+                         IsChecked="{Binding IsHostSelected, Mode=TwoWay}" 
+                         HorizontalOptions="Center" 
+                         Value="Host"/>
                             </StackLayout>
                         </StackLayout>
-
                         <!-- Label per il titolo -->
                         <Label Text="Profile Picture"
                            FontSize="16"

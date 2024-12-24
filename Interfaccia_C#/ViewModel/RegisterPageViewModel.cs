@@ -63,8 +63,72 @@ namespace Interfaccia_C_.ViewModel
                 OnPropertyChanged();
             }
         }
+        private bool isUserSelected;
+        private bool isHostSelected;
+        private string selectedUserType;
 
+        // Proprietà per "User"
+        public bool IsUserSelected
+        {
+            get => isUserSelected;
+            set
+            {
+                if (isUserSelected != value)
+                {
+                    isUserSelected = value;
+                    OnPropertyChanged(nameof(IsUserSelected));
 
+                    if (value)  // Quando "User" è selezionato
+                    {
+                        IsHostSelected = false;  // Deseleziona "Host"
+                        SelectedUserType = "User";  // Imposta "User"
+                    }
+
+                    // Debug: Stampa il valore selezionato
+                    Debug.WriteLine("User Selected: " + (IsUserSelected ? "User" : "None"));
+                }
+            }
+        }
+
+        // Proprietà per "Host"
+        public bool IsHostSelected
+        {
+            get => isHostSelected;
+            set
+            {
+                if (isHostSelected != value)
+                {
+                    isHostSelected = value;
+                    OnPropertyChanged(nameof(IsHostSelected));
+
+                    if (value)  // Quando "Host" è selezionato
+                    {
+                        IsUserSelected = false;  // Deseleziona "User"
+                        SelectedUserType = "Host";  // Imposta "Host"
+                    }
+
+                    // Debug: Stampa il valore selezionato
+                    Debug.WriteLine("Host Selected: " + (IsHostSelected ? "Host" : "None"));
+                }
+            }
+        }
+
+        // Proprietà per memorizzare il tipo di utente selezionato
+        public string SelectedUserType
+        {
+            get => selectedUserType;
+            set
+            {
+                if (selectedUserType != value)
+                {
+                    selectedUserType = value;
+                    OnPropertyChanged(nameof(SelectedUserType));
+
+                    // Debug: Stampa il valore della variabile selezionata
+                    Debug.WriteLine("Selected User Type: " + selectedUserType);
+                }
+            }
+        }
         // Propriet� per il comando di navigazione alla LoginPage
         public ICommand GoToLoginCommand { get; }
 
@@ -212,9 +276,10 @@ namespace Interfaccia_C_.ViewModel
                 Username = this.Name,
                 Email = this.Email,
                 Password = this.Password,
-                PImage = ProfileImage
+                PImage = ProfileImage,
+                Role=selectedUserType
             };
-
+            Debug.WriteLine("Contenuto della richiesta solo paylod: " + payload);
             var jsonPayload = JsonSerializer.Serialize(payload);
 
             Debug.WriteLine("Contenuto della richiesta: " + jsonPayload);

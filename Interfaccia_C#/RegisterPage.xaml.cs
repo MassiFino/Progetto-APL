@@ -9,4 +9,5 @@ public partial class RegisterPage : ContentPage
         InitializeComponent();
         BindingContext = new RegisterPageViewModel();
     }
+
 }
