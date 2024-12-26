@@ -128,7 +128,7 @@ namespace Interfaccia_C_.ViewModel
                     if (role == "host")
                     {
 
-                        Debug.WriteLine("sono uno Host" + role);
+                        Debug.WriteLine("sono un: " + role);
 
                         // Crea una nuova Shell specifica per il ruolo Host
                         var hostShell = new HostShell();
@@ -142,7 +142,7 @@ namespace Interfaccia_C_.ViewModel
                     }
                     else
                     {
-                        Debug.WriteLine("sono uno User" + role);
+                        Debug.WriteLine("sono uno: r" + role);
                         // Crea una nuova Shell specifica per il ruolo Host
                         var userShell = new UserShell();
 
