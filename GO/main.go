@@ -53,7 +53,7 @@ func LogInHandler(w http.ResponseWriter, r *http.Request) {
 
 	// Login riuscito
 	w.Header().Set("Content-Type", "application/json")
-	response := fmt.Sprintf(`{"status": "success","message": "Login effettuato con successo!","Role": "%s"}`, Role)
+	response := fmt.Sprintf(`{"status": "success","message": "Login effettuato con successo!","role": "%s"}`, Role)
 	fmt.Println(response) // Usa fmt.Println invece di fmt.Printf per stampare la risposta
 
 	// Scrivi la risposta JSON con w.Write
