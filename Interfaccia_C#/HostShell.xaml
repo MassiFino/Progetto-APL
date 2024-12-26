@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Interfaccia_C_.HostShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Interfaccia_C_"
+    Shell.FlyoutBehavior="Flyout"
+    Title="InterfacciaHost_C_"
+    Shell.NavBarIsVisible="False"
+    BackgroundColor="AliceBlue"
+    
+>
+
+
+    <ShellContent
+        Title="Profile"
+        ContentTemplate="{DataTemplate local:ProfileHostPage}"
+        Route="ProfilePage" />
+
+    <ShellContent
+      Title="Add Hotel"
+      ContentTemplate="{DataTemplate local:AddHotelPage}"
+      Route="AddHotelPage" />
+    
+    <ShellContent
+   Title="Add Room "
+   ContentTemplate="{DataTemplate local:AddRoomPage}"
+   Route="AddRoomPage" />
+ 
+</Shell>

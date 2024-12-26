@@ -38,7 +38,8 @@ def login(request: LoginRequest):
 
     try:
         response = connect_go("login", payload)
-        return response
+        print(response)
+        return response   
     except ConnectionError as e:
         raise HTTPException(status_code=502, detail=str(e))
 

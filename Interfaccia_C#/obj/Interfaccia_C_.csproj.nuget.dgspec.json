@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Archivio\\Progetti\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj": {}
+    "D:\\Archivio\\Ultimo\\Nuova cartella\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj": {}
   },
   "projects": {
-    "D:\\Archivio\\Progetti\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj": {
+    "D:\\Archivio\\Ultimo\\Nuova cartella\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Archivio\\Progetti\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj",
+        "projectUniqueName": "D:\\Archivio\\Ultimo\\Nuova cartella\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj",
         "projectName": "Interfaccia_C_",
-        "projectPath": "D:\\Archivio\\Progetti\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj",
+        "projectPath": "D:\\Archivio\\Ultimo\\Nuova cartella\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj",
         "packagesPath": "C:\\Users\\dario\\.nuget\\packages\\",
-        "outputPath": "D:\\Archivio\\Progetti\\Progetto-APL\\Interfaccia_C#\\obj\\",
+        "outputPath": "D:\\Archivio\\Ultimo\\Nuova cartella\\Progetto-APL\\Interfaccia_C#\\obj\\",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
         "fallbackFolders": [

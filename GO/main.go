@@ -37,20 +37,27 @@ func LogInHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Dati ricevuti: %+v\n", req)
 
 	// Verifica le credenziali dell'utente
-	valid, err := database.CheckUserCredentials(db, req.Username, req.Password)
+	valid, err, Role := database.CheckUserCredentials(db, req.Username, req.Password)
 	if err != nil {
+		// Gestisce l'errore interno del server
 		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
 		return
 	}
 
 	if !valid {
+		// Gestisce le credenziali non valide
 		http.Error(w, "Credenziali non valide", http.StatusUnauthorized)
 		return
 	}
+	fmt.Printf("Dati : %s\n", Role)
 
 	// Login riuscito
 	w.Header().Set("Content-Type", "application/json")
-	w.Write([]byte(`{"status": "success", "message": "Login effettuato con successo!"}`))
+	response := fmt.Sprintf(`{"status": "success","message": "Login effettuato con successo!","Role": "%s"}`, Role)
+	fmt.Println(response) // Usa fmt.Println invece di fmt.Printf per stampare la risposta
+
+	// Scrivi la risposta JSON con w.Write
+	w.Write([]byte(response))
 }
 
 func SignUPHandler(w http.ResponseWriter, r *http.Request) {

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gVI77W8hcRY=",
+  "dgSpecHash": "nHNvwoeua1U=",
   "success": true,
-  "projectFilePath": "D:\\Archivio\\Progetti\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj",
+  "projectFilePath": "D:\\Archivio\\Ultimo\\Nuova cartella\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\dario\\.nuget\\packages\\googlegson\\2.11.0.3\\googlegson.2.11.0.3.nupkg.sha512",
     "C:\\Users\\dario\\.nuget\\packages\\microsoft.extensions.configuration\\9.0.0\\microsoft.extensions.configuration.9.0.0.nupkg.sha512",

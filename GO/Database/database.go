@@ -30,27 +30,27 @@ func ConnectDB(username, password, host, port, dbName string) (*sql.DB, error) {
 	return db, nil
 }
 
-func CheckUserCredentials(db *sql.DB, username, password string) (bool, error) {
-	var storedPassword string
+func CheckUserCredentials(db *sql.DB, username, password string) (bool, error, string) {
+	var storedPassword, Role string
 
 	// Query per verificare le credenziali
-	query := "SELECT Password FROM users WHERE Username = ?"
-	err := db.QueryRow(query, username).Scan(&storedPassword)
+	query := "SELECT Password, role FROM users WHERE Username = ?"
+	err := db.QueryRow(query, username).Scan(&storedPassword, &Role)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			// Nessun utente trovato
-			return false, nil
+			return false, nil, ""
 		}
 		log.Println("Errore nella query:", err)
-		return false, err
+		return false, err, ""
 	}
 
 	// Controllo della password (non crittografata)
 	if storedPassword == password {
-		return true, nil
+		return true, nil, Role
 	}
 
-	return false, nil
+	return false, nil, ""
 }
 
 func CheckUserExists(db *sql.DB, username, email string) (bool, error) {

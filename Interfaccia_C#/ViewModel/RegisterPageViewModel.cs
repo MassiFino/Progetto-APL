@@ -6,6 +6,7 @@ using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 using System.Diagnostics;
+using System.Data;
 
 namespace Interfaccia_C_.ViewModel
 {
@@ -283,6 +284,7 @@ namespace Interfaccia_C_.ViewModel
             var jsonPayload = JsonSerializer.Serialize(payload);
 
             Debug.WriteLine("Contenuto della richiesta: " + jsonPayload);
+            Debug.WriteLine(selectedUserType);
 
             var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
@@ -292,11 +294,44 @@ namespace Interfaccia_C_.ViewModel
                 var url = "http://localhost:9000/signup";
 
                 var response = await client.PostAsync(url, content);
+                Debug.WriteLine("dopo signup"+selectedUserType);
 
                 if (response.IsSuccessStatusCode)
                 {
+                    if (selectedUserType != null)
+                    {
+
+                        // Carica la Shell appropriata in base al ruolo
+                        if (selectedUserType == "Host")
+                        {
+
+                            Debug.WriteLine("sono uno Host"+selectedUserType);
+
+                            // Crea una nuova Shell specifica per il ruolo Host
+                            var hostShell = new HostShell();
+
+                            // Imposta la nuova Shell come finestra principale
+                            Application.Current.MainPage = hostShell;
+
+                            // Naviga alla pagina desiderata all'interno della nuova Shell
+                            await hostShell.GoToAsync("//ProfilePage");
+
+                        }
+                        else
+                        {
+                            Debug.WriteLine("sono uno User" + selectedUserType);
+                            // Crea una nuova Shell specifica per il ruolo Host
+                            var userShell = new UserShell();
+
+                            // Imposta la nuova Shell come finestra principale
+                            Application.Current.MainPage =userShell;
+
+                            // Naviga alla pagina desiderata all'interno della nuova Shell
+                            await userShell.GoToAsync("//MainPage");
+                        }
+
+                    }
                     await Shell.Current.DisplayAlert("Successo", "Registrazione completata con successo!", "OK");
-                    await Shell.Current.GoToAsync("//MainPage"); // se � avvenuta con successo vai alla main page
                 }
                 else
                 {

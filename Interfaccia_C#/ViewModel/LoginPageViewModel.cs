@@ -9,6 +9,7 @@ using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using System.Text.Json;
 using System.Diagnostics;
+using System.Data;
 
 
 namespace Interfaccia_C_.ViewModel
@@ -61,7 +62,12 @@ namespace Interfaccia_C_.ViewModel
             GoToRegisterCommand = new Command(async () => await Shell.Current.GoToAsync("//RegisterPage"));
         }
 
-
+        public class LoginResponse
+        {
+            public string Status { get; set; }
+            public string Message { get; set; }
+            public string role { get; set; }
+        }
         private async Task Login()
         {
             // Verifica che i campi non siano vuoti
@@ -106,11 +112,46 @@ namespace Interfaccia_C_.ViewModel
                 {
                     // Leggi il contenuto della risposta
                     var responseContent = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine($"Response Content: {responseContent}");
+                    Debug.WriteLine("ho fatto login" + responseContent);
 
-                    // Naviga alla pagina principale
-                    await Shell.Current.DisplayAlert("Successo", "Login effettuato con successo!", "OK");
-                    await Shell.Current.GoToAsync("//MainPage"); 
+                    // Deserializza la risposta JSON in un oggetto LoginResponse
+                    var userData = JsonSerializer.Deserialize<LoginResponse>(responseContent);
+                    // Assegna il valore del campo 'Role' alla variabile 'typeUser'
+
+                    string role = userData.role;
+
+                    
+                    Debug.WriteLine("stampa questo "+ role);
+
+
+                    // Carica la Shell appropriata in base al ruolo
+                    if (role == "host")
+                    {
+
+                        Debug.WriteLine("sono uno Host" + role);
+
+                        // Crea una nuova Shell specifica per il ruolo Host
+                        var hostShell = new HostShell();
+
+                        // Imposta la nuova Shell come finestra principale
+                        Application.Current.MainPage = hostShell;
+
+                        // Naviga alla pagina desiderata all'interno della nuova Shell
+                        await hostShell.GoToAsync("//ProfilePage");
+
+                    }
+                    else
+                    {
+                        Debug.WriteLine("sono uno User" + role);
+                        // Crea una nuova Shell specifica per il ruolo Host
+                        var userShell = new UserShell();
+
+                        // Imposta la nuova Shell come finestra principale
+                        Application.Current.MainPage = userShell;
+
+                        // Naviga alla pagina desiderata all'interno della nuova Shell
+                        await userShell.GoToAsync("//MainPage");
+                    }
                 }
                 else
                 {

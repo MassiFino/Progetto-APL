@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Interfaccia_C_.UserShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Interfaccia_C_"
+    Shell.FlyoutBehavior="Flyout"
+    Title="InterfacciaUser_C_"
+    Shell.NavBarIsVisible="False"
+>
+    <!-- Nascondi la barra superiore -->
+
+
+    <ShellContent
+        Title="MainPage"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+  <ShellContent
+      Title="Profile"
+      ContentTemplate="{DataTemplate local:ProfileUserPage}"
+      Route="ProfileUserPage" />
+  
+</Shell>

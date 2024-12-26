@@ -8,6 +8,7 @@ type LogInRequest struct {
 type LogInResponse struct {
 	Success bool   `json:"status"`
 	Message string `json:"message"`
+	Role    string `json:"Role"`
 }
 
 type SignUpRequest struct {

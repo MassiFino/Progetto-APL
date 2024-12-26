@@ -8,28 +8,17 @@
     Title="Interfaccia_C_"
     Shell.NavBarIsVisible="False"> <!-- Nascondi la barra superiore -->
 
-    <!-- Pagina di Login come pagina iniziale -->
+
+    <!-- Pagina Home (MainPage), che sarà visibile dopo il login -->
     <ShellContent
         Title="Login"
         ContentTemplate="{DataTemplate local:LoginPage}"
-        Route="LoginPage"
-        IsVisible="True" />
-    
-    <!-- Pagina Home (MainPage), che sarà visibile dopo il login -->
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-    
-    <!-- Pagina di Registrazione -->
-    <ShellContent
-        Title="Register"
-        ContentTemplate="{DataTemplate local:RegisterPage}"
-        Route="RegisterPage" />
+        Route="LoginPage" />
+
+
     <!-- Pagina Profilo -->
     <ShellContent
-        Title="Profile"
-        ContentTemplate="{DataTemplate local:ProfilePage}"
-        Route="ProfilePage" />
-
+        Title="Registrazion"
+        ContentTemplate="{DataTemplate local:RegisterPage}"
+        Route="RegisterPage" />
 </Shell>
