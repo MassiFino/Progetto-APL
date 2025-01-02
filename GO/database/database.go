@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"progetto-go/types"
+	"strings"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -109,4 +110,53 @@ func GetUser(db *sql.DB, username string) (*types.UserResponse, error) {
 	// Log dei dati dell'utente recuperati
 	fmt.Println("Dati dell'utente recuperati:", user)
 	return &user, nil
+}
+
+func GetHotelsHost(db *sql.DB, username string) ([]types.HotelResponse, error) {
+	fmt.Printf("Cerco hotel per l'utente: %s\n", username)
+
+	query := "SELECT Name, Location, Description, Services, Rating, Images FROM hotels WHERE UserHost = ?"
+	rows, err := db.Query(query, username)
+	if err != nil {
+		return nil, fmt.Errorf("errore durante l'esecuzione della query: %v", err)
+	}
+	defer rows.Close()
+
+	fmt.Println("Esecuzione query per l'utente:", username)
+
+	var hotels []types.HotelResponse
+
+	// Itera su ogni riga restituita dalla query
+	for rows.Next() {
+		fmt.Println("Iterazione su una nuova riga dell'hotel")
+
+		var hotel types.HotelResponse
+		var services string
+		var rating float64 // tipo float64 per il Rating
+
+		// Scansione dei dati dalla query
+		err := rows.Scan(&hotel.Name, &hotel.Location, &hotel.Description, &services, &rating, &hotel.Images)
+		if err != nil {
+			return nil, fmt.Errorf("errore durante la scansione delle righe: %v", err)
+		}
+
+		// Assegna il valore di rating direttamente alla proprietà dell'hotel
+		hotel.Rating = rating
+
+		fmt.Printf("Services prima della divisione: %s\n", services)
+		hotel.Services = strings.Split(services, ",")
+		fmt.Printf("Hotel dopo scansione: %+v\n", hotel)
+
+		// Aggiungi l'hotel alla lista
+		hotels = append(hotels, hotel)
+	}
+
+	// Gestione degli errori delle righe
+	if err := rows.Err(); err != nil {
+		fmt.Printf("Errore durante l'iterazione delle righe: %v\n", err)
+		return nil, fmt.Errorf("errore durante l'iterazione delle righe: %v", err)
+	}
+
+	fmt.Printf("Gli hotel trovati sono: %d\n", len(hotels))
+	return hotels, nil
 }

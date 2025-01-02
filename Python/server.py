@@ -20,9 +20,7 @@ class SignupRequest(BaseModel):
     Password: str
     PImage: Optional[str] = None  # Campo opzionale
     Role: str
-    
-class UserData(BaseModel):
-    st: str
+
 
 @app.post("/login")
 def login(request: LoginRequest):
@@ -69,6 +67,16 @@ def get_user_data():
     try:
         payload = {"Username": current_username}
         response = connect_go("getUserData", payload)
+        print(response)
+        return response
+    except ConnectionError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+    
+@app.post("/getHotelsHost")
+def get_user_data():
+    try:
+        payload = {"Username": current_username}
+        response = connect_go("getHotelsHost", payload)
         print(response)
         return response
     except ConnectionError as e:

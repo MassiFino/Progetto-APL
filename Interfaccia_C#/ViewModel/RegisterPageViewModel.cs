@@ -314,7 +314,7 @@ namespace Interfaccia_C_.ViewModel
                             Application.Current.MainPage = hostShell;
 
                             // Naviga alla pagina desiderata all'interno della nuova Shell
-                            await hostShell.GoToAsync("//ProfilePage");
+                            await hostShell.GoToAsync("//ProfileHostPage");
 
                         }
                         else

@@ -6,9 +6,36 @@
              BackgroundColor="AliceBlue"
              Padding="0">
 
+    <!-- ScrollView per contenere il contenuto della pagina -->
     <ScrollView>
         <VerticalStackLayout Padding="10">
+            <!-- Nome dell'hotel -->
+            <Label Text="{Binding Name}" 
+                   FontSize="24" 
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
 
+            <!-- Descrizione dell'hotel -->
+            <Label Text="{Binding Description}" 
+                   FontSize="14" 
+                   LineBreakMode="WordWrap"
+                   HorizontalOptions="Start" />
+
+            <!-- Location dell'hotel -->
+            <Label Text="{Binding Location}" 
+                   FontSize="16"
+                   HorizontalOptions="Start" />
+
+            <!-- Rating dell'hotel -->
+            <Label Text="{Binding Rating}" 
+                   FontSize="16"
+                   HorizontalOptions="Start" />
+
+            <!-- Mostrare l'immagine dell'hotel -->
+            <Image Source="{Binding ImageHotel}" 
+                   Aspect="AspectFill" 
+                   HeightRequest="200" 
+                   HorizontalOptions="Center" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

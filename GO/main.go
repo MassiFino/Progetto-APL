@@ -136,6 +136,49 @@ func getUserDataHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Errore durante la codifica della risposta JSON", http.StatusInternalServerError)
 	}
 }
+
+func getHotelsHostHandler(w http.ResponseWriter, r *http.Request) {
+	// Verifica che il metodo sia POST
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Definiamo una struttura per l'email che riceviamo nel corpo della richiesta
+	var req types.UserRequest
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+	fmt.Printf("email ricevuta: %+v\n", req.Username)
+
+	// Recupera gli hotel dal database usando la funzione getHotelsByHost
+	hotels, err := database.GetHotelsHost(db, req.Username)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore durante la ricerca degli hotel: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Se non sono stati trovati hotel, restituisci un errore
+	if len(hotels) == 0 {
+		http.Error(w, "Nessun hotel trovato per questo utente", http.StatusNotFound)
+		return
+	}
+	// Stampa degli hotel trovati per il debug
+	for i, hotel := range hotels {
+		fmt.Printf("Hotel #%d: %+v\n", i+1, hotel)
+	}
+
+	// Rispondi con i dati degli hotel in formato JSON
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(hotels)
+	if err != nil {
+		http.Error(w, "Errore durante la codifica della risposta JSON", http.StatusInternalServerError)
+	}
+}
+
 func main() {
 	db = initializeDatabase() // Inizializza la connessione al database
 	defer db.Close()          // Chiude la connessione al termine del server
@@ -143,6 +186,8 @@ func main() {
 	http.HandleFunc("/login", LogInHandler)
 	http.HandleFunc("/signup", SignUPHandler)
 	http.HandleFunc("/getUserData", getUserDataHandler)
+	http.HandleFunc("/getHotelsHost", getHotelsHostHandler)
+
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)
 
