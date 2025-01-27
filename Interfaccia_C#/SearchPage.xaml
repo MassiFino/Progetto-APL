@@ -62,7 +62,60 @@
         </Border>
         
         <ScrollView>
-       
-    </ScrollView>
+                <VerticalStackLayout Margin="10" Spacing="20">
+
+                    <!-- Dettagli dell'utente locatore -->
+                    <Label Text="Profilo Locatore" FontSize="24" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+
+                    <!-- Lista degli hotel posseduti -->
+                    <CollectionView ItemsSource="{Binding OwnedHotels}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border  Padding="10" Margin="0,10">
+                                    <HorizontalStackLayout Spacing="20">
+                                        <Border Stroke="LightGray" StrokeThickness="1" Padding="5" Grid.RowSpan="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image Source="{Binding ImageHotel}" WidthRequest="80" HeightRequest="80" VerticalOptions="CenterAndExpand"/>
+                                        </Border>
+
+
+                                        <!-- Contenuto a destra (nome, posizione, descrizione, servizi) -->
+                                        <StackLayout VerticalOptions="CenterAndExpand" Spacing="10" HorizontalOptions="FillAndExpand">
+
+                                            <!-- Nome dell'Hotel -->
+                                            <Label Text="{Binding name}" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
+
+                                            <!-- Posizione dell'Hotel -->
+                                            <Label Text="{Binding location}" FontSize="14" TextColor="Gray"/>
+
+                                            <!-- Descrizione dell'Hotel -->
+                                            <Label Text="{Binding description}" FontSize="12" TextColor="Black"/>
+
+                                            <!-- Servizi -->
+                                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                                <Label Text="Servizi:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                                <Label Text="{Binding services, StringFormat='{0}'}" FontSize="12" TextColor="Gray"/>
+                                            </StackLayout>
+                                            <!-- Servizi -->
+                                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                                <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                                <Label Text="{Binding rating}" FontSize="12" TextColor="Gray"/>
+                                            </StackLayout>
+                                            <Button Text="Visualizza"
+                                  BackgroundColor="LightBlue"
+                                  TextColor="White"
+                                  CornerRadius="10"
+                                  Command="{Binding ViewHotelCommand}"
+                                  CommandParameter="{Binding .}" />
+
+
+
+                                        </StackLayout>
+                                    </HorizontalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </ScrollView>
     </VerticalStackLayout>
 </ContentPage>

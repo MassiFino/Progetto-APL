@@ -3,16 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Interfaccia_C_.ProfileUserPage"
              xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel"
-             BackgroundColor="AliceBlue"
+             BackgroundColor="LightYellow"
              Padding="0">
 
     <VerticalStackLayout Margin="10" Spacing="15">
-        <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="AliceBlue" Padding="20"
+        <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="AntiqueWhite" Padding="20"
                HorizontalOptions="Center" VerticalOptions="Center"
                StrokeShape="RoundRectangle 20"> 
             <Grid Margin="10" ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
                 <!-- Immagine del profilo nella colonna di sinistra -->
-                <Border Stroke="LightGray" StrokeThickness="1" Padding="5" Grid.RowSpan="5" HorizontalOptions="Center" VerticalOptions="Center">
+                <Border Stroke="LightGray" StrokeThickness="1" Padding="5" Grid.RowSpan="5" HorizontalOptions="Center" VerticalOptions="Center" StrokeShape="RoundRectangle 10">
                     <Image Source="{Binding ProfileImage}" WidthRequest="80" HeightRequest="80" VerticalOptions="CenterAndExpand"/>
                 </Border>
 
@@ -44,25 +44,70 @@
         </Border>
 
         <ScrollView>
-       
+            <VerticalStackLayout Margin="10" Spacing="20">
 
-            <!-- Prenotazioni Dinamiche -->
-            <CollectionView ItemsSource="{Binding Bookings}" Margin="0,20,0,0">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border Padding="15" BackgroundColor="#f5f5f5">
-                            <StackLayout>
-                                <!-- Immagine della prenotazione, bindata alla proprietà BookingImage -->
-                                <Image Source="{Binding BookingImage}" WidthRequest="50" HeightRequest="50" />
-                                <Label Text="{Binding HotelName}" FontAttributes="Bold" FontSize="18" />
-                                <Label Text="{Binding StayPeriod}" FontSize="14" />
-                                <Label Text="{Binding Price, StringFormat='€ {0:F2}'}" FontSize="16" TextColor="Green" />
-                            </StackLayout>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
+                <!-- Dettagli dell'utente locatore -->
+                <Label Text="Profilo Locatore" FontSize="24" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
 
-    </ScrollView>
+                <!-- Messaggio in caso di nessuna prenotazione -->
+                <Label Text="{Binding Message}"
+               FontSize="20"
+               FontAttributes="Bold"
+               TextColor="Black"
+               HorizontalOptions="Center" 
+               IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
+
+                <!-- Lista delle prenotazioni -->
+                <CollectionView ItemsSource="{Binding OwnedBookings}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightGreen" Padding="40"
+                               HorizontalOptions="Center" VerticalOptions="Center"
+                               StrokeShape="RoundRectangle 60">     
+                                <HorizontalStackLayout Spacing="20">
+
+
+                                    <!-- Contenuto a destra (informazioni sulla prenotazione) -->
+                                    <StackLayout VerticalOptions="CenterAndExpand" Spacing="10" HorizontalOptions="FillAndExpand">
+                                        <HorizontalStackLayout Spacing="10">
+
+                                            <!-- Nome della stanza prenotata -->
+                                        <Label Text="{Binding roomName}" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
+
+                                        <!-- Nome della stanza prenotata -->
+                                        <Label Text="{Binding hotelName}" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
+                                    </HorizontalStackLayout>
+                                        <HorizontalStackLayout Spacing="10">    
+                                            <!-- Data di check-in -->
+                                        <Label Text="{Binding checkInDate, StringFormat='Check-in: {0:dd MMM yyyy}'}" FontSize="14" TextColor="Gray"/>
+
+                                        <!-- Data di check-out -->
+                                        <Label Text="{Binding checkOutDate, StringFormat='Check-out: {0:dd MMM yyyy}'}" FontSize="14" TextColor="Gray"/>
+                                        <!-- Importo totale -->
+                                        </HorizontalStackLayout>
+                                        <HorizontalStackLayout Spacing="10">
+
+                                            <Label Text="{Binding totalAmount, StringFormat='€ {0:F2}'}" FontSize="14" TextColor="Black"/>
+
+                                        <!-- Stato della prenotazione -->
+                                        <Label Text="{Binding status}" FontSize="14" TextColor="Gray"/>
+                                         </HorizontalStackLayout>
+
+                                            <!-- Bottone per visualizzare i dettagli della prenotazione -->
+                                                                        <Button Text="Elimina"
+                                             Command="{Binding EliminaPrenotazioneCommand}"
+                                             BackgroundColor="#007BFF"
+                                             TextColor="Black"
+                                             CornerRadius="25"
+                                             HeightRequest="40"
+                                             WidthRequest="150" />          
+                                    </StackLayout>
+                                </HorizontalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </ScrollView>
     </VerticalStackLayout>
 </ContentPage>

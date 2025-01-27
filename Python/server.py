@@ -81,3 +81,13 @@ def get_user_data():
         return response
     except ConnectionError as e:
         raise HTTPException(status_code=502, detail=str(e))
+    
+@app.post("/getBookings")
+def get_user_data():
+    try:
+        payload = {"Username": current_username}
+        response = connect_go("getBookings", payload)
+        print(response)
+        return response
+    except ConnectionError as e:
+        raise HTTPException(status_code=502, detail=str(e))

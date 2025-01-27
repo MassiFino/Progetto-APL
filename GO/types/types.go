@@ -47,3 +47,17 @@ type HotelResponse struct {
 	Rating      float64  `json:"rating,omitempty"` // Valutazione dell'hotel (opzionale)
 	Images      string   `json:"images"`           // URL delle immagini dell'hotel
 }
+type BookingRequest struct {
+	Username string `json:"username"`
+}
+type BookingResponse struct {
+	BookingID     int     `json:"bookingID"`
+	Username      string  `json:"username"`
+	CheckInDate   string  `json:"checkInDate"`
+	CheckOutDate  string  `json:"checkOutDate"`
+	TotalAmount   float64 `json:"totalAmount"`
+	Status        string  `json:"status"`
+	RoomName      string  `json:"roomName"`
+	HotelName     string  `json:"hotelName"`
+	HotelLocation string  `json:"hotelLocation"`
+}

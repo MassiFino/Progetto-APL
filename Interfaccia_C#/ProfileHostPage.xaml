@@ -12,7 +12,7 @@
                StrokeShape="RoundRectangle 20">
             <Grid Margin="10" ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
                 <!-- Immagine del profilo nella colonna di sinistra -->
-                <Border Stroke="LightGray" StrokeThickness="1" Padding="5" Grid.RowSpan="5" HorizontalOptions="Center" VerticalOptions="Center">
+                <Border Stroke="LightGray" StrokeThickness="1" Padding="5" Grid.RowSpan="5" HorizontalOptions="Center" VerticalOptions="Center" StrokeShape="RoundRectangle 10">
                     <Image Source="{Binding ProfileImage}" WidthRequest="80" HeightRequest="80" VerticalOptions="CenterAndExpand"/>
                 </Border>
 
@@ -48,6 +48,13 @@
 
                 <!-- Dettagli dell'utente locatore -->
                 <Label Text="Profilo Locatore" FontSize="24" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+                <!-- Messaggio in caso di nessun hotel -->
+                <Label Text="{Binding Message}"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="Black"
+                   HorizontalOptions="Center" 
+                   IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
 
                 <!-- Lista degli hotel posseduti -->
                 <CollectionView ItemsSource="{Binding OwnedHotels}">

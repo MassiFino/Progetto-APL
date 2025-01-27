@@ -160,9 +160,14 @@ func getHotelsHostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Se non sono stati trovati hotel, restituisci un errore
+	// Se non sono stati trovati hotel, restituisci comunque una risposta di successo con lista vuota
 	if len(hotels) == 0 {
-		http.Error(w, "Nessun hotel trovato per questo utente", http.StatusNotFound)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)             // Risposta con successo
+		err := json.NewEncoder(w).Encode(hotels) // Rispondi con la lista vuota di hotel
+		if err != nil {
+			http.Error(w, "Errore durante la codifica della risposta JSON", http.StatusInternalServerError)
+		}
 		return
 	}
 	// Stampa degli hotel trovati per il debug
@@ -178,6 +183,53 @@ func getHotelsHostHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Errore durante la codifica della risposta JSON", http.StatusInternalServerError)
 	}
 }
+func getBookingsHandler(w http.ResponseWriter, r *http.Request) {
+	// Verifica che il metodo sia POST
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Definiamo una struttura per l'email che riceviamo nel corpo della richiesta
+	var req types.UserRequest
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+	fmt.Printf("email ricevuta: %+v\n", req.Username)
+
+	// Recupera le prenotazioni dal database usando la funzione getBookings
+	bookings, err := database.GetBookings(db, req.Username)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore durante la ricerca delle prenotazioni: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Se non sono state trovate prenotazioni, restituisci comunque una risposta di successo con lista vuota
+	if len(bookings) == 0 {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK)               // Risposta con successo
+		err := json.NewEncoder(w).Encode(bookings) // Rispondi con la lista vuota di prenotazioni
+		if err != nil {
+			http.Error(w, "Errore durante la codifica della risposta JSON", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	// Stampa delle prenotazioni trovate per il debug
+	for i, booking := range bookings {
+		fmt.Printf("Prenotazione #%d: %+v\n", i+1, booking)
+	}
+
+	// Rispondi con i dati delle prenotazioni in formato JSON
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(bookings)
+	if err != nil {
+		http.Error(w, "Errore durante la codifica della risposta JSON", http.StatusInternalServerError)
+	}
+}
 
 func main() {
 	db = initializeDatabase() // Inizializza la connessione al database
@@ -187,6 +239,7 @@ func main() {
 	http.HandleFunc("/signup", SignUPHandler)
 	http.HandleFunc("/getUserData", getUserDataHandler)
 	http.HandleFunc("/getHotelsHost", getHotelsHostHandler)
+	http.HandleFunc("/getBookings", getBookingsHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)

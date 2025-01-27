@@ -106,6 +106,7 @@
                                 <Entry Placeholder="Confirm Password" 
                                   Text="{Binding ConfirmPassword}" 
                                   TextColor="Black"
+                                  WidthRequest="240"
                                   IsPassword="True" />
                             </HorizontalStackLayout>
                         </Border>

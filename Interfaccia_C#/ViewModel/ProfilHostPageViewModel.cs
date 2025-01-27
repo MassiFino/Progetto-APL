@@ -46,6 +46,17 @@ private async void OnViewHotel(Hotel selectedHotel)
         private string role;
         private ImageSource _profileImage;
         private ImageSource _hotelImage;
+        private string message;
+
+        public string Message
+        {
+            get => message;
+            set
+            {
+                message = value;
+                OnPropertyChanged(nameof(Message));
+            }
+        }
         // Proprietà per il binding
         public string UserName
         {
@@ -77,7 +88,21 @@ private async void OnViewHotel(Hotel selectedHotel)
                 }
             }
         }
-      
+        // La proprietà ImageHotel per il binding
+        private ImageSource _imageHotel;
+        public ImageSource ImageHotel
+        {
+            get => _imageHotel;
+            set
+            {
+                if (_imageHotel != value)
+                {
+                    _imageHotel = value;
+                    OnPropertyChanged();  // Se la classe Hotel implementa INotifyPropertyChanged
+                }
+            }
+        }
+
         // Gestione delle modifiche alle proprietà
         private void SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
@@ -104,7 +129,9 @@ private async void OnViewHotel(Hotel selectedHotel)
         {
             if (File.Exists(imagePath))
             {
+                Debug.WriteLine("Immagine trovata: " + imagePath);
                 return ImageSource.FromFile(imagePath);  // Usa FileImageSource per caricare l'immagine
+
             }
             else
             {
@@ -162,19 +189,7 @@ private async void OnViewHotel(Hotel selectedHotel)
         public double rating { get; set; }
         public string images { get; set; }
 
-        // La proprietà ImageHotel per il binding
-        public ImageSource ImageHotel
-        {
-            get => _hotelImage;
-            set
-            {
-                if (_hotelImage != value)
-                {
-                    _hotelImage = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+       
         public async Task LoadHotelData()
         {
             try
@@ -184,7 +199,8 @@ private async void OnViewHotel(Hotel selectedHotel)
 
                 // Esegui la richiesta all'API
                 var response = await client.PostAsync(url, new StringContent(""));
-
+                var jsonR = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine("Questa è la risposta: " + jsonR);
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -192,12 +208,13 @@ private async void OnViewHotel(Hotel selectedHotel)
 
                     // Deserializza la risposta in una lista di Hotel
                     var hotels = JsonSerializer.Deserialize<List<Hotel>>(jsonResponse);
-                    if (hotels != null)
+                    if (hotels != null && hotels.Count > 0)
                     {
 
                         OwnedHotels.Clear(); // Pulisce la lista corrente
                         foreach (var hotel in hotels)
                         {// Assicurati che i servizi siano popolati correttamente
+                            Message = "";
 
                             // Verifica che la lista dei servizi non sia null
                             if (hotel.services == null)
@@ -230,20 +247,27 @@ private async void OnViewHotel(Hotel selectedHotel)
                             Debug.WriteLine("Path completo " + imagePath);
                             // Imposta l'immagine dell'hotel se il percorso è valido
                             ImageHotel = GetImageSource(imagePath);
+                            Debug.WriteLine("Immaginissima: " + ImageHotel);
 
                             // Aggiungi l'hotel alla lista
                             OwnedHotels.Add(hotel);
                         }
+                    }
+                    else
+                    {
+                        // Se non ci sono hotel, imposta il messaggio "Non ho trovato hotel"
+                        Message = "Non ho trovato hotel";
                     }
                 }
                 else
                 {
                     var errorContent = await response.Content.ReadAsStringAsync();
                     await Application.Current.MainPage.DisplayAlert("Errore", $"Caricamento dati fallito: {errorContent}", "OK");
+
                 }
             }
             catch (Exception ex)
-            {
+            { 
                 await Application.Current.MainPage.DisplayAlert("Errore", $"Si è verificato un errore: {ex.Message}", "OK");
             }
         }
