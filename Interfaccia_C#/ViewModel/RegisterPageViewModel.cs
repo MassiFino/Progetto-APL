@@ -7,6 +7,8 @@ using Microsoft.Maui.Controls;
 using Microsoft.Maui.Storage;
 using System.Diagnostics;
 using System.Data;
+using Microsoft.Maui.Storage;
+
 
 namespace Interfaccia_C_.ViewModel
 {
@@ -130,6 +132,15 @@ namespace Interfaccia_C_.ViewModel
                 }
             }
         }
+
+        public class RegisterResponse
+        {
+            public string Status { get; set; }
+            public string Message { get; set; }
+            public string Role { get; set; }
+            public string Token { get; set; } 
+        }
+
         // Propriet� per il comando di navigazione alla LoginPage
         public ICommand GoToLoginCommand { get; }
 
@@ -252,10 +263,11 @@ namespace Interfaccia_C_.ViewModel
                 Console.WriteLine($"Error selecting image: {ex.Message}");
             }
         }
+
         // Metodo per gestire la registrazione
         private async Task Register()
         {
-            // Verifica che i campi siano compilati correttamente
+            // 1) Controlli vari su campi vuoti e password
             if (string.IsNullOrWhiteSpace(Name) ||
                 string.IsNullOrWhiteSpace(Email) ||
                 string.IsNullOrWhiteSpace(Password) ||
@@ -264,27 +276,24 @@ namespace Interfaccia_C_.ViewModel
                 await Shell.Current.DisplayAlert("Errore", "Tutti i campi sono obbligatori.", "OK");
                 return;
             }
-
             if (Password != ConfirmPassword)
             {
                 await Shell.Current.DisplayAlert("Errore", "Le password non coincidono.", "OK");
                 return;
             }
 
-            // Prepara il payload per l'invio
+            // 2) Prepara il payload per la richiesta
             var payload = new
             {
                 Username = this.Name,
                 Email = this.Email,
                 Password = this.Password,
                 PImage = ProfileImage,
-                Role=selectedUserType
+                Role = selectedUserType
             };
-            Debug.WriteLine("Contenuto della richiesta solo paylod: " + payload);
-            var jsonPayload = JsonSerializer.Serialize(payload);
 
+            var jsonPayload = JsonSerializer.Serialize(payload);
             Debug.WriteLine("Contenuto della richiesta: " + jsonPayload);
-            Debug.WriteLine(selectedUserType);
 
             var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
@@ -294,54 +303,59 @@ namespace Interfaccia_C_.ViewModel
                 var url = "http://localhost:9000/signup";
 
                 var response = await client.PostAsync(url, content);
-                Debug.WriteLine("dopo signup"+selectedUserType);
+                Debug.WriteLine("dopo signup " + selectedUserType);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    if (selectedUserType != null)
-                    {
+                    var responseContent = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("Risposta JSON: " + responseContent);
 
-                        // Carica la Shell appropriata in base al ruolo
+                    var registerResponse = JsonSerializer.Deserialize<RegisterResponse>(responseContent);
+
+                    if (registerResponse != null && registerResponse.Status == "ok")
+                    {
+                        // 4d) Se esiste un token, salva in SecureStorage
+                        if (!string.IsNullOrEmpty(registerResponse.Token))
+                        {
+                            await SecureStorage.SetAsync("jwt_token", registerResponse.Token);
+                        }
+
                         if (selectedUserType == "Host")
                         {
+                            Debug.WriteLine("sono un Host " + selectedUserType);
 
-                            Debug.WriteLine("sono uno Host"+selectedUserType);
-
-                            // Crea una nuova Shell specifica per il ruolo Host
                             var hostShell = new HostShell();
-
-                            // Imposta la nuova Shell come finestra principale
                             Application.Current.MainPage = hostShell;
-
-                            // Naviga alla pagina desiderata all'interno della nuova Shell
                             await hostShell.GoToAsync("//ProfileHostPage");
-
                         }
                         else
                         {
-                            Debug.WriteLine("sono uno User" + selectedUserType);
-                            // Crea una nuova Shell specifica per il ruolo Host
+                            Debug.WriteLine("sono un User " + selectedUserType);
+
                             var userShell = new UserShell();
-
-                            // Imposta la nuova Shell come finestra principale
-                            Application.Current.MainPage =userShell;
-
-                            // Naviga alla pagina desiderata all'interno della nuova Shell
+                            Application.Current.MainPage = userShell;
                             await userShell.GoToAsync("//MainPage");
                         }
 
+                        await Shell.Current.DisplayAlert("Successo", "Registrazione completata con successo!", "OK");
                     }
-                    await Shell.Current.DisplayAlert("Successo", "Registrazione completata con successo!", "OK");
+                    else
+                    {
+
+                        var errorContent = registerResponse?.Message ?? "Risposta sconosciuta dal server.";
+                        await Shell.Current.DisplayAlert("Errore", $"Registrazione fallita: {errorContent}", "OK");
+                    }
                 }
                 else
                 {
+                    //Se lo stato non è success, leggi il contenuto di errore
                     var errorContent = await response.Content.ReadAsStringAsync();
                     await Shell.Current.DisplayAlert("Errore", $"Registrazione fallita: {errorContent}", "OK");
                 }
             }
             catch (Exception ex)
             {
-                await Shell.Current.DisplayAlert("Errore", $"Si � verificato un errore: {ex.Message}", "OK");
+                await Shell.Current.DisplayAlert("Errore", $"Si è verificato un errore: {ex.Message}", "OK");
             }
         }
 

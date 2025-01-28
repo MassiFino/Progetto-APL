@@ -10,6 +10,10 @@ using System.Text.Json.Serialization;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
 using Interfaccia_C_.Model; // Importa il modello Hotel
+using System.Net.Http.Headers; // Per AuthenticationHeaderValue
+using Microsoft.Maui.Storage;   // Per SecureStorage
+using System.Text;
+
 
 namespace Interfaccia_C_.ViewModel
 {
@@ -134,9 +138,29 @@ namespace Interfaccia_C_.ViewModel
         {
             try
             {
+                var token = await SecureStorage.GetAsync("jwt_token");
+                if (string.IsNullOrEmpty(token))
+                {
+                    // Non hai il token, l'utente non è loggato
+                    Debug.WriteLine("Token mancante! Reindirizzo al login?");
+                    await Shell.Current.GoToAsync("//LoginPage");
+                    return;
+                }
+
                 var url = "http://localhost:9000/getUserData"; // Cambia l'URL se necessario
                 using var client = new HttpClient();
-                var response = await client.PostAsync(url, new StringContent(""));
+                var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
+
+                // Se devi mandare un body JSON vuoto, ad es.:
+                requestMessage.Content = new StringContent("{}", Encoding.UTF8, "application/json");
+
+                // 3) Imposta l'header Authorization: Bearer <token>
+                requestMessage.Headers.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+
+                // 4) Invii la richiesta
+                var response = await client.SendAsync(requestMessage);
+
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -174,11 +198,30 @@ namespace Interfaccia_C_.ViewModel
         {
             try
             {
-                var url = "http://localhost:9000/getBookings"; // Cambia l'URL se necessario
+                var token = await SecureStorage.GetAsync("jwt_token");
+                if (string.IsNullOrEmpty(token))
+                {
+                    // Non hai il token, l'utente non è loggato
+                    Debug.WriteLine("Token mancante! Reindirizzo al login?");
+                    await Shell.Current.GoToAsync("//LoginPage");
+                    return;
+                }
+
+                var url = "http://localhost:9000/getBookings"; 
                 using var client = new HttpClient();
 
-                // Esegui la richiesta all'API
-                var response = await client.PostAsync(url, new StringContent(""));
+                var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
+
+                // Se devi mandare un body JSON vuoto, ad es.:
+                requestMessage.Content = new StringContent("{}", Encoding.UTF8, "application/json");
+
+                // 3) Imposta l'header Authorization: Bearer <token>
+                requestMessage.Headers.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+
+                // 4) Invii la richiesta
+                var response = await client.SendAsync(requestMessage);
+
                 var jsonR = await response.Content.ReadAsStringAsync();
                 Debug.WriteLine("Questa è la risposta: " + jsonR);
 

@@ -21,4 +21,5 @@
         Title="Registrazion"
         ContentTemplate="{DataTemplate local:RegisterPage}"
         Route="RegisterPage" />
+
 </Shell>

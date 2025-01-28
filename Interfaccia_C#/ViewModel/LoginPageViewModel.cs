@@ -10,6 +10,7 @@ using Microsoft.Maui.Controls;
 using System.Text.Json;
 using System.Diagnostics;
 using System.Data;
+using Microsoft.Maui.Storage;
 
 
 namespace Interfaccia_C_.ViewModel
@@ -67,6 +68,7 @@ namespace Interfaccia_C_.ViewModel
             public string Status { get; set; }
             public string Message { get; set; }
             public string role { get; set; }
+            public string token { get; set; }
         }
         private async Task Login()
         {
@@ -118,6 +120,11 @@ namespace Interfaccia_C_.ViewModel
                     var userData = JsonSerializer.Deserialize<LoginResponse>(responseContent);
                     // Assegna il valore del campo 'Role' alla variabile 'typeUser'
 
+                    if (!string.IsNullOrEmpty(userData.token))
+                    {
+                        // Salviamo il token in SecureStorage
+                        await SecureStorage.SetAsync("jwt_token", userData.token);
+                    }
                     string role = userData.role;
 
                     
