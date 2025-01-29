@@ -6,18 +6,35 @@
     xmlns:local="clr-namespace:Interfaccia_C_"
     Shell.FlyoutBehavior="Flyout"
     Title="InterfacciaUser_C_"
-    Shell.NavBarIsVisible="False"
->
+    Shell.NavBarIsVisible="False" >
+    <Shell.FlyoutBackground>
+        <LinearGradientBrush>
+            <GradientStop Color="#6D83F2" Offset="0.0" />
+            <GradientStop Color="#F2C94C" Offset="1.0" />
+        </LinearGradientBrush>
+    </Shell.FlyoutBackground>
     <!-- Nascondi la barra superiore -->
 
 
     <ShellContent
         Title="MainPage"
         ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-  <ShellContent
-      Title="Profile"
-      ContentTemplate="{DataTemplate local:ProfileUserPage}"
-      Route="ProfileUserPage" />
-  
+        Route="MainPage" >
+        <ShellContent.Icon>
+            <FileImageSource File="home.png" />
+        </ShellContent.Icon>
+    </ShellContent>
+    
+    
+    <ShellContent
+    Title="Profilo"
+    ContentTemplate="{DataTemplate local:ProfileHostPage}"
+   Route="ProfilePage">
+        <ShellContent.Icon>
+            <FileImageSource File="account2.png" />
+        </ShellContent.Icon>
+    </ShellContent>
+    
+
+
 </Shell>

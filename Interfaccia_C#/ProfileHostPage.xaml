@@ -7,7 +7,7 @@
              Padding="0">
 
     <VerticalStackLayout Margin="10" Spacing="15">
-        <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="AliceBlue" Padding="20"
+        <Border Stroke="#20B2AA" StrokeThickness="1" BackgroundColor="#00CED1" Padding="20"
                HorizontalOptions="Center" VerticalOptions="Center"
                StrokeShape="RoundRectangle 20">
             <Grid Margin="10" ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
@@ -19,26 +19,36 @@
                 <!-- Prima riga con Nome utente e Email -->
                 <StackLayout Grid.Column="1" Grid.Row="0" Spacing="10" VerticalOptions="Start" Padding="5">
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Nome Utente:" FontAttributes="Bold" FontSize="16" TextColor="Black" VerticalOptions="Center"  Margin="10" />
+                        <Label Text="Nome Utente:" FontAttributes="Bold" FontSize="16" TextColor="#FF6347" VerticalOptions="Center" Margin="10" />
+                        <!-- Colore acceso per Nome Utente -->
                         <Label Text="{Binding UserName}" FontSize="18" TextColor="Black" VerticalOptions="Center" Margin="10" />
-                        <Label Text="Email:" FontAttributes="Bold" FontSize="16" TextColor="Black" VerticalOptions="Center"  Margin="10" />
-                        <Label Text="{Binding Email}" FontSize="14" TextColor="Gray" VerticalOptions="Center" Margin="10" />
-                        <Label Text="Ruolo:" FontAttributes="Bold" FontSize="16" TextColor="Black" VerticalOptions="Center"  Margin="10" />
-                        <Label Text="{Binding Role}" FontSize="14" TextColor="Gray" VerticalOptions="Center" Margin="10" />
-                    </HorizontalStackLayout>
+                        <!-- Testo neutro per il valore -->
 
+                        <Label Text="Email:" FontAttributes="Bold" FontSize="16" TextColor="#FF6347" VerticalOptions="Center" Margin="10" />
+                        <!-- Colore acceso per Email -->
+                        <Label Text="{Binding Email}" FontSize="14" TextColor="Gray" VerticalOptions="Center" Margin="10" />
+                        <!-- Testo neutro per il valore -->
+
+                        <Label Text="Ruolo:" FontAttributes="Bold" FontSize="16" TextColor="#FF6347" VerticalOptions="Center" Margin="10" />
+                        <!-- Colore acceso per Ruolo -->
+                        <Label Text="{Binding Role}" FontSize="14" TextColor="Gray" VerticalOptions="Center" Margin="10" />
+                        <!-- Testo neutro per il valore -->
+                    </HorizontalStackLayout>
                 </StackLayout>
 
                 <!-- Seconda riga con Punti Fedeltà, Prenotazioni Totali e Ruolo -->
                 <StackLayout Grid.Column="1" Grid.Row="1" Spacing="10" VerticalOptions="Start" Padding="5">
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Punti Fedeltà:" FontAttributes="Bold" FontSize="16" TextColor="Black" VerticalOptions="Center"  Margin="10"/>
+                        <Label Text="Punti Fedeltà:" FontAttributes="Bold" FontSize="16" TextColor="#32CD32" VerticalOptions="Center" Margin="10"/>
+                        <!-- Colore acceso per Punti Fedeltà -->
                         <Label Text="{Binding PuntiFedelta, StringFormat='{0} punti'}" FontSize="14" TextColor="Black" VerticalOptions="Center" Margin="10" />
+                        <!-- Testo neutro per il valore -->
 
-                        <Label Text="Prenotazioni Totali:" FontAttributes="Bold" FontSize="16" TextColor="Black" VerticalOptions="Center"  Margin="10" />
+                        <Label Text="Prenotazioni Totali:" FontAttributes="Bold" FontSize="16" TextColor="#32CD32" VerticalOptions="Center" Margin="10" />
+                        <!-- Colore acceso per Prenotazioni Totali -->
                         <Label Text="{Binding TotPren, StringFormat='{0} Prenotazioni attive'}" FontSize="14" TextColor="Black" VerticalOptions="Center" Margin="10" />
+                        <!-- Testo neutro per il valore -->
                     </HorizontalStackLayout>
-
                 </StackLayout>
             </Grid>
         </Border>
@@ -52,7 +62,7 @@
                 <Label Text="{Binding Message}"
                    FontSize="20"
                    FontAttributes="Bold"
-                   TextColor="Black"
+                   TextColor="#32CD32"
                    HorizontalOptions="Center" 
                    IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
 
@@ -60,9 +70,9 @@
                 <CollectionView ItemsSource="{Binding OwnedHotels}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Border  Padding="10" Margin="0,10">
+                            <Border Padding="10" Margin="0,10" BackgroundColor="LightYellow" Stroke="#FFA500" StrokeShape="RoundRectangle 10">
                                 <HorizontalStackLayout Spacing="20">
-                                    <Border Stroke="LightGray" StrokeThickness="1" Padding="5" Grid.RowSpan="5" HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Border Stroke="LightGray" StrokeThickness="1" Padding="5" Grid.RowSpan="5" HorizontalOptions="Center" VerticalOptions="Center" StrokeShape="RoundRectangle 20">
                                         <Image Source="{Binding ImageHotel}" WidthRequest="80" HeightRequest="80" VerticalOptions="CenterAndExpand"/>
                                     </Border>
 
@@ -74,23 +84,23 @@
                                         <Label Text="{Binding name}" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
 
                                         <!-- Posizione dell'Hotel -->
-                                        <Label Text="{Binding location}" FontSize="14" TextColor="Gray"/>
+                                        <Label Text="{Binding location}" FontSize="14" TextColor="#FFD700"/>
 
                                         <!-- Descrizione dell'Hotel -->
-                                        <Label Text="{Binding description}" FontSize="12" TextColor="Black"/>
+                                        <Label Text="{Binding description}" FontSize="12" TextColor="#4682B4"/>
 
                                         <!-- Servizi -->
                                         <StackLayout Orientation="Horizontal" Spacing="10">
                                             <Label Text="Servizi:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                            <Label Text="{Binding services, StringFormat='{0}'}" FontSize="12" TextColor="Gray"/>
+                                            <Label Text="{Binding services, StringFormat='{0}'}" FontSize="12" TextColor="#D2691E"/>
                                         </StackLayout>
                                         <!-- Servizi -->
                                         <StackLayout Orientation="Horizontal" Spacing="10">
                                             <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                            <Label Text="{Binding rating}" FontSize="12" TextColor="Gray"/>
+                                            <Label Text="{Binding rating}" FontSize="12" TextColor="#D2691E"/>
                                         </StackLayout>
                                         <Button Text="Visualizza"
-                                        BackgroundColor="LightBlue"
+                                        BackgroundColor="#FF1493"
                                         TextColor="White"
                                         CornerRadius="10"
                                         Command="{Binding ViewHotelCommand}"
