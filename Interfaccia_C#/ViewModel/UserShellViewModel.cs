@@ -30,6 +30,8 @@ namespace Interfaccia_C_.ViewModel
         // Metodo che esegue il logout
         private async void ExecuteLogout()
         {
+
+            SecureStorage.Remove("jwt_token");
             // Mostra un alert di logout
             await App.Current.MainPage.DisplayAlert("Logout", "Sei stato disconnesso.", "OK");
 
