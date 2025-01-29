@@ -34,7 +34,12 @@
             <FileImageSource File="account2.png" />
         </ShellContent.Icon>
     </ShellContent>
-    
+
+    <!-- Logout con Command -->
+    <MenuItem
+        Text="Logout"
+        Command="{Binding LogoutCommand}"
+        IconImageSource="logout.png" />
 
 
 </Shell>

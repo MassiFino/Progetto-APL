@@ -7,20 +7,174 @@
              Title="Add Hotel Page"
              BackgroundColor="White"
              Padding="0">
+    <ScrollView>
 
+        <VerticalStackLayout Spacing="20">
 
-        <ScrollView>
-        <VerticalStackLayout Margin="10" Spacing="15">
+            <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="AliceBlue" Padding="20"
+                    HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
+                    StrokeShape="RoundRectangle 20">
+                <VerticalStackLayout Spacing="20">
 
-                <!-- Contenuto scrollabile -->
-                <StackLayout>
-                <Label 
-                    Text="Welcome to the Add Hotel Page!" 
-                    FontSize="18" 
-                    FontAttributes="Italic" 
-                    Margin="0,10,0,5" 
-                TextColor="Green" />
-            </StackLayout>
+                    <!-- Nome dell'hotel -->
+                    <Label Text="Nome dell'hotel"
+                           FontSize="16"
+                           TextColor="Black"
+                           HorizontalOptions="Start" />
+                    <Entry x:Name="HotelNameEntry"
+                           Placeholder="Inserisci il nome dell'hotel"
+                           Text="{Binding HotelName}"
+                           MaxLength="150"
+                           HorizontalOptions="FillAndExpand"
+                           HeightRequest="45" />
+
+                    <!-- Posizione dell'hotel -->
+                    <Label Text="Posizione dell'hotel"
+                           FontSize="16"
+                           TextColor="Black"
+                           HorizontalOptions="Start" />
+                    <Entry x:Name="HotelLocationEntry"
+                           Placeholder="Inserisci la posizione"
+                           Text="{Binding Location}"
+                           MaxLength="200"
+                           HorizontalOptions="FillAndExpand"
+                           HeightRequest="45" />
+
+                    <!-- Descrizione dell'hotel -->
+                    <Label Text="Descrizione dell'hotel"
+                           FontSize="16"
+                           TextColor="Black"
+                           HorizontalOptions="Start" />
+                    <Editor x:Name="HotelDescriptionEditor"
+                            Placeholder="Inserisci la descrizione"
+                            Text="{Binding Description}"
+                            MaxLength="500"
+                            HeightRequest="150"
+                            HorizontalOptions="FillAndExpand" />
+
+                    <!-- Valutazione dell'hotel -->
+                    <Label Text="Valutazione dell'hotel (0-5)"
+                           FontSize="16"
+                           TextColor="Black"
+                           HorizontalOptions="Start" />
+                    <Entry x:Name="HotelRatingEntry"
+                           Placeholder="Valutazione (0-5)"
+                           Text="{Binding Rating}"
+                           Keyboard="Numeric"
+                           MaxLength="5"
+                           HorizontalOptions="FillAndExpand"
+                           HeightRequest="45" />
+
+                    <!-- Immagine dell'hotel -->
+                    <Label Text="URL Immagine dell'hotel"
+                           FontSize="16"
+                           TextColor="Black"
+                           HorizontalOptions="Start" />
+                    <Entry x:Name="HotelImageEntry"
+                           Placeholder="Inserisci URL dell'immagine"
+                           Text="{Binding Images}"
+                           MaxLength="500"
+                           HorizontalOptions="FillAndExpand"
+                           HeightRequest="45" />
+
+                    <!-- Sezione per l'upload delle immagini -->
+                    <Label Text="Carica Immagini"
+                           FontSize="16"
+                           TextColor="Black"
+                           HorizontalOptions="Start" />
+                    <Button Text="Upload Image"
+                            Command="{Binding UploadImageCommand}"
+                            BackgroundColor="#007BFF"
+                            TextColor="White"
+                            CornerRadius="25"
+                            HeightRequest="40"
+                            WidthRequest="150" />
+
+                    <!-- Messaggio di stato per il caricamento -->
+                    <Label Text="{Binding UploadStatusMessage}"
+                           FontSize="14"
+                           TextColor="Green"
+                           IsVisible="{Binding IsUploadComplete}"
+                           HorizontalTextAlignment="Center" />
+
+                    <!-- Sezione per la selezione dei servizi -->
+                    <Label Text="Seleziona i Servizi"
+                           FontSize="16"
+                           TextColor="Black"
+                           HorizontalOptions="Start" />
+
+                    <StackLayout Spacing="10">
+                        <!-- Servizi -->
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Free Wi-Fi" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsWifiEnabled}" />
+                            </StackLayout>
+
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Free Parking" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsParkingEnabled}" />
+                            </StackLayout>
+
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Free Breakfast" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsBreakfastEnabled}" />
+                            </StackLayout>
+                        </StackLayout>
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Pool" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsPoolEnabled}" />
+                            </StackLayout>
+
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Gym" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsGymEnabled}" />
+                            </StackLayout>
+
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Spa" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsSpaEnabled}" />
+                            </StackLayout>
+                        </StackLayout>
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Room Service" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsRoomServiceEnabled}" />
+                            </StackLayout>
+
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Pets Allowed" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsPetsAllowedEnabled}" />
+                            </StackLayout>
+
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Restaurant" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsRestaurantEnabled}" />
+                            </StackLayout>
+                        </StackLayout>
+
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Air Conditioning" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsAirConditioningEnabled}" />
+                            </StackLayout>
+                        </StackLayout>
+                    </StackLayout>
+
+                    <!-- Pulsante per inviare i dati -->
+                    <Button Text="Aggiungi Hotel"
+                            Command="{Binding AddHotelCommand}"
+                            BackgroundColor="#28A745"
+                            TextColor="White"
+                            CornerRadius="20"
+                            HeightRequest="50" />
+
+                </VerticalStackLayout>
+            </Border>
         </VerticalStackLayout>
+
     </ScrollView>
 </ContentPage>

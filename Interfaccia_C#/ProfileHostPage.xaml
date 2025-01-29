@@ -7,6 +7,7 @@
              Padding="0">
 
     <VerticalStackLayout Margin="10" Spacing="15">
+       
         <Border Stroke="#20B2AA" StrokeThickness="1" BackgroundColor="#00CED1" Padding="20"
                HorizontalOptions="Center" VerticalOptions="Center"
                StrokeShape="RoundRectangle 20">
@@ -55,9 +56,10 @@
 
         <ScrollView>
             <VerticalStackLayout Margin="10" Spacing="20">
-
-                <!-- Dettagli dell'utente locatore -->
+              
+                    <!-- Dettagli dell'utente locatore -->
                 <Label Text="Profilo Locatore" FontSize="24" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+                 <HorizontalStackLayout Spacing="10">
                 <!-- Messaggio in caso di nessun hotel -->
                 <Label Text="{Binding Message}"
                    FontSize="20"
@@ -65,7 +67,15 @@
                    TextColor="#32CD32"
                    HorizontalOptions="Center" 
                    IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
-
+                <!-- Bottone per la registrazione -->
+                <Button Text="Aggiungi un hotel"
+                     Command="{Binding AddHotelCommand}"
+                     BackgroundColor="#28A745"
+                     TextColor="White"
+                     CornerRadius="20"
+                     HeightRequest="40"
+                     WidthRequest="150" />
+                </HorizontalStackLayout>
                 <!-- Lista degli hotel posseduti -->
                 <CollectionView ItemsSource="{Binding OwnedHotels}">
                     <CollectionView.ItemTemplate>

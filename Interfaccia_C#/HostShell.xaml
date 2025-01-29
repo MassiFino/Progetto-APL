@@ -7,18 +7,14 @@
     Shell.FlyoutBehavior="Flyout"
     Title="InterfacciaHost_C_"
     Shell.NavBarIsVisible="False"
-    
 >
     <Shell.FlyoutBackground>
         <LinearGradientBrush>
             <GradientStop Color="#00B5B8" Offset="0.0" />
             <GradientStop Color="#D80072" Offset="1.0" />
-
         </LinearGradientBrush>
     </Shell.FlyoutBackground>
 
-
-   
     <ShellContent
         Title="Profilo"
         ContentTemplate="{DataTemplate local:ProfileHostPage}"
@@ -36,19 +32,21 @@
             <FileImageSource File="hotel.png" />
         </ShellContent.Icon>
     </ShellContent>
-    <ShellContent
-        
-        
-   Title="Add Room "
-   ContentTemplate="{DataTemplate local:AddRoomPage}"
-   Route="AddRoomPage" 
-    IsVisible="False">
-    <ShellContent.Icon>
-        <FileImageSource File="room.png" />
-    </ShellContent.Icon>
+    
+    <ShellContent     
+     Title="Add Room "
+     ContentTemplate="{DataTemplate local:AddRoomPage}"
+     Route="AddRoomPage" 
+     IsVisible="False">
+        <ShellContent.Icon>
+            <FileImageSource File="room.png" />
+        </ShellContent.Icon>
     </ShellContent>
-    
-    
 
+    <!-- Logout con Command -->
+    <MenuItem
+        Text="Logout"
+        Command="{Binding LogoutCommand}"
+        IconImageSource="logout.png" />
 
 </Shell>

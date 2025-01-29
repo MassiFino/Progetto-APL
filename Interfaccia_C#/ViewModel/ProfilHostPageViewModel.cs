@@ -22,17 +22,22 @@ namespace Interfaccia_C_.ViewModel
 
 public ICommand ViewHotelCommand { get; }
 
-// Costruttore del ViewModel
-public ProfileHostPageViewModel()
+        public ICommand AddHotelCommand { get; }
+
+        // Costruttore del ViewModel
+        public ProfileHostPageViewModel()
 {
     OwnedHotels = new ObservableCollection<Hotel>();  // Inizializza la lista degli hotel
     ViewHotelCommand = new Command<Hotel>(OnViewHotel);  // Imposta il comando per il pulsante "Visualizza"
-    
-    LoadUserData(); // Carica i dati dell'utente all'avvio
+    AddHotelCommand = new Command(async () => await Shell.Current.GoToAsync("//AddHotelPage"));
+
+
+            LoadUserData(); // Carica i dati dell'utente all'avvio
     LoadHotelData();   // Carica i dati degli hotel
 }
 
-private async void OnViewHotel(Hotel selectedHotel)
+
+        private async void OnViewHotel(Hotel selectedHotel)
 {
     if (selectedHotel != null)
     {
