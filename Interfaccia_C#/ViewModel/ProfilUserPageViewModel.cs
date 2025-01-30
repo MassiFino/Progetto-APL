@@ -33,7 +33,15 @@ namespace Interfaccia_C_.ViewModel
         private string role;
         private ImageSource _profileImage;
         private string message;
+        // Classe per la risposta dell'API
+        public class UserResponse
+        {
+            public string Username { get; set; }
+            public string Email { get; set; }
+            public string Role { get; set; }
+            public string PImage { get; set; }
 
+        }
         // Proprietà per il binding
         public string UserName
         {
@@ -93,42 +101,22 @@ namespace Interfaccia_C_.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        // Classe per la risposta dell'API
-        public class UserResponse
-        {
-            public string Username { get; set; }
-            public string Email { get; set; }
-            public string Role { get; set; }
-            public string PImage { get; set; }
-            public override string ToString()
-            {
-                return $"Username: {Username}, Email: {Email}, Role: {Role}, PImage: {PImage}";
-            }
-        }
-
-        public class Booking
-        {
-            public int bookingID { get; set; }  // Identificativo univoco della prenotazione
-            public string username { get; set; }  // Nome utente del cliente
-            public DateTime checkInDate { get; set; }  // Data di check-in
-            public DateTime checkOutDate { get; set; }  // Data di check-out
-            public decimal totalAmount { get; set; }  // Importo totale della prenotazione
-            public string status { get; set; }  // Stato della prenotazione
-            public string roomName { get; set; }  // Nome della stanza
-            public string hotelName { get; set; }  // URL o percorso dell'immagine della stanza
-            public string hotelLocation { get; set; }
-            
-        }
+       
+     
 
         // Metodo per ottenere l'immagine del profilo
         public ImageSource GetImageSource(string imagePath)
         {
             if (File.Exists(imagePath))
             {
+                Debug.WriteLine("Immagine trovata: " + imagePath);
                 return ImageSource.FromFile(imagePath);  // Usa FileImageSource per caricare l'immagine
+
             }
             else
             {
+                Debug.WriteLine("Immagine non trovata: " + imagePath);
+
                 return null;  // Immagine non trovata
             }
         }
@@ -237,21 +225,41 @@ namespace Interfaccia_C_.ViewModel
                         Debug.WriteLine("Questa è dopo la serializzazione: " + bookings);
 
                         OwnedBookings.Clear(); // Pulisce la lista corrente
-
+                        Message = "Queste sono le tue prenotazioni";
                         foreach (var booking in bookings)
                         {
-                            Message = "";
-
+                           
                             // Debug per vedere i dettagli della prenotazione
                             Debug.WriteLine($"Prenotazione: {booking.roomName}");
                             Debug.WriteLine($"Check-in: {booking.checkInDate.ToShortDateString()}");
                             Debug.WriteLine($"Check-out: {booking.checkOutDate.ToShortDateString()}");
                             Debug.WriteLine($"Importo: €{booking.totalAmount:F2}");
                             Debug.WriteLine($"Stato: {booking.status}");
-                            Debug.WriteLine($"RoomName: {booking.roomName}");
+                            
+                            Debug.WriteLine($"RoomName: {booking.roomImage}");
+
                             Debug.WriteLine($"HotelName: {booking.hotelName}");
 
                             // Assegna l'immagine della stanza alla proprietà di binding
+                            // Gestisci il percorso dell'immagine per l'hotel
+                            // Gestisci le immagini: prendi solo la prima immagine dalla stringa separata da virgole
+                            if (!string.IsNullOrEmpty(booking.roomImage?.Trim())) // Aggiungi Trim() per rimuovere spazi bianchi
+                            {
+                                var imageList = booking.roomImage.Split(','); // Dividi la stringa in un array di immagini
+                                booking.roomImage = imageList[0]; // Prendi solo la prima immagine
+                                Debug.WriteLine("Path immagine: " + booking.roomImage);
+                            }
+
+                            Debug.WriteLine($"RoomImages: {booking.roomImage}");
+                            string image = booking.roomImage;
+                            Debug.WriteLine("Path immagine hotel: " + image);
+
+                            string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName;
+                            var imagPath = Path.Combine(projectDirectory, image);
+                            Debug.WriteLine("Path completo " + imagPath);
+                            // Imposta l'immagine dell'hotel se il percorso è valido
+                            booking.ImageSource = GetImageSource(imagPath); // Imposta la proprietà ImageSource
+                            Debug.WriteLine("Immaginissima room: " + booking.ImageSource);
 
                             // Aggiungi la prenotazione alla lista
                             OwnedBookings.Add(booking);

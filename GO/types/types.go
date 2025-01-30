@@ -58,6 +58,7 @@ type BookingResponse struct {
 	TotalAmount   float64 `json:"totalAmount"`
 	Status        string  `json:"status"`
 	RoomName      string  `json:"roomName"`
+	RoomImage     string  `json:"roomImage"` // URL delle immagini della stanza
 	HotelName     string  `json:"hotelName"`
 	HotelLocation string  `json:"hotelLocation"`
 }

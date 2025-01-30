@@ -7,9 +7,10 @@
              Padding="0">
 
     <VerticalStackLayout Margin="10" Spacing="15">
+        <!-- Sezione statica: Profilo utente -->
         <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="AntiqueWhite" Padding="20"
                HorizontalOptions="Center" VerticalOptions="Center"
-               StrokeShape="RoundRectangle 20"> 
+               StrokeShape="RoundRectangle 20">
             <Grid Margin="10" ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
                 <!-- Immagine del profilo nella colonna di sinistra -->
                 <Border Stroke="LightGray" StrokeThickness="1" Padding="5" Grid.RowSpan="5" HorizontalOptions="Center" VerticalOptions="Center" StrokeShape="RoundRectangle 10">
@@ -43,71 +44,70 @@
             </Grid>
         </Border>
 
-        <ScrollView>
-            <VerticalStackLayout Margin="10" Spacing="20">
-
-                <!-- Dettagli dell'utente locatore -->
-                <Label Text="Profilo Locatore" FontSize="24" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
-
-                <!-- Messaggio in caso di nessuna prenotazione -->
-                <Label Text="{Binding Message}"
-               FontSize="20"
-               FontAttributes="Bold"
-               TextColor="Black"
-               HorizontalOptions="Center" 
-               IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
+            <!-- Messaggio in caso di nessuna prenotazione -->
+        <Label Text="{Binding Message}"
+     FontSize="18"
+     FontAttributes="Bold"
+     TextColor="Black"
+     HorizontalOptions="Center" 
+     IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
+        <!-- ScrollView per la lista delle prenotazioni -->
+            <ScrollView>
 
                 <!-- Lista delle prenotazioni -->
                 <CollectionView ItemsSource="{Binding OwnedBookings}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightGreen" Padding="40"
+                            <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightGreen" Padding="20"
                                HorizontalOptions="Center" VerticalOptions="Center"
-                               StrokeShape="RoundRectangle 60">     
+                               StrokeShape="RoundRectangle 30">
                                 <HorizontalStackLayout Spacing="20">
 
-
+                                    <Frame HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent" CornerRadius="20" Padding="0" HeightRequest="150" WidthRequest="150">
+                                        <Image Source="{Binding ImageSource}" Aspect="AspectFill" WidthRequest="180" HeightRequest="180" VerticalOptions="CenterAndExpand" />
+                                    </Frame>
                                     <!-- Contenuto a destra (informazioni sulla prenotazione) -->
                                     <StackLayout VerticalOptions="CenterAndExpand" Spacing="10" HorizontalOptions="FillAndExpand">
                                         <HorizontalStackLayout Spacing="10">
 
                                             <!-- Nome della stanza prenotata -->
-                                        <Label Text="{Binding roomName}" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
+                                            <Label Text="{Binding roomName}" FontSize="18" FontAttributes="Bold" TextColor="Black"/>
 
-                                        <!-- Nome della stanza prenotata -->
-                                        <Label Text="{Binding hotelName}" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
-                                    </HorizontalStackLayout>
-                                        <HorizontalStackLayout Spacing="10">    
+                                            <!-- Nome dell'hotel -->
+                                            <Label Text="{Binding hotelName}" FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+                                        </HorizontalStackLayout>
+                                        <HorizontalStackLayout Spacing="10">
                                             <!-- Data di check-in -->
-                                        <Label Text="{Binding checkInDate, StringFormat='Check-in: {0:dd MMM yyyy}'}" FontSize="14" TextColor="Gray"/>
+                                            <Label Text="{Binding checkInDate, StringFormat='Check-in: {0:dd MMM yyyy}'}" FontSize="14" TextColor="Gray"/>
 
-                                        <!-- Data di check-out -->
-                                        <Label Text="{Binding checkOutDate, StringFormat='Check-out: {0:dd MMM yyyy}'}" FontSize="14" TextColor="Gray"/>
-                                        <!-- Importo totale -->
+                                            <!-- Data di check-out -->
+                                            <Label Text="{Binding checkOutDate, StringFormat='Check-out: {0:dd MMM yyyy}'}" FontSize="14" TextColor="Gray"/>
+                                            <!-- Importo totale -->
                                         </HorizontalStackLayout>
                                         <HorizontalStackLayout Spacing="10">
 
                                             <Label Text="{Binding totalAmount, StringFormat='€ {0:F2}'}" FontSize="14" TextColor="Black"/>
 
-                                        <!-- Stato della prenotazione -->
-                                        <Label Text="{Binding status}" FontSize="14" TextColor="Gray"/>
-                                         </HorizontalStackLayout>
+                                            <!-- Stato della prenotazione -->
+                                            <Label Text="{Binding status}" FontSize="14" TextColor="Gray"/>
+                                        </HorizontalStackLayout>
 
-                                            <!-- Bottone per visualizzare i dettagli della prenotazione -->
-                                                                        <Button Text="Elimina"
+                                        <!-- Bottone per visualizzare i dettagli della prenotazione -->
+                                        <Button Text="Elimina"
                                              Command="{Binding EliminaPrenotazioneCommand}"
                                              BackgroundColor="#007BFF"
                                              TextColor="Black"
                                              CornerRadius="25"
                                              HeightRequest="40"
-                                             WidthRequest="150" />          
+                                             WidthRequest="150" />
                                     </StackLayout>
                                 </HorizontalStackLayout>
                             </Border>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-            </VerticalStackLayout>
-        </ScrollView>
-    </VerticalStackLayout>
+            </ScrollView>
+
+
+        </VerticalStackLayout>
 </ContentPage>

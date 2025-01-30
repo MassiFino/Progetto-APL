@@ -160,11 +160,10 @@ func GetHotelsHost(db *sql.DB, username string) ([]types.HotelResponse, error) {
 	fmt.Printf("Gli hotel trovati sono: %d\n", len(hotels))
 	return hotels, nil
 }
-
 func GetBookings(db *sql.DB, username string) ([]types.BookingResponse, error) {
 	fmt.Printf("Cerco prenotazioni per l'utente: %s\n", username)
 
-	// Query modificata per ottenere il nome della stanza e dell'hotel
+	// Query per ottenere i dettagli della prenotazione, incluso il percorso dell'immagine
 	query := `
     SELECT 
         b.BookingID,
@@ -173,7 +172,8 @@ func GetBookings(db *sql.DB, username string) ([]types.BookingResponse, error) {
         b.CheckOutDate,
         b.TotalAmount,
         b.Status,
-        r.Name AS RoomName,  -- Nome della stanza
+        r.Name AS RoomName,
+        r.Images AS RoomImage,  -- Nome della stanza e immagine
         h.Name AS HotelName,  -- Nome dell'hotel
         h.Location AS HotelLocation  -- Posizione dell'hotel
     FROM bookings b
@@ -198,21 +198,20 @@ func GetBookings(db *sql.DB, username string) ([]types.BookingResponse, error) {
 		fmt.Println("Iterazione su una nuova riga di prenotazione")
 
 		var booking types.BookingResponse
-		var roomName, hotelName, hotelLocation string
+		var roomName, roomImage, hotelName, hotelLocation string
 
 		// Scansione dei dati dalla query
 		err := rows.Scan(&booking.BookingID, &booking.Username, &booking.CheckInDate, &booking.CheckOutDate,
-			&booking.TotalAmount, &booking.Status, &roomName, &hotelName, &hotelLocation)
+			&booking.TotalAmount, &booking.Status, &roomName, &roomImage, &hotelName, &hotelLocation)
 		if err != nil {
 			return nil, fmt.Errorf("errore durante la scansione delle righe: %v", err)
 		}
 
-		// Assegna i nomi della stanza e dell'hotel
+		// Assegna i dati
 		booking.RoomName = roomName
 		booking.HotelName = hotelName
 		booking.HotelLocation = hotelLocation
-
-		fmt.Printf("Prenotazione dopo scansione: %+v\n", booking)
+		booking.RoomImage = roomImage // Assegna l'immagine della stanza
 
 		// Aggiungi la prenotazione alla lista
 		bookings = append(bookings, booking)

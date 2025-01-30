@@ -24,12 +24,12 @@
             <FileImageSource File="home.png" />
         </ShellContent.Icon>
     </ShellContent>
-    
-    
+
+
     <ShellContent
-    Title="Profilo"
-    ContentTemplate="{DataTemplate local:ProfileHostPage}"
-   Route="ProfilePage">
+       Title="Profilo"
+       ContentTemplate="{DataTemplate local:ProfileUserPage}"
+       Route="ProfilePage">
         <ShellContent.Icon>
             <FileImageSource File="account2.png" />
         </ShellContent.Icon>

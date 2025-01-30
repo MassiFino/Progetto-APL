@@ -1894,3 +1894,13 @@ D:\Archivio\Ultimo\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.1904
 D:\Archivio\Ultimo\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\qualifiers.txt
 D:\Archivio\Ultimo\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\qualifiers.txt.intermediate
 D:\Archivio\Ultimo\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\MultipleQualifiersPerDimensionFound.txt
+D:\Archivio\Ultimo\Progetto-APL\Interfaccia_C#\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\account2.scale-100.png
+D:\Archivio\Ultimo\Progetto-APL\Interfaccia_C#\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\home.scale-100.png
+D:\Archivio\Ultimo\Progetto-APL\Interfaccia_C#\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\hotel.scale-100.png
+D:\Archivio\Ultimo\Progetto-APL\Interfaccia_C#\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\logout.scale-100.png
+D:\Archivio\Ultimo\Progetto-APL\Interfaccia_C#\bin\Debug\net9.0-windows10.0.19041.0\win10-x64\room.scale-100.png
+D:\Archivio\Ultimo\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\account2.scale-100.png
+D:\Archivio\Ultimo\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\home.scale-100.png
+D:\Archivio\Ultimo\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\hotel.scale-100.png
+D:\Archivio\Ultimo\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\logout.scale-100.png
+D:\Archivio\Ultimo\Progetto-APL\Interfaccia_C#\obj\Debug\net9.0-windows10.0.19041.0\win10-x64\resizetizer\r\room.scale-100.png

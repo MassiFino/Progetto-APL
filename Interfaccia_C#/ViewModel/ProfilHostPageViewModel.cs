@@ -18,7 +18,9 @@ using System.Text;
 namespace Interfaccia_C_.ViewModel
 {
     public class ProfileHostPageViewModel : INotifyPropertyChanged
-    {public ObservableCollection<Hotel> OwnedHotels { get; set; }
+    {
+
+        public ObservableCollection<Hotel> OwnedHotels { get; set; }
 
 public ICommand ViewHotelCommand { get; }
 
@@ -53,7 +55,6 @@ public ICommand ViewHotelCommand { get; }
         private string email;
         private string role;
         private ImageSource _profileImage;
-        private ImageSource _hotelImage;
         private string message;
 
         public string Message
@@ -110,7 +111,15 @@ public ICommand ViewHotelCommand { get; }
                 }
             }
         }
+        // Classe per la risposta dell'API
+        public class UserResponse
+        {
+            public string Username { get; set; }
+            public string Email { get; set; }
+            public string Role { get; set; }
+            public string PImage { get; set; }
 
+        }
         // Gestione delle modifiche alle proprietà
         private void SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
@@ -197,6 +206,8 @@ public ICommand ViewHotelCommand { get; }
 
                         // Imposta l'immagine del profilo se il percorso è valido
                         ProfileImage = GetImageSource(imagePath);
+                        Debug.WriteLine("Immaginissima profilo: " + ProfileImage);
+
                     }
                 }
                 else
@@ -211,14 +222,9 @@ public ICommand ViewHotelCommand { get; }
             }
         }
        
-        public string name { get; set; }
-        public string location { get; set; }
-        public string description { get; set; }
-        public List<string> services { get; set; }
-        public double rating { get; set; }
-        public string images { get; set; }
-
        
+
+
         public async Task LoadHotelData()
         {
             try
@@ -259,11 +265,11 @@ public ICommand ViewHotelCommand { get; }
                     var hotels = JsonSerializer.Deserialize<List<Hotel>>(jsonResponse);
                     if (hotels != null && hotels.Count > 0)
                     {
+                        Message = "Questi sono i tuoi Hotel";
 
                         OwnedHotels.Clear(); // Pulisce la lista corrente
                         foreach (var hotel in hotels)
                         {// Assicurati che i servizi siano popolati correttamente
-                            Message = "";
 
                             // Verifica che la lista dei servizi non sia null
                             if (hotel.services == null)
@@ -295,8 +301,8 @@ public ICommand ViewHotelCommand { get; }
                             var imagePath = Path.Combine(projectDirectory, image);
                             Debug.WriteLine("Path completo " + imagePath);
                             // Imposta l'immagine dell'hotel se il percorso è valido
-                            ImageHotel = GetImageSource(imagePath);
-                            Debug.WriteLine("Immaginissima: " + ImageHotel);
+                            hotel.ImageSource = GetImageSource(imagePath); // Imposta la proprietà ImageSource
+                            Debug.WriteLine("Immaginissima: " + hotel.ImageSource);
 
                             // Aggiungi l'hotel alla lista
                             OwnedHotels.Add(hotel);
