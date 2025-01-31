@@ -1,8 +1,11 @@
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
 namespace Interfaccia_C_.Model
 {
 
 
-    public class Booking
+    public class Booking: INotifyPropertyChanged
     {
         public int bookingID { get; set; }  // Identificativo univoco della prenotazione
         public string username { get; set; }  // Nome utente del cliente
@@ -17,6 +20,54 @@ namespace Interfaccia_C_.Model
         public string hotelLocation { get; set; }
         public ImageSource ImageSource { get; set; }
 
+        // Proprietà UI: Sezione “Lascia Recensione”
+        private bool isReviewVisible;
+        public bool IsReviewVisible
+        {
+            get => isReviewVisible;
+            set
+            {
+                if (isReviewVisible != value)
+                {
+                    isReviewVisible = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
 
+        private int rating;
+        public int Rating
+        {
+            get => rating;
+            set
+            {
+                if (rating != value)
+                {
+                    rating = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string comment;
+        public string Comment
+        {
+            get => comment;
+            set
+            {
+                if (comment != value)
+                {
+                    comment = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

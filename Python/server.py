@@ -168,3 +168,24 @@ def get_user_data(credentials: HTTPAuthorizationCredentials = Depends(security))
         raise HTTPException(status_code=401, detail="Token non valido")
     except ConnectionError as e:
         raise HTTPException(status_code=502, detail=str(e))
+    
+#da completare
+@app.post("/addReview")
+def add_review(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    try:
+        token = credentials.credentials
+
+        # 2) Decodifica per ottenere i claims
+        payload = decode_jwt_token(token)
+
+        # 3) Recupera l'username dai claims
+        username = payload.get("username")
+        if not username:
+            raise HTTPException(status_code=400, detail="Claim 'username' mancante")
+        
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token scaduto")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Token non valido")
+    except ConnectionError as e:
+        raise HTTPException(status_code=502, detail=str(e))

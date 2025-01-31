@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Interfaccia_C_.ProfileUserPage"
+             x:Name="ProfilePageViewRoot"
              xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel"
              BackgroundColor="LightYellow"
              Padding="0">
@@ -100,7 +101,24 @@
                                              CornerRadius="25"
                                              HeightRequest="40"
                                              WidthRequest="150" />
-                                    </StackLayout>
+
+                                        <!-- Bottone “Lascia Recensione” -->
+                                        <Button Text="Lascia Recensione"
+                                            Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.LasciaRecensioneCommand}"
+                                            CommandParameter="{Binding .}" />
+                                       <!-- Sezione recensione, visibile se IsReviewVisible == true -->
+                                    <StackLayout IsVisible="{Binding IsReviewVisible}" BackgroundColor="LightBlue" HeightRequest="200">
+                                            <Label Text="Dai un voto (1-5):"/>
+                                            <Slider Minimum="1" Maximum="5" Value="{Binding Rating}"/>
+                                            <Editor Text="{Binding Comment}" />
+                                        
+                                        <Label Text="{Binding IsReviewVisible}" FontSize="10" TextColor="Red" />
+                                        
+                                        <Button Text="Invia Recensione"
+                                            Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.InviaRecensioneCommand}"
+                                            CommandParameter="{Binding .}" />
+                                        </StackLayout>
+                                </StackLayout>
                                 </HorizontalStackLayout>
                             </Border>
                         </DataTemplate>

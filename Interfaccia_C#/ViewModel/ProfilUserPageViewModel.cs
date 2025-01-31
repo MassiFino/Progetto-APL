@@ -13,6 +13,7 @@ using Interfaccia_C_.Model; // Importa il modello Hotel
 using System.Net.Http.Headers; // Per AuthenticationHeaderValue
 using Microsoft.Maui.Storage;   // Per SecureStorage
 using System.Text;
+using Windows.ApplicationModel.UserDataAccounts;
 
 
 namespace Interfaccia_C_.ViewModel
@@ -26,6 +27,7 @@ namespace Interfaccia_C_.ViewModel
             OwnedBookings = new ObservableCollection<Booking>();  // Inizializza la lista degli hotel
             LoadUserData(); // Carica i dati dell'utente all'avvio
             LoadBookingData();
+
         }
 
         private string userName;
@@ -101,8 +103,14 @@ namespace Interfaccia_C_.ViewModel
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-       
-     
+        private Command<Booking> lasciaRecensioneCommand;
+        public Command<Booking> LasciaRecensioneCommand =>
+            lasciaRecensioneCommand ??= new Command<Booking>(async (booking) => await OnLasciaRecensione(booking));
+
+        private Command<Booking> inviaRecensioneCommand;
+        public Command<Booking> InviaRecensioneCommand =>
+            inviaRecensioneCommand ??= new Command<Booking>(async (booking) => await OnInviaRecensione(booking));
+
 
         // Metodo per ottenere l'immagine del profilo
         public ImageSource GetImageSource(string imagePath)
@@ -283,9 +291,63 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-    
+        private async Task OnLasciaRecensione(Booking booking)
+        {
+            if (booking == null) return;
 
-  
+
+            // Mostra sezione recensione
+            booking.IsReviewVisible = true;
+        }
+
+        private async Task OnInviaRecensione(Booking booking)
+        {
+            if (booking == null) return;
+
+            int rating = booking.Rating;
+            string comment = booking.Comment;
+
+            // Chiamata al server
+            var token = await SecureStorage.GetAsync("jwt_token");
+            if (string.IsNullOrEmpty(token))
+            {
+                await Shell.Current.GoToAsync("//LoginPage");
+                return;
+            }
+
+            var payload = new
+            {
+                Rating = rating,
+                Comment = comment,
+                //string username  (aggiungere questi parametri)
+                //int hotelID 
+                //int roomID 
+                reviewDate = DateTime.Now
+            };
+
+            using var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/addReview");
+            var json = JsonSerializer.Serialize(payload);
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+                await Application.Current.MainPage.DisplayAlert("Successo", "Recensione inviata", "OK");
+                // nascondo sezione e resetto
+                booking.IsReviewVisible = false;
+                booking.Rating = 0;
+                booking.Comment = "";
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                await Application.Current.MainPage.DisplayAlert("Errore", errorContent, "OK");
+            }
+        }
+
+
 
 
 
