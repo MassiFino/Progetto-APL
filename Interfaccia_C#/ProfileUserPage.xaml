@@ -53,9 +53,9 @@
      HorizontalOptions="Center" 
      IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
         <!-- ScrollView per la lista delle prenotazioni -->
-            <ScrollView>
+        <ScrollView HeightRequest="400">
 
-                <!-- Lista delle prenotazioni -->
+            <!-- Lista delle prenotazioni -->
                 <CollectionView ItemsSource="{Binding OwnedBookings}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
@@ -91,7 +91,19 @@
 
                                             <!-- Stato della prenotazione -->
                                             <Label Text="{Binding status}" FontSize="14" TextColor="Gray"/>
-                                        </HorizontalStackLayout>
+
+                                        <StackLayout IsVisible="{Binding IsReviewSectionVisible}">
+                                            <Label Text="Data Recensione:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                            <Label Text="{Binding createdAt}" FontSize="12" TextColor="Black"/>
+                                        
+                                
+                                            <Label Text="Commento:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                            <Label Text="{Binding review}" FontSize="12" TextColor="Black"/>
+                                       
+                                            <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                            <Label Text="{Binding rating}" FontSize="12" TextColor="Black"/>
+                                        </StackLayout>
+                                    </HorizontalStackLayout>
 
                                         <!-- Bottone per visualizzare i dettagli della prenotazione -->
                                         <Button Text="Elimina"
@@ -107,7 +119,7 @@
                                             Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.LasciaRecensioneCommand}"
                                             CommandParameter="{Binding .}" />
                                        <!-- Sezione recensione, visibile se IsReviewVisible == true -->
-                                    <StackLayout IsVisible="{Binding IsReviewVisible}" BackgroundColor="LightBlue" HeightRequest="200">
+                                    <StackLayout IsVisible="{Binding IsReviewVisible}"  HeightRequest="180">
                                             <Label Text="Dai un voto (1-5):"/>
                                             <Slider Minimum="1" Maximum="5" Value="{Binding Rating}"/>
                                             <Editor Text="{Binding Comment}" />
@@ -117,7 +129,8 @@
                                         <Button Text="Invia Recensione"
                                             Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.InviaRecensioneCommand}"
                                             CommandParameter="{Binding .}" />
-                                        </StackLayout>
+                                       
+                                    </StackLayout>
                                 </StackLayout>
                                 </HorizontalStackLayout>
                             </Border>

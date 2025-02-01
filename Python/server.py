@@ -30,8 +30,11 @@ class addReviewRequest(BaseModel):
     RoomID: int
     Comment: str
     Rating: int
-
-
+    
+class getReviewsRequest(BaseModel):
+    Username: str
+    RoomID: int
+   
 @app.post("/login")
 def login(request: LoginRequest):
     payload = {"Username": request.Username, "Password": request.Password}
@@ -175,7 +178,6 @@ def get_user_data(credentials: HTTPAuthorizationCredentials = Depends(security))
     except ConnectionError as e:
         raise HTTPException(status_code=502, detail=str(e))
     
-#da completare
 @app.post("/addReview")
 def add_review(request: addReviewRequest):
     try:
@@ -186,4 +188,18 @@ def add_review(request: addReviewRequest):
         return response
     except ConnectionError as e:
         raise HTTPException(status_code=502, detail=str(e))
+    
+        
+@app.post("/getReviews")
+def add_review(request: getReviewsRequest):
+    try:
+
+        response = connect_go("getReviews", request.dict())
+
+        print(response)
+        return response
+    except ConnectionError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+    
+    
     

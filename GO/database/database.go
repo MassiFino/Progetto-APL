@@ -238,3 +238,33 @@ func AddReview(db *sql.DB, roomID int, username, review string, rating int) erro
 
 	return nil
 }
+
+func GetReview(db *sql.DB, roomID int, username string) (*types.ReviewResp, error) {
+	// Query per selezionare il commento, rating e il CreatedAt (timestamp) per la roomID e username specificati
+	query := "SELECT review, rating, CreatedAt FROM reviews WHERE roomID = ? AND Username = ? LIMIT 1"
+	fmt.Printf("Sto cercando le recensioni")
+
+	// Esegui la query
+	row := db.QueryRow(query, roomID, username)
+
+	// Crea una struttura per memorizzare il commento, il rating e la data di creazione
+	var review types.ReviewResp
+	var createdAt string // Variabile temporanea per memorizzare la data come stringa
+
+	// Scansiona il risultato nella struttura
+	err := row.Scan(&review.Comment, &review.Rating, &createdAt)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			// Nessuna recensione trovata, restituisci una struttura vuota
+			return &types.ReviewResp{}, nil
+		}
+		log.Printf("Errore durante la scansione della recensione: %v", err)
+		return nil, fmt.Errorf("errore durante la scansione della recensione: %w", err)
+	}
+
+	// Assegna la data di creazione (CreatedAt) alla struttura ReviewResp
+	review.CreatedAt = createdAt
+
+	// Restituisci la recensione trovata con il commento, il rating e la data di creazione
+	return &review, nil
+}

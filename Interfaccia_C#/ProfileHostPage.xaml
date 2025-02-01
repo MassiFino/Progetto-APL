@@ -70,13 +70,32 @@
                                         <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
                                         <Label Text="{Binding rating}" FontSize="12" TextColor="#D2691E"/>
                                     </StackLayout>
-
-                                    <Button Text="Visualizza"
+                                    <HorizontalStackLayout Spacing="20">
+                                        <Button Text="Visualizza"
                                             BackgroundColor="#FF1493"
                                             TextColor="White"
                                             CornerRadius="10"
                                             Command="{Binding ViewHotelCommand}"
                                             CommandParameter="{Binding .}" />
+
+                                        <StackLayout Orientation="Horizontal" Spacing="10" IsVisible="{Binding IsReviewSectionVisible}">
+                                            <Label Text="Data Recensione:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                            <Label Text="{Binding ReviewDate}" FontSize="12" TextColor="#D2691E"/>
+                                        </StackLayout>
+
+                                        <StackLayout Orientation="Horizontal" Spacing="10" IsVisible="{Binding IsReviewSectionVisible}">
+                                            <Label Text="Commento:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                            <Label Text="{Binding Comment}" FontSize="12" TextColor="#4682B4"/>
+                                        </StackLayout>
+
+                                        <StackLayout Orientation="Horizontal" Spacing="10" IsVisible="{Binding IsReviewSectionVisible}">
+                                            <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                            <Label Text="{Binding Rating}" FontSize="12" TextColor="#FF6347"/>
+                                        </StackLayout>
+
+                                    </HorizontalStackLayout>
+                                    
+                                    
                                 </StackLayout>
                             </HorizontalStackLayout>
                         </Border>

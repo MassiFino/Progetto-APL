@@ -110,8 +110,14 @@ namespace Interfaccia_C_.ViewModel
 
         private Command<Booking> inviaRecensioneCommand;
         public Command<Booking> InviaRecensioneCommand =>
-            inviaRecensioneCommand ??= new Command<Booking>(async (booking) => await OnInviaRecensione(booking));
+inviaRecensioneCommand ??= new Command<Booking>(async (booking) =>
+{
+    // Prima esegui la funzione di invio recensione
+await OnInviaRecensione(booking);
 
+    // Poi esegui la funzione FetchReviewData
+await FetchReviewData(booking);
+});
 
         // Metodo per ottenere l'immagine del profilo
         public ImageSource GetImageSource(string imagePath)
@@ -273,6 +279,7 @@ namespace Interfaccia_C_.ViewModel
 
                             // Aggiungi la prenotazione alla lista
                             OwnedBookings.Add(booking);
+                            FetchReviewData(booking);
                         }
                     }
                     else
@@ -346,6 +353,147 @@ namespace Interfaccia_C_.ViewModel
 
 
 
+
+        public class Review
+        {
+            public string createdAt { get; set; }  // Data della recensione
+            public string review { get; set; }     // Commento della recensione
+            public decimal rating { get; set; }     // Voto della recensione
+        }
+
+        private bool _isReviewSectionVisible;
+        public bool IsReviewSectionVisible
+        {
+            get { return _isReviewSectionVisible; }
+            set
+            {
+                if (_isReviewSectionVisible != value)
+                {
+                    _isReviewSectionVisible = value;
+                    OnPropertyChanged();  // Assicurati che la UI venga aggiornata
+                }
+            }
+        }
+        private string _createdAt;
+        public string createdAt
+        {
+            get { return _createdAt; }
+            set
+            {
+                _createdAt = value;
+                OnPropertyChanged(); // Assicurati che la UI venga aggiornata
+            }
+        }
+
+        private string _review;
+        public string review
+        {
+            get { return _review; }
+            set
+            {
+                _review = value;
+                OnPropertyChanged(); // Assicurati che la UI venga aggiornata
+            }
+        }
+
+        private decimal _rating;
+        public decimal rating
+        {
+            get { return _rating; }
+            set
+            {
+                _rating = value;
+                OnPropertyChanged(); // Assicurati che la UI venga aggiornata
+            }
+        }
+        // Metodo che recupera la recensione (simulato, può essere un'operazione asincrona)
+        public async Task FetchReviewData(Booking booking)
+        {
+            try
+            {
+                // Recupera il token JWT dall'archivio sicuro
+                var token = await SecureStorage.GetAsync("jwt_token");
+                if (string.IsNullOrEmpty(token))
+                {
+                    // Se non c'è il token, l'utente non è loggato
+                    Debug.WriteLine("Token mancante! Reindirizzo al login?");
+                    await Shell.Current.GoToAsync("//LoginPage");
+                    return;
+                }
+
+                // Crea il payload con i dati necessari
+                var payload = new
+                {
+                    Username = booking.username,
+                    RoomID = booking.roomID
+                };
+
+                Debug.WriteLine($"username: {booking.username}");
+                Debug.WriteLine($"roomID: {booking.roomID}");
+
+                using var client = new HttpClient();
+                var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/getReviews");
+
+                // Serializza il payload in formato JSON
+                var json = JsonSerializer.Serialize(payload);
+                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                // Imposta l'header di autorizzazione
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                // Invia la richiesta e ottieni la risposta
+                var response = await client.SendAsync(request);
+
+                // Leggi la risposta
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine("Questa è la risposta: " + jsonResponse);
+
+                // Verifica se la risposta è stata positiva
+                if (response.IsSuccessStatusCode)
+                {
+                    // Deserializza la risposta in un oggetto Review
+                    var reviewData = JsonSerializer.Deserialize<Review>(jsonResponse);
+
+                    // Controlla se la recensione è vuota (commento, rating e data)
+                    if (
+                            reviewData.review == "" &&
+                            reviewData.rating == 0 &&
+                            reviewData.createdAt == "")
+                    {
+                        // Se la recensione è vuota, nascondi la sezione
+                        IsReviewSectionVisible = false;
+                        Debug.WriteLine("La recensione è vuota.");
+                    }
+                    else
+                    {
+                        // Assegna i dati della recensione alla proprietà del ViewModel
+                        createdAt = reviewData.createdAt;
+                        review = reviewData.review;
+                        rating = reviewData.rating;
+
+                        Debug.WriteLine($"createdAt: {createdAt}");
+                        Debug.WriteLine($"review: {review}");
+                        Debug.WriteLine($"rating: {rating}");
+
+                        // La risposta è positiva, puoi rendere visibile la sezione recensione
+                        IsReviewSectionVisible = true;
+                    }
+                }
+                else
+                {
+                    // Gestisci errori di risposta dal server
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    await Application.Current.MainPage.DisplayAlert("Errore", $"Caricamento dati fallito: {errorContent}", "OK");
+                    IsReviewSectionVisible = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Gestisci eventuali errori di rete o eccezioni
+                Debug.WriteLine("Errore durante la chiamata: " + ex.Message);
+                IsReviewSectionVisible = false; // Assicurati che la recensione sia nascosta in caso di errore
+            }
+        }
 
 
 

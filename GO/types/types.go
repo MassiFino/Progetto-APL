@@ -75,3 +75,13 @@ type ReviewResponse struct {
 	Success bool   `json:"status"`
 	Message string `json:"message"`
 }
+
+type ReviewReq struct {
+	RoomID   int    `json:"roomID"`
+	Username string `json:"Username"`
+}
+type ReviewResp struct {
+	Comment   string  `json:"review"`    // Il campo "review" sarà trattato come stringa
+	Rating    float64 `json:"rating"`    // Rating come numero decimale
+	CreatedAt string  `json:"createdAt"` // Timestamp convertito come stringa
+}

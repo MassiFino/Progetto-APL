@@ -260,6 +260,48 @@ func addReviewHandler(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func getReviewsHandler(w http.ResponseWriter, r *http.Request) {
+	// Verifica che la richiesta sia di tipo POST
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Decodifica il corpo della richiesta in una struttura ReviewRequest
+	var req types.ReviewRequest
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Printf("Dati ricevuti: %+v\n", req)
+
+	// Chiama la funzione GetReview per ottenere la recensione dalla base di dati
+	review, err := database.GetReview(db, req.RoomID, req.Username)
+	if err != nil {
+		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
+		return
+	}
+
+	// Se non viene trovata la recensione
+	if review == nil {
+		// Restituisci una risposta JSON con la recensione non trovata
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusOK) // Status 200 OK anche se non sono state trovate recensioni
+		w.Write([]byte(`{"status": "success", "message": "Nessuna recensione trovata"}`))
+		return
+	}
+
+	// Se la recensione è trovata, restituisci i dettagli della recensione
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(review) // Restituisce la recensione
+	if err != nil {
+		http.Error(w, "Errore nella codifica della risposta JSON", http.StatusInternalServerError)
+	}
+}
+
 func main() {
 	db = initializeDatabase() // Inizializza la connessione al database
 	defer db.Close()          // Chiude la connessione al termine del server
@@ -270,6 +312,7 @@ func main() {
 	http.HandleFunc("/getHotelsHost", getHotelsHostHandler)
 	http.HandleFunc("/getBookings", getBookingsHandler)
 	http.HandleFunc("/addReview", addReviewHandler)
+	http.HandleFunc("/getReviews", getReviewsHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)
