@@ -8,6 +8,7 @@ namespace Interfaccia_C_.Model
     public class Booking: INotifyPropertyChanged
     {
         public int bookingID { get; set; }  // Identificativo univoco della prenotazione
+        public int roomID { get; set; }
         public string username { get; set; }  // Nome utente del cliente
         public DateTime checkInDate { get; set; }  // Data di check-in
         public DateTime checkOutDate { get; set; }  // Data di check-out

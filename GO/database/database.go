@@ -168,6 +168,7 @@ func GetBookings(db *sql.DB, username string) ([]types.BookingResponse, error) {
     SELECT 
         b.BookingID,
         b.Username,
+		b.RoomID,
         b.CheckInDate,
         b.CheckOutDate,
         b.TotalAmount,
@@ -201,7 +202,7 @@ func GetBookings(db *sql.DB, username string) ([]types.BookingResponse, error) {
 		var roomName, roomImage, hotelName, hotelLocation string
 
 		// Scansione dei dati dalla query
-		err := rows.Scan(&booking.BookingID, &booking.Username, &booking.CheckInDate, &booking.CheckOutDate,
+		err := rows.Scan(&booking.BookingID, &booking.Username, &booking.RoomID, &booking.CheckInDate, &booking.CheckOutDate,
 			&booking.TotalAmount, &booking.Status, &roomName, &roomImage, &hotelName, &hotelLocation)
 		if err != nil {
 			return nil, fmt.Errorf("errore durante la scansione delle righe: %v", err)
@@ -225,4 +226,15 @@ func GetBookings(db *sql.DB, username string) ([]types.BookingResponse, error) {
 
 	fmt.Printf("Le prenotazioni trovate sono: %d\n", len(bookings))
 	return bookings, nil
+}
+
+func AddReview(db *sql.DB, roomID int, username, review string, rating int) error {
+	query := "INSERT INTO reviews (roomID, Username, review, rating) VALUES (?, ?, ?, ?)"
+	_, err := db.Exec(query, roomID, username, review, rating)
+	if err != nil {
+		log.Printf("Errore durante l'inserimento della recensione: %v", err)
+		return fmt.Errorf("errore durante l'inserimento della recensione: %w", err)
+	}
+
+	return nil
 }

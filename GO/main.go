@@ -231,6 +231,35 @@ func getBookingsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func addReviewHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.ReviewRequest
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Printf("Dati ricevuti: %+v\n", req)
+
+	// Aggiungi la recensione
+	err = database.AddReview(db, req.RoomID, req.Username, req.Comment, req.Rating)
+	if err != nil {
+		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
+		return
+	}
+
+	// Aggiunta della recensione riuscita
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status": "success", "message": "Recensione aggiunta con successo!"}`))
+
+}
+
 func main() {
 	db = initializeDatabase() // Inizializza la connessione al database
 	defer db.Close()          // Chiude la connessione al termine del server
@@ -240,6 +269,7 @@ func main() {
 	http.HandleFunc("/getUserData", getUserDataHandler)
 	http.HandleFunc("/getHotelsHost", getHotelsHostHandler)
 	http.HandleFunc("/getBookings", getBookingsHandler)
+	http.HandleFunc("/addReview", addReviewHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)

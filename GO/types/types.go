@@ -52,6 +52,7 @@ type BookingRequest struct {
 }
 type BookingResponse struct {
 	BookingID     int     `json:"bookingID"`
+	RoomID        int     `json:"roomID"`
 	Username      string  `json:"username"`
 	CheckInDate   string  `json:"checkInDate"`
 	CheckOutDate  string  `json:"checkOutDate"`
@@ -61,4 +62,16 @@ type BookingResponse struct {
 	RoomImage     string  `json:"roomImage"` // URL delle immagini della stanza
 	HotelName     string  `json:"hotelName"`
 	HotelLocation string  `json:"hotelLocation"`
+}
+
+type ReviewRequest struct {
+	RoomID   int    `json:"roomID"`
+	Username string `json:"Username"`
+	Comment  string `json:"comment"`
+	Rating   int    `json:"rating"`
+}
+
+type ReviewResponse struct {
+	Success bool   `json:"status"`
+	Message string `json:"message"`
 }
