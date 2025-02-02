@@ -7,7 +7,7 @@ public partial class ProfileHostPage : ContentPage
     public ProfileHostPage()
     {
         InitializeComponent();
-        BindingContext = new ProfileHostPageViewModel();
+        BindingContext = new ProfilHostPageViewModel();
     }
 
     

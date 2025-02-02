@@ -26,14 +26,14 @@
     </ShellContent>
 
 
-    <ShellContent
-       Title="Profilo"
-       ContentTemplate="{DataTemplate local:ProfileUserPage}"
-       Route="ProfilePage">
-        <ShellContent.Icon>
-            <FileImageSource File="account2.png" />
-        </ShellContent.Icon>
-    </ShellContent>
+    
+ 
+    <!-- Logout con Command -->
+    <MenuItem
+       Text="Vai al profilo"
+       Command="{Binding ProfileCommand}"
+       IconImageSource="account2.png" />
+
 
     <!-- Logout con Command -->
     <MenuItem

@@ -17,7 +17,7 @@ using System.Text;
 
 namespace Interfaccia_C_.ViewModel
 {
-    public class ProfileHostPageViewModel : INotifyPropertyChanged
+    public class ProfilHostPageViewModel : INotifyPropertyChanged
     {
 
         public ObservableCollection<Hotel> OwnedHotels { get; set; }
@@ -27,7 +27,7 @@ public ICommand ViewHotelCommand { get; }
         public ICommand AddHotelCommand { get; }
 
         // Costruttore del ViewModel
-        public ProfileHostPageViewModel()
+        public ProfilHostPageViewModel()
 {
     OwnedHotels = new ObservableCollection<Hotel>();  // Inizializza la lista degli hotel
     ViewHotelCommand = new Command<Hotel>(OnViewHotel);  // Imposta il comando per il pulsante "Visualizza"

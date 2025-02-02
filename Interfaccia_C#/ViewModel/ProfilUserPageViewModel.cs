@@ -19,11 +19,11 @@ using System.Text;
 
 namespace Interfaccia_C_.ViewModel
 {
-    public class ProfileUserPageViewModel : INotifyPropertyChanged
+    public class ProfilUserPageViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<Booking> OwnedBookings { get; set; }
         // Costruttore del ViewModel
-        public ProfileUserPageViewModel()
+        public ProfilUserPageViewModel()
         {
             OwnedBookings = new ObservableCollection<Booking>();  // Inizializza la lista degli hotel
             LoadUserData(); // Carica i dati dell'utente all'avvio
@@ -86,6 +86,9 @@ namespace Interfaccia_C_.ViewModel
                 OnPropertyChanged(nameof(Message));
             }
         }
+
+      
+
         // Gestione delle modifiche alle proprietà
         private void SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
         {
@@ -137,7 +140,7 @@ await FetchReviewData(booking);
         }
 
         // Metodo per caricare i dati dell'utente
-        private async Task LoadUserData()
+        public async Task LoadUserData()
         {
             try
             {
@@ -351,9 +354,6 @@ await FetchReviewData(booking);
             }
         }
 
-
-
-
         public class Review
         {
             public string createdAt { get; set; }  // Data della recensione
@@ -361,51 +361,9 @@ await FetchReviewData(booking);
             public decimal rating { get; set; }     // Voto della recensione
         }
 
-        private bool _isReviewSectionVisible;
-        public bool IsReviewSectionVisible
-        {
-            get { return _isReviewSectionVisible; }
-            set
-            {
-                if (_isReviewSectionVisible != value)
-                {
-                    _isReviewSectionVisible = value;
-                    OnPropertyChanged();  // Assicurati che la UI venga aggiornata
-                }
-            }
-        }
-        private string _createdAt;
-        public string createdAt
-        {
-            get { return _createdAt; }
-            set
-            {
-                _createdAt = value;
-                OnPropertyChanged(); // Assicurati che la UI venga aggiornata
-            }
-        }
 
-        private string _review;
-        public string review
-        {
-            get { return _review; }
-            set
-            {
-                _review = value;
-                OnPropertyChanged(); // Assicurati che la UI venga aggiornata
-            }
-        }
 
-        private decimal _rating;
-        public decimal rating
-        {
-            get { return _rating; }
-            set
-            {
-                _rating = value;
-                OnPropertyChanged(); // Assicurati che la UI venga aggiornata
-            }
-        }
+
         // Metodo che recupera la recensione (simulato, può essere un'operazione asincrona)
         public async Task FetchReviewData(Booking booking)
         {
@@ -455,28 +413,33 @@ await FetchReviewData(booking);
                     var reviewData = JsonSerializer.Deserialize<Review>(jsonResponse);
 
                     // Controlla se la recensione è vuota (commento, rating e data)
-                    if (
-                            reviewData.review == "" &&
-                            reviewData.rating == 0 &&
-                            reviewData.createdAt == "")
+                    if (string.IsNullOrWhiteSpace(reviewData.review) &&
+                             reviewData.rating == 0 &&
+                             string.IsNullOrWhiteSpace(reviewData.createdAt))
                     {
-                        // Se la recensione è vuota, nascondi la sezione
-                        IsReviewSectionVisible = false;
+                        booking.MessageReview = "Non hai ancora inserito nessuna recensione.";
+                        Debug.WriteLine(" : " + booking.MessageReview);
+
+                        // Nasconde la sezione recensione se non ci sono dati
+                        booking.IsReviewSectionVisible = false;
                         Debug.WriteLine("La recensione è vuota.");
                     }
                     else
                     {
-                        // Assegna i dati della recensione alla proprietà del ViewModel
-                        createdAt = reviewData.createdAt;
-                        review = reviewData.review;
-                        rating = reviewData.rating;
+                        booking.MessageReview = "Questa è la recensione che hai inserito.";
+                        Debug.WriteLine(" : " + booking.MessageReview);
 
-                        Debug.WriteLine($"createdAt: {createdAt}");
-                        Debug.WriteLine($"review: {review}");
-                        Debug.WriteLine($"rating: {rating}");
+                        // Assegna i dati della recensione alle proprietà del ViewModel
+                        booking.createdAt = reviewData.createdAt;
+                        booking.review = reviewData.review;
+                        booking.voto = reviewData.rating;
 
-                        // La risposta è positiva, puoi rendere visibile la sezione recensione
-                        IsReviewSectionVisible = true;
+                        Debug.WriteLine($"createdAt: {booking.createdAt}");
+                        Debug.WriteLine($"review: {booking.review}");
+                        Debug.WriteLine($"rating: {booking.voto}");
+
+                        // Mostra la sezione recensione
+                        booking.IsReviewSectionVisible = true;
                     }
                 }
                 else
@@ -484,14 +447,14 @@ await FetchReviewData(booking);
                     // Gestisci errori di risposta dal server
                     var errorContent = await response.Content.ReadAsStringAsync();
                     await Application.Current.MainPage.DisplayAlert("Errore", $"Caricamento dati fallito: {errorContent}", "OK");
-                    IsReviewSectionVisible = false;
+                    booking.IsReviewSectionVisible = false;
                 }
             }
             catch (Exception ex)
             {
                 // Gestisci eventuali errori di rete o eccezioni
                 Debug.WriteLine("Errore durante la chiamata: " + ex.Message);
-                IsReviewSectionVisible = false; // Assicurati che la recensione sia nascosta in caso di errore
+                booking.IsReviewSectionVisible = false; // Assicurati che la recensione sia nascosta in caso di errore
             }
         }
 

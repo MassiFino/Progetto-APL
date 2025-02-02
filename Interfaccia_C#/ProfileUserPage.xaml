@@ -53,7 +53,7 @@
      HorizontalOptions="Center" 
      IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
         <!-- ScrollView per la lista delle prenotazioni -->
-        <ScrollView HeightRequest="400">
+        <ScrollView HeightRequest="500">
 
             <!-- Lista delle prenotazioni -->
                 <CollectionView ItemsSource="{Binding OwnedBookings}">
@@ -90,9 +90,20 @@
                                             <Label Text="{Binding totalAmount, StringFormat='€ {0:F2}'}" FontSize="14" TextColor="Black"/>
 
                                             <!-- Stato della prenotazione -->
-                                            <Label Text="{Binding status}" FontSize="14" TextColor="Gray"/>
+                                          <Label Text="{Binding status}" FontSize="14" TextColor="Gray"/>
+                                    </HorizontalStackLayout>
 
+                                    <!-- Messaggio in caso di nessuna prenotazione -->
+                                    <VerticalStackLayout>
+
+                                    <Label Text="{Binding MessageReview}"
+                                             FontSize="18"
+                                             FontAttributes="Bold"
+                                             TextColor="Black"/>
+                                            
                                         <StackLayout IsVisible="{Binding IsReviewSectionVisible}">
+                                            
+                                            
                                             <Label Text="Data Recensione:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
                                             <Label Text="{Binding createdAt}" FontSize="12" TextColor="Black"/>
                                         
@@ -103,7 +114,8 @@
                                             <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
                                             <Label Text="{Binding rating}" FontSize="12" TextColor="Black"/>
                                         </StackLayout>
-                                    </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+
 
                                         <!-- Bottone per visualizzare i dettagli della prenotazione -->
                                         <Button Text="Elimina"
@@ -116,15 +128,16 @@
 
                                         <!-- Bottone “Lascia Recensione” -->
                                         <Button Text="Lascia Recensione"
+
                                             Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.LasciaRecensioneCommand}"
                                             CommandParameter="{Binding .}" />
                                        <!-- Sezione recensione, visibile se IsReviewVisible == true -->
                                     <StackLayout IsVisible="{Binding IsReviewVisible}"  HeightRequest="180">
-                                            <Label Text="Dai un voto (1-5):"/>
+                                        <Label Text="Dai un voto (1-5):" TextColor="Black"/>
                                             <Slider Minimum="1" Maximum="5" Value="{Binding Rating}"/>
-                                            <Editor Text="{Binding Comment}" />
-                                        
-                                        <Label Text="{Binding IsReviewVisible}" FontSize="10" TextColor="Red" />
+                                        <Editor Text="{Binding Comment}" TextColor="Black"/>
+
+                                        <Label Text="{Binding IsReviewVisible}" FontSize="10" TextColor="Black" />
                                         
                                         <Button Text="Invia Recensione"
                                             Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.InviaRecensioneCommand}"

@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace Interfaccia_C_.Model
 {
@@ -63,7 +64,78 @@ namespace Interfaccia_C_.Model
                 }
             }
         }
+        public class Review
+        {
+            public string createdAt { get; set; }  // Data della recensione
+            public string review { get; set; }     // Commento della recensione
+            public decimal rating { get; set; }     // Voto della recensione
+        }
 
+        private bool _isReviewSectionVisible;
+        public bool IsReviewSectionVisible
+        {
+            get { return _isReviewSectionVisible; }
+            set
+            {
+                if (_isReviewSectionVisible != value)
+                {
+                    _isReviewSectionVisible = value;
+                    OnPropertyChanged();  // Assicurati che la UI venga aggiornata
+                }
+            }
+        }
+        private string _createdAt;
+        public string createdAt
+        {
+            get { return _createdAt; }
+            set
+            {
+                _createdAt = value;
+                OnPropertyChanged(); // Assicurati che la UI venga aggiornata
+            }
+        }
+
+        private string _review;
+        public string review
+        {
+            get { return _review; }
+            set
+            {
+                _review = value;
+                OnPropertyChanged(); // Assicurati che la UI venga aggiornata
+            }
+        }
+
+        private decimal _rating;
+        public decimal voto
+        {
+            get { return _rating; }
+            set
+            {
+                _rating = value;
+                OnPropertyChanged(); // Assicurati che la UI venga aggiornata
+            }
+        }
+
+
+        private string _messageReview;
+
+        public string MessageReview
+        {
+            get => _messageReview;
+            set
+            {
+                if (_messageReview != value)
+                {
+                    _messageReview = value;
+                    OnPropertyChanged(nameof(MessageReview));
+
+                    // Debug per vedere se il valore cambia
+                    Debug.WriteLine($"MessageReview aggiornato: {_messageReview}");
+                }
+            }
+        }
+        
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")

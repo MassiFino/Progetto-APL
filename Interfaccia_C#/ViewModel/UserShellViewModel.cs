@@ -19,11 +19,12 @@ namespace Interfaccia_C_.ViewModel
     {
         // Comando di logout
         public ICommand LogoutCommand { get; }
-
+        public ICommand PrifileCommand { get; }
         public UserShellViewModel()
         {
             // Inizializza il comando
             LogoutCommand = new Command(ExecuteLogout);
+            PrifileCommand= new Command(ExecuteProfileUserNavigation);
 
         }
 
@@ -43,6 +44,17 @@ namespace Interfaccia_C_.ViewModel
 
             // Naviga alla pagina di login
             await appShell.GoToAsync("//LoginPage");
+        }
+
+
+        private async void ExecuteProfileUserNavigation()
+        {
+            // Prima carica i dati dell'utente
+            var viewModel = new ProfilUserPageViewModel();
+            viewModel.LoadUserData();  // Carica i dati prima di navigare
+            Debug.WriteLine("Sono qui dentro");
+            // Poi naviga alla pagina del profilo
+            await Shell.Current.GoToAsync("//ProfileUserPage");
         }
     }
 }
