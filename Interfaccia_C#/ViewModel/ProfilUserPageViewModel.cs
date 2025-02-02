@@ -113,14 +113,23 @@ namespace Interfaccia_C_.ViewModel
 
         private Command<Booking> inviaRecensioneCommand;
         public Command<Booking> InviaRecensioneCommand =>
-inviaRecensioneCommand ??= new Command<Booking>(async (booking) =>
-{
-    // Prima esegui la funzione di invio recensione
-await OnInviaRecensione(booking);
+            inviaRecensioneCommand ??= new Command<Booking>(async (booking) =>
+            {
+            // Prima esegui la funzione di invio recensione
+            await OnInviaRecensione(booking);
 
-    // Poi esegui la funzione FetchReviewData
-await FetchReviewData(booking);
-});
+            // Poi esegui la funzione FetchReviewData
+            await FetchReviewData(booking);
+            });
+
+        private Command<Booking> eliminaPrenotazioneCommand;
+        public Command<Booking> EliminaPrenotazioneCommand =>
+            eliminaPrenotazioneCommand ??= new Command<Booking>(async (booking) => await OnEliminaPrenotazione(booking));
+
+        // Comando per eliminare la recensione
+        private Command<Booking> eliminaRecensioneCommand;
+        public Command<Booking> EliminaRecensioneCommand =>
+            eliminaRecensioneCommand ??= new Command<Booking>(async (booking) => await OnEliminaRecensione(booking));
 
         // Metodo per ottenere l'immagine del profilo
         public ImageSource GetImageSource(string imagePath)
@@ -307,6 +316,11 @@ await FetchReviewData(booking);
         {
             if (booking == null) return;
 
+            if (!string.IsNullOrWhiteSpace(booking.review))
+            {
+                await Application.Current.MainPage.DisplayAlert("Attenzione", "Hai già inserito una recensione per questa prenotazione.", "OK");
+                return;
+            }
 
             // Mostra sezione recensione
             booking.IsReviewVisible = true;
@@ -345,6 +359,7 @@ await FetchReviewData(booking);
                 booking.IsReviewVisible = false;
                 booking.Rating = 0;
                 booking.Comment = "";
+                booking.IsDeleteReviewVisible = true;
 
             }
             else
@@ -422,6 +437,7 @@ await FetchReviewData(booking);
 
                         // Nasconde la sezione recensione se non ci sono dati
                         booking.IsReviewSectionVisible = false;
+                        booking.IsDeleteReviewVisible = false;
                         Debug.WriteLine("La recensione è vuota.");
                     }
                     else
@@ -440,6 +456,7 @@ await FetchReviewData(booking);
 
                         // Mostra la sezione recensione
                         booking.IsReviewSectionVisible = true;
+                        booking.IsDeleteReviewVisible = true;
                     }
                 }
                 else
@@ -457,6 +474,114 @@ await FetchReviewData(booking);
                 booking.IsReviewSectionVisible = false; // Assicurati che la recensione sia nascosta in caso di errore
             }
         }
+
+
+
+        private async Task OnEliminaPrenotazione(Booking booking)
+        {
+            if (booking == null) return;
+
+
+            double giorniRimanenti = (booking.checkInDate - DateTime.Now).TotalDays;
+            Debug.WriteLine($"Giorni rimanenti per il check-in: {giorniRimanenti}");
+
+            if (giorniRimanenti < 5)
+            {
+                await Application.Current.MainPage.DisplayAlert("Attenzione", "Non puoi eliminare la prenotazione se mancano meno di 5 giorni dal check-in.", "OK");
+                return;
+            }
+
+
+            try
+            {
+                var token = await SecureStorage.GetAsync("jwt_token");
+                if (string.IsNullOrEmpty(token))
+                {
+                    await Shell.Current.GoToAsync("//LoginPage");
+                    return;
+                }
+                using var client = new HttpClient();
+
+                // Prepara il payload per eliminare la prenotazione
+                var payload = new
+                {
+                    BookingID = booking.bookingID,  // Assicurati che questa proprietà esista nel modello Booking
+                    Username = booking.username
+                };
+                var json = JsonSerializer.Serialize(payload);
+
+                var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/deleteBooking");
+                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Successo", "Prenotazione eliminata", "OK");
+                    // Rimuovi la prenotazione dalla lista
+                    OwnedBookings.Remove(booking);
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    await Application.Current.MainPage.DisplayAlert("Errore", errorContent, "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Errore", ex.Message, "OK");
+            }
+        }
+
+        private async Task OnEliminaRecensione(Booking booking)
+        {
+            if (booking == null) return;
+
+
+            try
+            {
+                var token = await SecureStorage.GetAsync("jwt_token");
+                if (string.IsNullOrEmpty(token))
+                {
+                    await Shell.Current.GoToAsync("//LoginPage");
+                    return;
+                }
+                using var client = new HttpClient();
+
+                // Prepara il payload per eliminare la recensione
+                var payload = new
+                {
+                    Username = booking.username,
+                    RoomID = booking.roomID
+                };
+                var json = JsonSerializer.Serialize(payload);
+                var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/deleteReview");
+                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await client.SendAsync(request);
+                if (response.IsSuccessStatusCode)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Successo", "Recensione eliminata", "OK");
+                    // Aggiorna le proprietà relative alla recensione
+                    booking.MessageReview = "Recensione eliminata";
+                    booking.review = "";
+                    booking.voto = 0;
+                    booking.createdAt = "";
+                    booking.IsReviewSectionVisible = false;
+
+                    booking.IsDeleteReviewVisible = false; //scompare il pulsante elimina
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    await Application.Current.MainPage.DisplayAlert("Errore", errorContent, "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Errore", ex.Message, "OK");
+            }
+        }
+
 
 
 

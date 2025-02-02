@@ -19,12 +19,12 @@ namespace Interfaccia_C_.ViewModel
     {
         // Comando di logout
         public ICommand LogoutCommand { get; }
-        public ICommand PrifileCommand { get; }
+        public ICommand ProfileCommand { get; }
         public UserShellViewModel()
         {
             // Inizializza il comando
             LogoutCommand = new Command(ExecuteLogout);
-            PrifileCommand= new Command(ExecuteProfileUserNavigation);
+            ProfileCommand= new Command(ExecuteProfileUserNavigation);
 
         }
 

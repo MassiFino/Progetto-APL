@@ -17,7 +17,7 @@
         />
 
 
-    <!-- Pagina Profilo -->
+    <!-- Pagina Refgistrazione -->
     <ShellContent
         Title="Registrazion"
         ContentTemplate="{DataTemplate local:RegisterPage}"

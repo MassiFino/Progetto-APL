@@ -268,3 +268,25 @@ func GetReview(db *sql.DB, roomID int, username string) (*types.ReviewResp, erro
 	// Restituisci la recensione trovata con il commento, il rating e la data di creazione
 	return &review, nil
 }
+
+func DeleteBooking(db *sql.DB, bookingID int, username string) error {
+	query := "DELETE FROM bookings WHERE BookingID = ? AND Username = ?"
+	_, err := db.Exec(query, bookingID, username)
+	if err != nil {
+		log.Printf("Errore durante l'eliminazione della prenotazione: %v", err)
+		return fmt.Errorf("errore durante l'eliminazione della prenotazione: %w", err)
+	}
+
+	return nil
+}
+
+func DeleteReview(db *sql.DB, roomID int, username string) error {
+	query := "DELETE FROM reviews WHERE roomID = ? AND Username = ?"
+	_, err := db.Exec(query, roomID, username)
+	if err != nil {
+		log.Printf("Errore durante l'eliminazione della recensione: %v", err)
+		return fmt.Errorf("errore durante l'eliminazione della recensione: %w", err)
+	}
+
+	return nil
+}

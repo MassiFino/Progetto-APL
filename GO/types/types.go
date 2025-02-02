@@ -85,3 +85,13 @@ type ReviewResp struct {
 	Rating    float64 `json:"rating"`    // Rating come numero decimale
 	CreatedAt string  `json:"createdAt"` // Timestamp convertito come stringa
 }
+
+type DeleteBookingRequest struct {
+	BookingID int    `json:"BookingID"`
+	Username  string `json:"Username"`
+}
+
+type DeleteReviewRequest struct {
+	RoomID   int    `json:"RoomID"`
+	Username string `json:"Username"`
+}

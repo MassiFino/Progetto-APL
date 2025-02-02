@@ -302,6 +302,58 @@ func getReviewsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func deleteBookingHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.DeleteBookingRequest
+
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	// Esegui la query di cancellazione
+	err := database.DeleteBooking(db, req.BookingID, req.Username)
+
+	if err != nil {
+		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
+		return
+	}
+
+	// Risposta JSON per la cancellazione della prenotazione
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status": "success", "message": "Prenotazione eliminata con successo"}`))
+}
+
+// Handler per eliminare una recensione
+func deleteReviewHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.DeleteReviewRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	// Esegui la query di cancellazione
+	err := database.DeleteReview(db, req.RoomID, req.Username)
+
+	if err != nil {
+		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status": "success", "message": "Recensione eliminata con successo"}`))
+}
+
 func main() {
 	db = initializeDatabase() // Inizializza la connessione al database
 	defer db.Close()          // Chiude la connessione al termine del server
@@ -313,6 +365,8 @@ func main() {
 	http.HandleFunc("/getBookings", getBookingsHandler)
 	http.HandleFunc("/addReview", addReviewHandler)
 	http.HandleFunc("/getReviews", getReviewsHandler)
+	http.HandleFunc("/deleteBooking", deleteBookingHandler)
+	http.HandleFunc("/deleteReview", deleteReviewHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)

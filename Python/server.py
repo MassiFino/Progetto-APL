@@ -34,7 +34,17 @@ class addReviewRequest(BaseModel):
 class getReviewsRequest(BaseModel):
     Username: str
     RoomID: int
-   
+
+
+class DeleteBookingRequest(BaseModel):
+    BookingID: int
+    Username: str
+
+class DeleteReviewRequest(BaseModel):
+    Username: str
+    RoomID: int
+
+
 @app.post("/login")
 def login(request: LoginRequest):
     payload = {"Username": request.Username, "Password": request.Password}
@@ -202,4 +212,23 @@ def add_review(request: getReviewsRequest):
         raise HTTPException(status_code=502, detail=str(e))
     
     
-    
+@app.post("/deleteBooking")
+def delete_booking(request: DeleteBookingRequest):
+    try:
+        
+        # Prepara il payload da inviare al servizio (o direttamente usalo per eliminare)
+        response = connect_go("deleteBooking", request.dict())
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+# Endpoint per eliminare una recensione
+@app.post("/deleteReview")
+def delete_review(request: DeleteReviewRequest):
+    try:
+        
+        
+        response = connect_go("deleteReview", request.dict())
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))

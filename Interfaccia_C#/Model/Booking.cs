@@ -135,7 +135,23 @@ namespace Interfaccia_C_.Model
                 }
             }
         }
-        
+
+
+        private bool _isDeleteReviewVisible = false; // default false: se non esiste la recensione, il pulsante è nascosto
+        public bool IsDeleteReviewVisible
+        {
+            get => _isDeleteReviewVisible;
+            set
+            {
+                if (_isDeleteReviewVisible != value)
+                {
+                    _isDeleteReviewVisible = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
