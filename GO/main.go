@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"progetto-go/database"
 	"progetto-go/types"
+	"progetto-go/utils"
 )
 
 var db *sql.DB // Variabile globale per la connessione al database
@@ -354,6 +355,47 @@ func deleteReviewHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status": "success", "message": "Recensione eliminata con successo"}`))
 }
 
+func getMeteGettonateHandler(w http.ResponseWriter, r *http.Request) {
+	// Solitamente questo endpoint è in GET, ma puoi scegliere anche POST se preferisci
+	if r.Method != http.MethodGet {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Recupera le mete dal database
+	mete, err := database.GetMeteFromDB(db)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore nel recupero delle mete: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Calcola il punteggio per ciascuna meta
+	meteConPunteggio := utils.CalcolaPunteggi(mete)
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(meteConPunteggio); err != nil {
+		http.Error(w, "Errore durante la codifica della risposta JSON", http.StatusInternalServerError)
+	}
+}
+
+func getOfferteImperdibiliHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	offerte, err := database.GetOfferteImperdibili(db)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore nel recupero delle offerte: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(offerte); err != nil {
+		http.Error(w, "Errore durante la codifica della risposta JSON", http.StatusInternalServerError)
+	}
+}
+
 func main() {
 	db = initializeDatabase() // Inizializza la connessione al database
 	defer db.Close()          // Chiude la connessione al termine del server
@@ -367,6 +409,8 @@ func main() {
 	http.HandleFunc("/getReviews", getReviewsHandler)
 	http.HandleFunc("/deleteBooking", deleteBookingHandler)
 	http.HandleFunc("/deleteReview", deleteReviewHandler)
+	http.HandleFunc("/getMeteGettonate", getMeteGettonateHandler)
+	http.HandleFunc("/getOfferteImperdibili", getOfferteImperdibiliHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)

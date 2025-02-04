@@ -232,3 +232,23 @@ def delete_review(request: DeleteReviewRequest):
         return response
     except Exception as e:
         raise HTTPException(status_code=502, detail=str(e))
+
+@app.get("/getMeteGettonate")
+def get_mete_gettonate():
+    try:
+        response = connect_go("getMeteGettonate", {})
+
+        metas_ordinate = sorted(response, key=lambda m: m["punteggio"], reverse=True)
+
+        return metas_ordinate
+    except ConnectionError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+    
+@app.get("/getOfferteImperdibili")
+def get_offerte_imperdibili():
+    try:
+        response = connect_go("getOfferteImperdibili", {})
+
+        return response
+    except ConnectionError as e:
+        raise HTTPException(status_code=502, detail=str(e))

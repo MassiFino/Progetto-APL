@@ -290,3 +290,77 @@ func DeleteReview(db *sql.DB, roomID int, username string) error {
 
 	return nil
 }
+
+func GetMeteFromDB(db *sql.DB) ([]types.ResponseMeta, error) {
+	query := `
+        SELECT 
+            h.Location AS NomeMeta,
+            COUNT(DISTINCT h.HotelID) AS NumeroHotel,
+            AVG(r.PricePerNight) AS PrezzoMedio,
+            COUNT(b.BookingID) AS NumeroPrenotazioni,
+            AVG(rv.Rating) AS MediaVoto,
+            MAX(h.Images) AS Immagine
+        FROM hotels h
+        JOIN rooms r ON h.HotelID = r.HotelID
+        LEFT JOIN bookings b ON r.RoomID = b.RoomID
+        LEFT JOIN reviews rv ON r.RoomID = rv.RoomID
+        GROUP BY h.Location
+        ORDER BY NumeroHotel DESC
+        LIMIT 10;
+    `
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var mete []types.ResponseMeta
+	for rows.Next() {
+		var m types.ResponseMeta
+		if err := rows.Scan(&m.NomeMeta, &m.NumeroHotel, &m.PrezzoMedio, &m.NumeroPrenotazioni, &m.MediaVoto, &m.Immagine); err != nil {
+			return nil, err
+		}
+		mete = append(mete, m)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return mete, nil
+}
+
+func GetOfferteImperdibili(db *sql.DB) ([]types.ResponseOffertaImperdibile, error) {
+	query := `
+        SELECT 
+            h.HotelID,
+            h.Name AS NomeHotel,
+            h.Images AS Immagine,
+            MIN(r.PricePerNight) AS PrezzoMinimo,
+            AVG(rv.Rating) AS MediaVoto
+        FROM hotels h
+        JOIN rooms r ON h.HotelID = r.HotelID
+        LEFT JOIN reviews rv ON r.RoomID = rv.RoomID
+        WHERE r.IsAvailable = TRUE
+        GROUP BY h.HotelID, h.Name, h.Images
+        HAVING AVG(rv.Rating) >= 3.0  -- Filtra per ottenere solo offerte con un voto medio decente
+        ORDER BY PrezzoMinimo ASC
+        LIMIT 10;
+    `
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var offerte []types.ResponseOffertaImperdibile
+	for rows.Next() {
+		var off types.ResponseOffertaImperdibile
+		if err := rows.Scan(&off.HotelID, &off.NomeHotel, &off.Immagine, &off.PrezzoMinimo, &off.MediaVoto); err != nil {
+			return nil, err
+		}
+		offerte = append(offerte, off)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return offerte, nil
+}
