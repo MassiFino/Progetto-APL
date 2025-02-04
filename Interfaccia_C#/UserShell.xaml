@@ -26,6 +26,13 @@
     </ShellContent>
 
     <ShellContent
+        Title="SearchPage"
+        ContentTemplate="{DataTemplate local:SearchPage}"
+        Route="SearchPage" >
+   
+    </ShellContent>
+
+    <ShellContent
     Title="Profilo"
     ContentTemplate="{DataTemplate local:ProfileUserPage}"
     Route="ProfileUserPage">

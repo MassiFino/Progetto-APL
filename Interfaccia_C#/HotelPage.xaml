@@ -2,37 +2,35 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Interfaccia_C_.HotelPage"
-             xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel"
              BackgroundColor="AliceBlue"
              Padding="0">
 
-    <!-- ScrollView per contenere il contenuto della pagina -->
     <ScrollView>
         <VerticalStackLayout Padding="10">
             <!-- Nome dell'hotel -->
-            <Label Text="{Binding Name}" 
+            <Label Text="{Binding name}" 
                    FontSize="24" 
                    FontAttributes="Bold"
                    HorizontalOptions="Center" />
 
             <!-- Descrizione dell'hotel -->
-            <Label Text="{Binding Description}" 
+            <Label Text="{Binding description}" 
                    FontSize="14" 
                    LineBreakMode="WordWrap"
                    HorizontalOptions="Start" />
 
             <!-- Location dell'hotel -->
-            <Label Text="{Binding Location}" 
+            <Label Text="{Binding location}" 
                    FontSize="16"
                    HorizontalOptions="Start" />
 
             <!-- Rating dell'hotel -->
-            <Label Text="{Binding Rating}" 
+            <Label Text="{Binding rating}" 
                    FontSize="16"
                    HorizontalOptions="Start" />
 
-            <!-- Mostrare l'immagine dell'hotel -->
-            <Image Source="{Binding ImageHotel}" 
+            <!-- Immagine dell'hotel -->
+            <Image Source="{Binding ImageSource}" 
                    Aspect="AspectFill" 
                    HeightRequest="200" 
                    HorizontalOptions="Center" />

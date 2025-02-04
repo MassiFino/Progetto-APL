@@ -30,7 +30,7 @@ public ICommand ViewHotelCommand { get; }
         public ProfilHostPageViewModel()
 {
     OwnedHotels = new ObservableCollection<Hotel>();  // Inizializza la lista degli hotel
-    ViewHotelCommand = new Command<Hotel>(OnViewHotel);  // Imposta il comando per il pulsante "Visualizza"
+            ViewHotelCommand = new Command(async () => await Shell.Current.GoToAsync("//HotelPage"));// Imposta il comando per il pulsante "Visualizza"
             AddHotelCommand = new Command(async () => await NavigateToAddHotelPage());
 
 

@@ -1,110 +1,208 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Microsoft.Maui.Controls;
-using System.Text.Json;
-using System.Diagnostics;
-
+using System.Threading.Tasks;  // Per simulare chiamate asincrone
+using System.Diagnostics;     // Per il debug
 
 namespace Interfaccia_C_.ViewModel
 {
-    public  class SearchPageViewModel
+    public class SearchPageViewModel : INotifyPropertyChanged
     {
-        private string _city;
-        private DateTime _checkInDate;
-        private DateTime _checkOutDate;
-        private bool _isInternetEnabled;
+        private string _searchCity;
+        private DateTime _checkInDate = DateTime.Today;
+        private DateTime _checkOutDate = DateTime.Today.AddDays(1);
+        private bool _isWiFiEnabled;
         private bool _isParkingEnabled;
+        private bool _isBreakfastEnabled;
+        private bool _isPoolEnabled;
         private bool _isGymEnabled;
         private bool _isSpaEnabled;
+        private bool _isRoomServiceEnabled;
+        private bool _isPetsAllowed;
+        private bool _isRestaurantEnabled;
+        private bool _isAirConditioningEnabled;
 
-        public string City
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            get => _city;
-            set => SetProperty(ref _city, value);
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        public string SearchCity
+        {
+            get => _searchCity;
+            set
+            {
+                _searchCity = value;
+                OnPropertyChanged();
+            }
+        }
         public DateTime CheckInDate
         {
             get => _checkInDate;
-            set => SetProperty(ref _checkInDate, value);
+            set
+            {
+                _checkInDate = value;
+                OnPropertyChanged();
+            }
         }
 
         public DateTime CheckOutDate
         {
             get => _checkOutDate;
-            set => SetProperty(ref _checkOutDate, value);
+            set
+            {
+                _checkOutDate = value;
+                OnPropertyChanged();
+            }
         }
 
-        public bool IsInternetEnabled
+        public bool IsWiFiEnabled
         {
-            get => _isInternetEnabled;
-            set => SetProperty(ref _isInternetEnabled, value);
+            get => _isWiFiEnabled;
+            set
+            {
+                _isWiFiEnabled = value;
+                OnPropertyChanged();
+            }
         }
 
         public bool IsParkingEnabled
         {
             get => _isParkingEnabled;
-            set => SetProperty(ref _isParkingEnabled, value);
+            set
+            {
+                _isParkingEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsBreakfastEnabled
+        {
+            get => _isBreakfastEnabled;
+            set
+            {
+                _isBreakfastEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsPoolEnabled
+        {
+            get => _isPoolEnabled;
+            set
+            {
+                _isPoolEnabled = value;
+                OnPropertyChanged();
+            }
         }
 
         public bool IsGymEnabled
         {
             get => _isGymEnabled;
-            set => SetProperty(ref _isGymEnabled, value);
+            set
+            {
+                _isGymEnabled = value;
+                OnPropertyChanged();
+            }
         }
 
         public bool IsSpaEnabled
         {
             get => _isSpaEnabled;
-            set => SetProperty(ref _isSpaEnabled, value);
+            set
+            {
+                _isSpaEnabled = value;
+                OnPropertyChanged();
+            }
         }
 
-        // Metodo per eseguire la ricerca
+        public bool IsRoomServiceEnabled
+        {
+            get => _isRoomServiceEnabled;
+            set
+            {
+                _isRoomServiceEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsPetsAllowed
+        {
+            get => _isPetsAllowed;
+            set
+            {
+                _isPetsAllowed = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsRestaurantEnabled
+        {
+            get => _isRestaurantEnabled;
+            set
+            {
+                _isRestaurantEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public bool IsAirConditioningEnabled
+        {
+            get => _isAirConditioningEnabled;
+            set
+            {
+                _isAirConditioningEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _selectedGuest;
+
+        // Proprietà per il valore selezionato
+        public string SelectedGuest
+        {
+            get => _selectedGuest;
+            set
+            {
+                _selectedGuest = value;
+                OnPropertyChanged();
+            }
+        }
+
+        // Comando per eseguire la ricerca
         public ICommand SearchCommand { get; }
 
         public SearchPageViewModel()
         {
-            // Inizializza il comando per la ricerca
-            SearchCommand = new Command(OnSearch);
+            SearchCommand = new Command(async () => await ExecuteSearch());
         }
 
-        private void OnSearch()
+        // Metodo che simula una ricerca
+        private async Task ExecuteSearch()
         {
-            // Qui raccogli i valori dalla proprietà e fai la ricerca
-            string city = City;
-            DateTime checkIn = CheckInDate;
-            DateTime checkOut = CheckOutDate;
-            bool isInternetEnabled = IsInternetEnabled;
-            bool isParkingEnabled = IsParkingEnabled;
-            bool isGymEnabled = IsGymEnabled;
-            bool isSpaEnabled = IsSpaEnabled;
+            // Simuliamo un piccolo ritardo per vedere che il comando funziona
 
-            // Esegui la logica della ricerca con questi valori
-            // Esempio: chiamare un servizio per cercare gli hotel in base ai filtri
-        }
+            // Stampa i parametri di ricerca nella console (puoi sostituirlo con la tua logica)
+            Debug.WriteLine($"🔍 Ricerca avviata con i seguenti parametri:");
+            Debug.WriteLine($"🔍 Ricerca avviata per la città: {SearchCity}");
+            Debug.WriteLine($"Numero di ospiti: {SelectedGuest}");
 
-        // Metodo di supporto per la notifica delle proprietà
-        public event PropertyChangedEventHandler PropertyChanged;
+            Debug.WriteLine($"Check-in: {CheckInDate:dd/MM/yyyy}");
+            Debug.WriteLine($"Check-out: {CheckOutDate:dd/MM/yyyy}");
+            Debug.WriteLine($"Wi-Fi: {IsWiFiEnabled}");
+            Debug.WriteLine($"Parcheggio: {IsParkingEnabled}");
+            Debug.WriteLine($"Colazione: {IsBreakfastEnabled}");
+            Debug.WriteLine($"Piscina: {IsPoolEnabled}");
+            Debug.WriteLine($"Palestra: {IsGymEnabled}");
+            Debug.WriteLine($"Spa: {IsSpaEnabled}");
+            Debug.WriteLine($"Servizio in Camera: {IsRoomServiceEnabled}");
+            Debug.WriteLine($"Animali Ammessi: {IsPetsAllowed}");
+            Debug.WriteLine($"Ristorante: {IsRestaurantEnabled}");
+            Debug.WriteLine($"Aria Condizionata: {IsAirConditioningEnabled}");
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        private void SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (!EqualityComparer<T>.Default.Equals(field, value))
-            {
-                field = value;
-                OnPropertyChanged(propertyName);
-            }
+            // Qui potresti fare una chiamata a un'API per ottenere i risultati
         }
     }
 }
-

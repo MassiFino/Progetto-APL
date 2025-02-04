@@ -17,18 +17,29 @@ namespace Interfaccia_C_.ViewModel
     public  class MainPageViewModel
     {
         public ICommand GuardaOffertaCommand { get; set; }
+        public ICommand GoToSearchCommand { get; }
+
+
+        // Inizializza il comando con la logica di navigazione
+        
+
+
 
         public MainPageViewModel()
         {
             // 1) Avviamo il controllo del token
             CheckToken();
 
-            // 2) Inizializza i comandi (se servono)
             GuardaOffertaCommand = new Command(() =>
             {
                 Debug.WriteLine("Comando GuardaOfferta eseguito");
             });
+
+            GoToSearchCommand = new Command(async () => await Shell.Current.GoToAsync("//SearchPage"));
+
         }
+
+
 
         private async void CheckToken()
         {

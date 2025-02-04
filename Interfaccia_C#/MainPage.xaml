@@ -9,55 +9,40 @@
              Padding="0">
 
     <VerticalStackLayout Margin="10" Spacing="15">
-        <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="AliceBlue" Padding="20"
+        <Border Stroke="LightGray" StrokeThickness="1"           BackgroundColor="DarkBlue"
+ Padding="20"
         HorizontalOptions="Center" VerticalOptions="Center"
         StrokeShape="RoundRectangle 20">
             <VerticalStackLayout Spacing="10">
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                    <!-- Campo di Ricerca città -->
-                    <Entry Placeholder="Cerca città" WidthRequest="200" HeightRequest="40" TextColor="Black" />
 
-                  
-                        <!-- DatePicker per il check-in -->
-                     <DatePicker Format="dd/MM/yyyy" 
-                    WidthRequest="150" 
-                    HeightRequest="40" 
-                    TextColor="Black" 
-                    Date="{Binding CheckInDate}" />
-                 
+                    <!-- Slogan con effetto stilizzato -->
+                    <Label Text="🏨 Trova l'hotel perfetto per il tuo viaggio! 🌍"
+           FontSize="22"
+           FontAttributes="Bold"
+           HorizontalOptions="Center"
+           TextColor="White"
+           BackgroundColor="DarkBlue"
+           Padding="15"
+           VerticalTextAlignment="Center"
+           HorizontalTextAlignment="Center"/>
 
-                        <!-- DatePicker per il check-out -->
-                    <DatePicker Format="dd/MM/yyyy" 
-                    WidthRequest="150" 
-                    HeightRequest="40" 
-                    TextColor="Black" 
-                    Date="{Binding CheckOutDate}" />
-                  
 
-                    <!-- Bottone di ricerca -->
-                    <Button Text="Cerca" WidthRequest="100" HeightRequest="40" />
+
+
+
+
+
+
+
+
+                    <Button Text="Cerca" 
+                     WidthRequest="100" 
+                     HeightRequest="40"
+                     Command="{Binding GoToSearchCommand}" />
+
                 </HorizontalStackLayout>
 
-
-                <!-- Sezione Filtri con Bordo Smussato -->
-                <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
-                    <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                        <Label Text="Free wifi" TextColor="Black" />
-                        <Switch IsToggled="{Binding IsInternetEnabled}" />
-                    </StackLayout>
-                    <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                        <Label Text="Free Parking" TextColor="Black" />
-                        <Switch IsToggled="{Binding IsParkingEnabled}" />
-                    </StackLayout>
-                    <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                        <Label Text="Gym" TextColor="Black" />
-                        <Switch IsToggled="{Binding IsGymEnabled}" />
-                    </StackLayout>
-                    <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                        <Label Text="Spa" TextColor="Black" />
-                        <Switch IsToggled="{Binding IsSpaEnabled}" />
-                    </StackLayout>
-                </StackLayout>
             </VerticalStackLayout>
         </Border>
         
