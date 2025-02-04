@@ -31,14 +31,26 @@ public ICommand ViewHotelCommand { get; }
 {
     OwnedHotels = new ObservableCollection<Hotel>();  // Inizializza la lista degli hotel
     ViewHotelCommand = new Command<Hotel>(OnViewHotel);  // Imposta il comando per il pulsante "Visualizza"
-    AddHotelCommand = new Command(async () => await Shell.Current.GoToAsync("//AddHotelPage"));
+            AddHotelCommand = new Command(async () => await NavigateToAddHotelPage());
 
 
             LoadUserData(); // Carica i dati dell'utente all'avvio
-    LoadHotelData();   // Carica i dati degli hotel
+        LoadHotelData();   // Carica i dati degli hotel
 }
 
+        private async Task NavigateToAddHotelPage()
+        {
+            if (!string.IsNullOrEmpty(UserName))
+            {
+                Debug.WriteLine($"UserName value before navigation: {UserName}"); // Add this line to debug the value
 
+                await Shell.Current.GoToAsync($"//AddHotelPage?UserName={UserName}");
+            }
+            else
+            {
+                Debug.WriteLine("UserName is null or empty.");
+            }
+        }
         private async void OnViewHotel(Hotel selectedHotel)
 {
     if (selectedHotel != null)

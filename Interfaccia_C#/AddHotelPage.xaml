@@ -8,8 +8,10 @@
              BackgroundColor="White"
              Padding="0">
     <ScrollView>
-
+  
+        
         <VerticalStackLayout Spacing="20">
+            <Label Text="{Binding UserName}" FontSize="20" TextColor="Black"/>
 
             <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="AliceBlue" Padding="20"
                     HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
@@ -52,18 +54,7 @@
                             HeightRequest="150"
                             HorizontalOptions="FillAndExpand" />
 
-                    <!-- Valutazione dell'hotel -->
-                    <Label Text="Valutazione dell'hotel (0-5)"
-                           FontSize="16"
-                           TextColor="Black"
-                           HorizontalOptions="Start" />
-                    <Entry x:Name="HotelRatingEntry"
-                           Placeholder="Valutazione (0-5)"
-                           Text="{Binding Rating}"
-                           Keyboard="Numeric"
-                           MaxLength="5"
-                           HorizontalOptions="FillAndExpand"
-                           HeightRequest="45" />
+                
 
                     <!-- Immagine dell'hotel -->
                     <Label Text="URL Immagine dell'hotel"

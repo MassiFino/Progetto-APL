@@ -9,12 +9,35 @@ using System.Windows.Input;
 using Microsoft.Maui.Controls;
 using System.Text.Json;
 using System.Diagnostics;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 
 namespace Interfaccia_C_.ViewModel
 {
-    public  class AddHotelPageViewModel
+   public class AddHotelPageViewModel : INotifyPropertyChanged
     {
+        private string userName;
 
+        public string UserName
+        {
+            get => userName;
+            set
+            {
+                if (userName != value)
+                {
+                    Debug.WriteLine($"UserName changing from {userName} to {value}"); // Debugging line
+                    userName = value;
+                    OnPropertyChanged(nameof(UserName));
+                }
+            }
+        }
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
