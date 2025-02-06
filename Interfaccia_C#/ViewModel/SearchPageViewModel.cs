@@ -188,7 +188,6 @@ namespace Interfaccia_C_.ViewModel
             Debug.WriteLine($"🔍 Ricerca avviata con i seguenti parametri:");
             Debug.WriteLine($"🔍 Ricerca avviata per la città: {SearchCity}");
             Debug.WriteLine($"Numero di ospiti: {SelectedGuest}");
-
             Debug.WriteLine($"Check-in: {CheckInDate:dd/MM/yyyy}");
             Debug.WriteLine($"Check-out: {CheckOutDate:dd/MM/yyyy}");
             Debug.WriteLine($"Wi-Fi: {IsWiFiEnabled}");

@@ -29,40 +29,14 @@ public ICommand ViewHotelCommand { get; }
         // Costruttore del ViewModel
         public ProfilHostPageViewModel()
 {
-    OwnedHotels = new ObservableCollection<Hotel>();  // Inizializza la lista degli hotel
+            OwnedHotels = new ObservableCollection<Hotel>();  // Inizializza la lista degli hotel
             ViewHotelCommand = new Command(async () => await Shell.Current.GoToAsync("//HotelPage"));// Imposta il comando per il pulsante "Visualizza"
-            AddHotelCommand = new Command(async () => await NavigateToAddHotelPage());
-
-
+            AddHotelCommand = new Command(async () => await Shell.Current.GoToAsync("//AddHotelPage"));
             LoadUserData(); // Carica i dati dell'utente all'avvio
-        LoadHotelData();   // Carica i dati degli hotel
+            LoadHotelData();   // Carica i dati degli hotel
 }
 
-        private async Task NavigateToAddHotelPage()
-        {
-            if (!string.IsNullOrEmpty(UserName))
-            {
-                Debug.WriteLine($"UserName value before navigation: {UserName}"); // Add this line to debug the value
-
-                await Shell.Current.GoToAsync($"//AddHotelPage?UserName={UserName}");
-            }
-            else
-            {
-                Debug.WriteLine("UserName is null or empty.");
-            }
-        }
-        private async void OnViewHotel(Hotel selectedHotel)
-{
-    if (selectedHotel != null)
-    {
-        // Debug per confermare l'hotel selezionato
-        Debug.WriteLine($"Hotel selezionato: {selectedHotel.name}");
-
-        // Naviga alla pagina dell'hotel, passando l'hotel selezionato
-        await Application.Current.MainPage.Navigation.PushAsync(new HotelPage(selectedHotel));
-    }
-}
-
+     
         private string userName;
         private string email;
         private string role;

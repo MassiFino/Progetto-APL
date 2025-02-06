@@ -28,8 +28,10 @@
     <ShellContent
         Title="SearchPage"
         ContentTemplate="{DataTemplate local:SearchPage}"
-        Route="SearchPage" >
-   
+        Route="SearchPage">
+        <ShellContent.Icon>
+            <FileImageSource File="search.png" />
+        </ShellContent.Icon>
     </ShellContent>
 
     <ShellContent

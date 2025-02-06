@@ -9,8 +9,7 @@
 
         <!-- Profilo Utente -->
         <Border Stroke="#20B2AA" StrokeThickness="1" BackgroundColor="#00CED1" Padding="20"
-               HorizontalOptions="Center" VerticalOptions="Center"
-               StrokeShape="RoundRectangle 20">
+               HorizontalOptions="Center" VerticalOptions="Center">
             <Grid Margin="10" ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
                 <Border Stroke="LightGray" StrokeThickness="1" Padding="5" Grid.RowSpan="5" HorizontalOptions="Center" VerticalOptions="Center" StrokeShape="RoundRectangle 10">
                     <Image Source="{Binding ProfileImage}" WidthRequest="80" HeightRequest="80" VerticalOptions="CenterAndExpand"/>

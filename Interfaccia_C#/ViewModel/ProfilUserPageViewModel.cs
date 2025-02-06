@@ -13,8 +13,7 @@ using Interfaccia_C_.Model; // Importa il modello Hotel
 using System.Net.Http.Headers; // Per AuthenticationHeaderValue
 using Microsoft.Maui.Storage;   // Per SecureStorage
 using System.Text;
-//using Windows.ApplicationModel.UserDataAccounts;
-//using Android.App;
+
 
 
 namespace Interfaccia_C_.ViewModel
@@ -341,10 +340,6 @@ namespace Interfaccia_C_.ViewModel
                 Rating = booking.Rating,
             };
 
-            Debug.WriteLine($"rating: {rating}");
-            Debug.WriteLine($"comment: {comment}");
-            Debug.WriteLine($"username: {booking.username}");
-            Debug.WriteLine($"roomID: {booking.roomID}");
 
             using var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/addReview");

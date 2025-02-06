@@ -10,8 +10,7 @@ public partial class HotelPage : ContentPage
     {
         InitializeComponent();
 
-        // Imposta il ViewModel con i dati dell'hotel
-        BindingContext = new HotelPageViewModel(hotel);
+        BindingContext = new HotelPageViewModel();
     }
 }
 
