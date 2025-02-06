@@ -7,7 +7,7 @@ import (
 // MetaConPunteggio include i dati della meta e il punteggio calcolato.
 type MetaConPunteggio struct {
 	types.ResponseMeta
-	Punteggio float64 `json:"punteggio"`
+	Punteggio float64 `json:"Punteggio"`
 }
 
 // Calcola il punteggio per ogni meta.

@@ -201,7 +201,7 @@ def add_review(request: addReviewRequest):
     
         
 @app.post("/getReviews")
-def add_review(request: getReviewsRequest):
+def get_review(request: getReviewsRequest):
     try:
 
         response = connect_go("getReviews", request.dict())
@@ -233,21 +233,31 @@ def delete_review(request: DeleteReviewRequest):
     except Exception as e:
         raise HTTPException(status_code=502, detail=str(e))
 
-@app.get("/getMeteGettonate")
+@app.post("/getMeteGettonate")
 def get_mete_gettonate():
     try:
+
+        print("Chiamata a getMeteGettonate")
         response = connect_go("getMeteGettonate", {})
 
-        metas_ordinate = sorted(response, key=lambda m: m["punteggio"], reverse=True)
+        mete_ordinate = sorted(response, key=lambda m: m["Punteggio"], reverse=True)
 
-        return metas_ordinate
+        print(mete_ordinate)
+
+        return mete_ordinate
     except ConnectionError as e:
         raise HTTPException(status_code=502, detail=str(e))
     
-@app.get("/getOfferteImperdibili")
+@app.post("/getOfferteImperdibili")
 def get_offerte_imperdibili():
     try:
         response = connect_go("getOfferteImperdibili", {})
+
+        if response is None:
+            print("risposta: None")
+        else:
+            print("risposta: " + str(response))
+
 
         return response
     except ConnectionError as e:

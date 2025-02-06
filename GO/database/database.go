@@ -298,7 +298,7 @@ func GetMeteFromDB(db *sql.DB) ([]types.ResponseMeta, error) {
             COUNT(DISTINCT h.HotelID) AS NumeroHotel,
             AVG(r.PricePerNight) AS PrezzoMedio,
             COUNT(b.BookingID) AS NumeroPrenotazioni,
-            AVG(rv.Rating) AS MediaVoto,
+            COALESCE(AVG(rv.Rating), 0) AS MediaVoto,
             MAX(h.Images) AS Immagine
         FROM hotels h
         JOIN rooms r ON h.HotelID = r.HotelID
@@ -341,7 +341,7 @@ func GetOfferteImperdibili(db *sql.DB) ([]types.ResponseOffertaImperdibile, erro
         LEFT JOIN reviews rv ON r.RoomID = rv.RoomID
         WHERE r.IsAvailable = TRUE
         GROUP BY h.HotelID, h.Name, h.Images
-        HAVING AVG(rv.Rating) >= 3.0  -- Filtra per ottenere solo offerte con un voto medio decente
+        HAVING COALESCE(AVG(rv.Rating), 0) >= 3.0  -- Filtra per ottenere solo offerte con un voto medio decente
         ORDER BY PrezzoMinimo ASC
         LIMIT 10;
     `

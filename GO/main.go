@@ -356,8 +356,8 @@ func deleteReviewHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getMeteGettonateHandler(w http.ResponseWriter, r *http.Request) {
-	// Solitamente questo endpoint è in GET, ma puoi scegliere anche POST se preferisci
-	if r.Method != http.MethodGet {
+
+	if r.Method != http.MethodPost {
 		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
 		return
 	}
@@ -379,7 +379,7 @@ func getMeteGettonateHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func getOfferteImperdibiliHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
+	if r.Method != http.MethodPost {
 		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
 		return
 	}
