@@ -40,12 +40,12 @@ type HotelRequest struct {
 }
 
 type HotelResponse struct {
-	Name        string   `json:"name"`             // Nome dell'hotel
-	Location    string   `json:"location"`         // Posizione dell'hotel
-	Description string   `json:"description"`      // Descrizione dettagliata dell'hotel
-	Services    []string `json:"services"`         // Elenco predefinito dei servizi
-	Rating      float64  `json:"rating,omitempty"` // Valutazione dell'hotel (opzionale)
-	Images      string   `json:"images"`           // URL delle immagini dell'hotel
+	Name        string   `json:"Name"`             // Nome dell'hotel
+	Location    string   `json:"Location"`         // Posizione dell'hotel
+	Description string   `json:"Description"`      // Descrizione dettagliata dell'hotel
+	Services    []string `json:"Services"`         // Elenco predefinito dei servizi
+	Rating      float64  `json:"Rating,omitempty"` // Valutazione dell'hotel (opzionale)
+	Images      string   `json:"Images"`           // URL delle immagini dell'hotel
 }
 type BookingRequest struct {
 	Username string `json:"username"`

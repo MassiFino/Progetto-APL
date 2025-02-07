@@ -69,50 +69,65 @@
 
 
                 <!-- Sezione Filtri con Bordo Smussato -->
-                <ScrollView Orientation="Horizontal">
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
-                        <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                            <Label Text="Free Wi-Fi" TextColor="Black" />
-                            <Switch IsToggled="{Binding IsWiFiEnabled}" />
+                    <VerticalStackLayout>
+                        <!-- Prima riga con le prime 3 opzioni -->
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Wi-Fi" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsWiFiEnabled}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Parking" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsParkingEnabled}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Breakfast" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsBreakfastEnabled}" />
+                            </StackLayout>
                         </StackLayout>
-                        <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                            <Label Text="Parking" TextColor="Black" />
-                            <Switch IsToggled="{Binding IsParkingEnabled}" />
+
+                        <!-- Seconda riga con altre 3 opzioni -->
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Pool" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsPoolEnabled}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Gym" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsGymEnabled}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Spa" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsSpaEnabled}" />
+                            </StackLayout>
                         </StackLayout>
-                        <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                            <Label Text="Breakfast" TextColor="Black" />
-                            <Switch IsToggled="{Binding IsBreakfastEnabled}" />
+
+                        <!-- Terza riga con le ultime 3 opzioni -->
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Room Service" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsRoomServiceEnabled}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Pets Allowed" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsPetsAllowed}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Restaurant" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsRestaurantEnabled}" />
+                            </StackLayout>
                         </StackLayout>
-                        <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                            <Label Text="Pool" TextColor="Black" />
-                            <Switch IsToggled="{Binding IsPoolEnabled}" />
+
+                        <!-- Quarta riga con l'ultima opzione -->
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <Label Text="Air Conditioning" TextColor="Black" />
+                                <Switch IsToggled="{Binding IsAirConditioningEnabled}" />
+                            </StackLayout>
                         </StackLayout>
-                        <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                            <Label Text="Gym" TextColor="Black" />
-                            <Switch IsToggled="{Binding IsGymEnabled}" />
-                        </StackLayout>
-                        <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                            <Label Text="Spa" TextColor="Black" />
-                            <Switch IsToggled="{Binding IsSpaEnabled}" />
-                        </StackLayout>
-                        <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                            <Label Text="Room Service" TextColor="Black" />
-                            <Switch IsToggled="{Binding IsRoomServiceEnabled}" />
-                        </StackLayout>
-                        <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                            <Label Text="Pets Allowed" TextColor="Black" />
-                            <Switch IsToggled="{Binding IsPetsAllowed}" />
-                        </StackLayout>
-                        <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                            <Label Text="Restaurant" TextColor="Black" />
-                            <Switch IsToggled="{Binding IsRestaurantEnabled}" />
-                        </StackLayout>
-                        <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                            <Label Text="Air Conditioning" TextColor="Black" />
-                            <Switch IsToggled="{Binding IsAirConditioningEnabled}" />
-                        </StackLayout>
-                    </StackLayout>
-                </ScrollView>
+                    </VerticalStackLayout>
+
+
             </VerticalStackLayout>
         </Border>
       

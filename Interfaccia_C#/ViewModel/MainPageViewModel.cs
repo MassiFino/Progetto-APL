@@ -17,6 +17,8 @@ namespace Interfaccia_C_.ViewModel
 {
     public class MainPageViewModel : INotifyPropertyChanged
     {
+        public ICommand GoToSearchCommand { get; }
+
         private HttpClient _httpClient;
 
         // Ora usi 'Hotel' al posto di MeteGettonateModel / OffertaImperdibileModel
@@ -40,6 +42,8 @@ namespace Interfaccia_C_.ViewModel
 
         public MainPageViewModel()
         {
+            GoToSearchCommand = new Command(async () => await Shell.Current.GoToAsync("//SearchPage"));
+
             // Comando per 'Guarda Offerta'
             GuardaOffertaCommand = new Command<Hotel>(async (hotelSelezionato) =>
             {
@@ -107,6 +111,24 @@ namespace Interfaccia_C_.ViewModel
                 MeteGettonate.Clear();
                 foreach (var meta in mete)
                 {
+                    if (!string.IsNullOrEmpty(meta.Images?.Trim()))
+                    {
+                        // Divido la stringa in più immagini
+                        var imageList = meta.Images.Split(',');
+                        // Prendo la prima
+                        var firstImage = imageList[0].Trim();
+
+                        Debug.WriteLine("Path immagine (prima del combine): " + firstImage);
+
+                        // Costruisco path completo
+                        string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName;
+                        var imagePath = Path.Combine(projectDirectory, firstImage);
+                        Debug.WriteLine("Path completo: " + imagePath);
+
+                        // Converto in ImageSource
+                        meta.ImageSource = GetImageSource(imagePath);
+                        Debug.WriteLine("Immaginissima: " + meta.ImageSource);
+                    }
                     MeteGettonate.Add(meta);
                 }
             }
@@ -139,6 +161,24 @@ namespace Interfaccia_C_.ViewModel
                 OfferteImperdibili.Clear();
                 foreach (var offerta in offerte)
                 {
+                    if (!string.IsNullOrEmpty(offerta.Images?.Trim()))
+                    {
+                        // Divido la stringa in più immagini
+                        var imageList = offerta.Images.Split(',');
+                        // Prendo la prima
+                        var firstImage = imageList[0].Trim();
+
+                        Debug.WriteLine("Path immagine (prima del combine): " + firstImage);
+
+                        // Costruisco path completo
+                        string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName;
+                        var imagePath = Path.Combine(projectDirectory, firstImage);
+                        Debug.WriteLine("Path completo: " + imagePath);
+
+                        // Converto in ImageSource
+                        offerta.ImageSource = GetImageSource(imagePath);
+                        Debug.WriteLine("Immaginissima: " + offerta.ImageSource);
+                    }
                     OfferteImperdibili.Add(offerta);
                 }
             }
@@ -147,7 +187,21 @@ namespace Interfaccia_C_.ViewModel
                 Debug.WriteLine($"Errore nel recupero delle offerte imperdibili: {ex.Message}");
             }
         }
+        public ImageSource GetImageSource(string imagePath)
+        {
+            if (File.Exists(imagePath))
+            {
+                Debug.WriteLine("Immagine trovata: " + imagePath);
+                return ImageSource.FromFile(imagePath);  // Usa FileImageSource per caricare l'immagine
 
+            }
+            else
+            {
+                Debug.WriteLine("Immagine non trovata: " + imagePath);
+
+                return null;  // Immagine non trovata
+            }
+        }
         // INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)

@@ -57,18 +57,18 @@
                                 </Frame>
 
                                 <StackLayout VerticalOptions="CenterAndExpand" Spacing="10" HorizontalOptions="FillAndExpand">
-                                    <Label Text="{Binding name}" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
-                                    <Label Text="{Binding location}" FontSize="14" TextColor="#FFD700"/>
-                                    <Label Text="{Binding description}" FontSize="12" TextColor="#4682B4"/>
+                                    <Label Text="{Binding Name}" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
+                                    <Label Text="{Binding Location}" FontSize="14" TextColor="#FFD700"/>
+                                    <Label Text="{Binding Description}" FontSize="12" TextColor="#4682B4"/>
 
                                     <StackLayout Orientation="Horizontal" Spacing="10">
                                         <Label Text="Servizi:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding services[0]}" FontSize="12" TextColor="#D2691E"/>
+                                        <Label Text="{Binding ServiziStringa}" FontSize="12" TextColor="#D2691E"/>
                                     </StackLayout>
 
                                     <StackLayout Orientation="Horizontal" Spacing="10">
                                         <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding rating}" FontSize="12" TextColor="#D2691E"/>
+                                        <Label Text="{Binding Rating}" FontSize="12" TextColor="#D2691E"/>
                                     </StackLayout>
                                     <HorizontalStackLayout Spacing="20">
                                         <Button Text="Visualizza"

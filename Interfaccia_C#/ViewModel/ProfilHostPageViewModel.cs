@@ -40,7 +40,6 @@ namespace Interfaccia_C_.ViewModel
             OwnedHotels = new ObservableCollection<Hotel>();
 
             // Imposta il comando per il pulsante "Visualizza"
-            // N.B. Il Command accetta un oggetto Hotel come parametro
             ViewHotelCommand = new Command<Hotel>(OnViewHotel);
 
             // Comando che naviga a una pagina "AddHotelPage" (shell route)
@@ -86,7 +85,6 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-        // Messaggio da visualizzare (es. "Non ho trovato hotel", etc.)
         public string Message
         {
             get => message;
@@ -108,9 +106,7 @@ namespace Interfaccia_C_.ViewModel
             {
                 Debug.WriteLine($"Hotel selezionato: {selectedHotel.Name}");
 
-                // Navigazione classica: devi avere un costruttore in HotelPage che accetti (Hotel)
-                // Esempio: public HotelPage(Hotel h) { InitializeComponent(); BindingContext = new HotelPageViewModel(h); }
-                //await Application.Current.MainPage.Navigation.PushAsync(new HotelPage(selectedHotel));
+              
             }
         }
 
@@ -209,15 +205,16 @@ namespace Interfaccia_C_.ViewModel
                         foreach (var hotel in hotels)
                         {
                             // Se la lista dei servizi è null, la inizializzi
-                            if (hotel.services == null)
-                                hotel.services = new List<string>();
+                            if (hotel.Services == null)
+                                hotel.Services = new List<string>();
 
                             // Debug per vedere i servizi
-                            foreach (var service in hotel.services)
+                            foreach (var service in hotel.Services)
                             {
                                 Debug.WriteLine($"Servizio dell'hotel: {service}");
                             }
-
+                            hotel.ServiziStringa = string.Join(", ", hotel.Services);
+                            Debug.WriteLine($"Servizi tutti : {hotel.ServiziStringa}");
                             // Se dal server arriva una proprietà "Images" con più percorsi separati da virgola
                             // Esempio: "Pictures\\Hotel1.png, Pictures\\Hotel2.png"
                             if (!string.IsNullOrEmpty(hotel.Images?.Trim()))

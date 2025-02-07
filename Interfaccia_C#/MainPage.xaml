@@ -14,46 +14,33 @@
     <ScrollView>
         <VerticalStackLayout Margin="10" Spacing="15">
 
-            <!-- Sezione Filtri e Ricerca -->
-            <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="AliceBlue" Padding="20"
-              HorizontalOptions="Center" VerticalOptions="Center"
-              StrokeShape="RoundRectangle 20">
+            <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="DarkBlue"
+        Padding="20" HorizontalOptions="Center" VerticalOptions="Center"
+        StrokeShape="RoundRectangle 20">
                 <VerticalStackLayout Spacing="10">
                     <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                        <!-- Campo di Ricerca città -->
-                        <Entry Placeholder="Cerca città" WidthRequest="200" HeightRequest="40" TextColor="Black" />
-                        <!-- DatePicker per il check-in -->
-                        <DatePicker Format="dd/MM/yyyy" WidthRequest="150" HeightRequest="40" TextColor="Black" Date="{Binding CheckInDate}" />
-                        <!-- DatePicker per il check-out -->
-                        <DatePicker Format="dd/MM/yyyy" WidthRequest="150" HeightRequest="40" TextColor="Black" Date="{Binding CheckOutDate}" />
-                        <!-- Bottone di ricerca -->
-                        <Button Text="Cerca" WidthRequest="100" HeightRequest="40" />
+                        <!-- Slogan con effetto stilizzato -->
+                        <Label Text="🏨 Trova l'hotel perfetto per il tuo viaggio! 🌍"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="White"
+                           BackgroundColor="DarkBlue"
+                           Padding="15"
+                           VerticalTextAlignment="Center"
+                           HorizontalTextAlignment="Center"/>
+                        <Button Text="Cerca" 
+                     WidthRequest="100" 
+                     HeightRequest="40"
+                     Command="{Binding GoToSearchCommand}" />
+
                     </HorizontalStackLayout>
 
-                    <!-- Sezione Filtri -->
-                    <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
-                        <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                            <Label Text="Free wifi" TextColor="Black" />
-                            <Switch IsToggled="{Binding IsInternetEnabled}" />
-                        </StackLayout>
-                        <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                            <Label Text="Free Parking" TextColor="Black" />
-                            <Switch IsToggled="{Binding IsParkingEnabled}" />
-                        </StackLayout>
-                        <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                            <Label Text="Gym" TextColor="Black" />
-                            <Switch IsToggled="{Binding IsGymEnabled}" />
-                        </StackLayout>
-                        <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                            <Label Text="Spa" TextColor="Black" />
-                            <Switch IsToggled="{Binding IsSpaEnabled}" />
-                        </StackLayout>
-                    </StackLayout>
                 </VerticalStackLayout>
             </Border>
 
             <!-- Sezione Offerte Imperdibili -->
-            <Label Text="Offerte imperdibili hotel in corso" FontSize="20" FontAttributes="Bold" Margin="0,10,0,5" />
+            <Label Text="Offerte imperdibili hotel in corso" FontSize="20" FontAttributes="Bold" Margin="0,10,0,5" TextColor="Black"/>
             <CollectionView ItemsSource="{Binding OfferteImperdibili}">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Horizontal" />
@@ -61,13 +48,14 @@
                 <CollectionView.ItemTemplate>
                     <!-- Imposto il tipo corretto per il binding -->
                     <DataTemplate x:DataType="model:Hotel">
-                        <Border Stroke="Gray" StrokeThickness="1" Padding="10" Margin="5" BackgroundColor="White" WidthRequest="250" HeightRequest="350">
+                        <Border Stroke="LightYellow" StrokeThickness="1" Padding="20" Margin="5" BackgroundColor="YellowGreen" WidthRequest="250" HeightRequest="350" StrokeShape="RoundRectangle 20">
+
                             <VerticalStackLayout>
                                 <!-- Assicurati che il valore di Immagine sia corretto, es. "hotel2.png" -->
                                 <Image Source="{Binding ImageSource}" HeightRequest="150" Aspect="AspectFill" />
-                                <Label Text="{Binding Name}" FontAttributes="Bold" Margin="0,5,0,0" />
+                                <Label Text="{Binding Name}" FontAttributes="Bold" Margin="0,5,0,0" TextColor="LightYellow"  />
                                 <!-- Usa PrezzoMinimo per il prezzo -->
-                                <Label Text="{Binding Prezzo}" TextColor="Green" />
+                                <Label Text="{Binding Prezzo}" TextColor="LightYellow" />
                                 <Button Text="Guarda l'offerta"
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=GuardaOffertaCommand}"
                                 CommandParameter="{Binding .}" 
@@ -79,18 +67,18 @@
             </CollectionView>
 
             <!-- Sezione Mete più gettonate -->
-            <Label Text="Mete più gettonate" FontSize="20" FontAttributes="Bold" Margin="0,10,0,5" />
+            <Label Text="Mete più gettonate" FontSize="20" FontAttributes="Bold" Margin="0,10,0,5" TextColor="Black"/>
             <CollectionView ItemsSource="{Binding MeteGettonate}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="2" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:Hotel">
-                        <Border Stroke="Gray" StrokeThickness="1" Padding="10" Margin="5" BackgroundColor="White" WidthRequest="180" HeightRequest="250">
+                        <Border Stroke="LightGoldenrodYellow" StrokeThickness="1" Padding="10" Margin="5" BackgroundColor="GreenYellow" WidthRequest="180" HeightRequest="250" StrokeShape="RoundRectangle 20">
                             <VerticalStackLayout>
                                 <Image Source="{Binding ImageSource}" HeightRequest="120" Aspect="AspectFill" />
-                                <Label Text="{Binding Name}" FontAttributes="Bold" Margin="0,5,0,0" />
-                                <Label Text="{Binding NumeroHotel}" />
+                                <Label Text="{Binding Name}" FontAttributes="Bold" Margin="0,5,0,0"  TextColor="Green" />
+                                <Label Text="{Binding NumeroHotel}"  TextColor="Green"/>
                                 <Label Text="{Binding Prezzo}" TextColor="Green" />
                             </VerticalStackLayout>
                         </Border>

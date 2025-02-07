@@ -6,10 +6,11 @@ namespace Interfaccia_C_.Model
         public string Name { get; set; }
         public string Location { get; set; }
         public string Description { get; set; }
-        public List<string> services { get; set; }
+        public List<string> Services { get; set; }
         public double Rating { get; set; }
         public ImageSource ImageSource { get; set; }
 
+        public string ServiziStringa { get; set; }
         public string Images { get; set; }  // Stringa che contiene il path (o i path)
         public float Prezzo { get; set; }
         public int NumeroHotel { get; set; }

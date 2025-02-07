@@ -8,32 +8,35 @@
     <ScrollView>
         <VerticalStackLayout Padding="10">
             <!-- Nome dell'hotel -->
-            <Label Text="{Binding name}" 
+            <Label Text="{Binding Name}" 
                    FontSize="24" 
                    FontAttributes="Bold"
-                   HorizontalOptions="Center" />
+                   HorizontalOptions="Center" TextColor="Black"/>
 
             <!-- Descrizione dell'hotel -->
-            <Label Text="{Binding description}" 
+            <Label Text="{Binding Description}" 
                    FontSize="14" 
                    LineBreakMode="WordWrap"
-                   HorizontalOptions="Start" />
+                   HorizontalOptions="Start" TextColor="Black" />
 
             <!-- Location dell'hotel -->
-            <Label Text="{Binding location}" 
+            <Label Text="{Binding Location}" 
                    FontSize="16"
-                   HorizontalOptions="Start" />
+                   HorizontalOptions="Start" TextColor="Black"/>
 
             <!-- Rating dell'hotel -->
-            <Label Text="{Binding rating}" 
+            <Label Text="{Binding Rating}" 
                    FontSize="16"
-                   HorizontalOptions="Start" />
+                   HorizontalOptions="Start" TextColor="Black"/>
 
             <!-- Immagine dell'hotel -->
             <Image Source="{Binding ImageSource}" 
-                   Aspect="AspectFill" 
-                   HeightRequest="200" 
-                   HorizontalOptions="Center" />
+       Aspect="AspectFill" 
+       HeightRequest="400" 
+       WidthRequest="400"
+       HorizontalOptions="Fill"
+       VerticalOptions="Center" />
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

@@ -179,10 +179,28 @@ namespace Interfaccia_C_.ViewModel
             SearchCommand = new Command(async () => await ExecuteSearch());
         }
 
+
+        private List<string> GetActiveServices()
+        {
+            List<string> activeServices = new List<string>();
+            if (IsWiFiEnabled) activeServices.Add("Free Wi-Fi");
+            if (IsParkingEnabled) activeServices.Add("Free Parking");
+            if (IsBreakfastEnabled) activeServices.Add("Free Breakfast");
+            if (IsPoolEnabled) activeServices.Add("Pool");
+            if (IsGymEnabled) activeServices.Add("Gym");
+            if (IsSpaEnabled) activeServices.Add("Spa");
+            if (IsRoomServiceEnabled) activeServices.Add("Room Service");
+            if (IsPetsAllowed) activeServices.Add("Pets Allowed");
+            if (IsRestaurantEnabled) activeServices.Add("Restaurant");
+            if (IsAirConditioningEnabled) activeServices.Add("Air Conditioning");
+
+            return activeServices;
+        }
         // Metodo che simula una ricerca
         private async Task ExecuteSearch()
         {
             // Simuliamo un piccolo ritardo per vedere che il comando funziona
+            var activeServices = GetActiveServices();
 
             // Stampa i parametri di ricerca nella console (puoi sostituirlo con la tua logica)
             Debug.WriteLine($"🔍 Ricerca avviata con i seguenti parametri:");
