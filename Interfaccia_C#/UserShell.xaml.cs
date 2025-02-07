@@ -6,6 +6,9 @@ public partial class UserShell : Shell
         public UserShell()
         {
             InitializeComponent();
+
+            Routing.RegisterRoute("HotelPage", typeof(HotelPage));
+
             BindingContext = new UserShellViewModel();
         }
     }

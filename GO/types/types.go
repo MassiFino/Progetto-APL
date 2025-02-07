@@ -97,18 +97,18 @@ type DeleteReviewRequest struct {
 }
 
 type ResponseMeta struct {
-	NomeMeta           string  `json:"NomeMeta"`
+	NomeMeta           string  `json:"Name"`
 	NumeroHotel        int     `json:"NumeroHotel"`
-	PrezzoMedio        float64 `json:"PrezzoMedio"`
-	Immagine           string  `json:"Immagine"`
+	PrezzoMedio        float64 `json:"Prezzo"`
+	Immagine           string  `json:"Images"`
 	NumeroPrenotazioni int     `json:"NumeroPrenotazioni"`
-	MediaVoto          float64 `json:"MediaVoto"`
+	MediaVoto          float64 `json:"Rating"`
 }
 
 type ResponseOffertaImperdibile struct {
 	HotelID      int     `json:"HotelID"`
-	NomeHotel    string  `json:"NomeHotel"`
-	Immagine     string  `json:"Immagine"`
-	PrezzoMinimo float64 `json:"PrezzoMinimo"`
-	MediaVoto    float64 `json:"MediaVoto"` // Nuovo campo per il voto medio
+	NomeHotel    string  `json:"Name"`
+	Immagine     string  `json:"Images"`
+	PrezzoMinimo float64 `json:"Prezzo"`
+	MediaVoto    float64 `json:"Rating"` // Nuovo campo per il voto medio
 }

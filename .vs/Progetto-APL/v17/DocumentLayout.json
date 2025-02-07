@@ -1,42 +1,38 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "D:\\Archivio\\Ultimo\\Progetto-APL\\",
+  "WorkspaceRootPath": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|d:\\archivio\\ultimo\\progetto-apl\\interfaccia_c#\\profileuserpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\profileuserpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl-2\\progetto-apl\\interfaccia_c#\\hotelpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\hotelpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|d:\\archivio\\ultimo\\progetto-apl\\interfaccia_c#\\viewmodel\\profiluserpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\viewmodel\\profiluserpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl-2\\progetto-apl\\interfaccia_c#\\viewmodel\\hotelpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\viewmodel\\hotelpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|d:\\archivio\\ultimo\\progetto-apl\\interfaccia_c#\\profilehostpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\profilehostpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl-2\\progetto-apl\\interfaccia_c#\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|d:\\archivio\\ultimo\\progetto-apl\\interfaccia_c#\\viewmodel\\profilhostpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\viewmodel\\profilhostpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|d:\\archivio\\ultimo\\progetto-apl\\interfaccia_c#\\registerpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\registerpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|d:\\archivio\\ultimo\\progetto-apl\\interfaccia_c#\\model\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\model\\booking.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|d:\\archivio\\ultimo\\progetto-apl\\interfaccia_c#\\model\\hotel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl-2\\progetto-apl\\interfaccia_c#\\model\\hotel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\model\\hotel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|d:\\archivio\\ultimo\\progetto-apl\\interfaccia_c#\\registerpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\registerpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl-2\\progetto-apl\\interfaccia_c#\\viewmodel\\mainpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\viewmodel\\mainpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|d:\\archivio\\ultimo\\progetto-apl\\interfaccia_c#\\usershell.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\usershell.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl-2\\progetto-apl\\interfaccia_c#\\viewmodel\\profilhostpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\viewmodel\\profilhostpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl-2\\progetto-apl\\interfaccia_c#\\hotelpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\hotelpage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl-2\\progetto-apl\\interfaccia_c#\\usershell.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\usershell.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -46,130 +42,110 @@
       "DocumentGroups": [
         {
           "DockedWidth": 276,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ProfilHostPageViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\ViewModel\\ProfilHostPageViewModel.cs",
+              "RelativeDocumentMoniker": "Interfaccia_C#\\ViewModel\\ProfilHostPageViewModel.cs",
+              "ToolTip": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\ViewModel\\ProfilHostPageViewModel.cs",
+              "RelativeToolTip": "Interfaccia_C#\\ViewModel\\ProfilHostPageViewModel.cs",
+              "ViewState": "AgIAAGYAAAAAAAAAAAAIwHAAAAASAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-07T09:51:15.011Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "ProfileUserPage.xaml",
-              "DocumentMoniker": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\ProfileUserPage.xaml",
-              "RelativeDocumentMoniker": "Interfaccia_C#\\ProfileUserPage.xaml",
-              "ToolTip": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\ProfileUserPage.xaml",
-              "RelativeToolTip": "Interfaccia_C#\\ProfileUserPage.xaml",
-              "ViewState": "AgIAACEAAAAAAAAAAAAkwDYAAAAAAAAAAAAAAA==",
+              "Title": "HotelPage.xaml",
+              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\HotelPage.xaml",
+              "RelativeDocumentMoniker": "Interfaccia_C#\\HotelPage.xaml",
+              "ToolTip": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\HotelPage.xaml",
+              "RelativeToolTip": "Interfaccia_C#\\HotelPage.xaml",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-01-29T22:28:05.882Z",
+              "WhenOpened": "2025-02-07T09:45:47.876Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "ProfilUserPageViewModel.cs",
-              "DocumentMoniker": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\ViewModel\\ProfilUserPageViewModel.cs",
-              "RelativeDocumentMoniker": "Interfaccia_C#\\ViewModel\\ProfilUserPageViewModel.cs",
-              "ToolTip": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\ViewModel\\ProfilUserPageViewModel.cs",
-              "RelativeToolTip": "Interfaccia_C#\\ViewModel\\ProfilUserPageViewModel.cs",
-              "ViewState": "AgIAAM0AAAAAAAAAAAAgwN4AAAAgAAAAAAAAAA==",
+              "Title": "HotelPageViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\ViewModel\\HotelPageViewModel.cs",
+              "RelativeDocumentMoniker": "Interfaccia_C#\\ViewModel\\HotelPageViewModel.cs",
+              "ToolTip": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\ViewModel\\HotelPageViewModel.cs",
+              "RelativeToolTip": "Interfaccia_C#\\ViewModel\\HotelPageViewModel.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAA7wCEAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-29T22:11:20.443Z",
+              "WhenOpened": "2025-02-07T09:45:38.239Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Booking.cs",
-              "DocumentMoniker": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\Model\\Booking.cs",
-              "RelativeDocumentMoniker": "Interfaccia_C#\\Model\\Booking.cs",
-              "ToolTip": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\Model\\Booking.cs",
-              "RelativeToolTip": "Interfaccia_C#\\Model\\Booking.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAFAAAAAAAAAA==",
+              "DocumentIndex": 6,
+              "Title": "HotelPage.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\HotelPage.xaml.cs",
+              "RelativeDocumentMoniker": "Interfaccia_C#\\HotelPage.xaml.cs",
+              "ToolTip": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\HotelPage.xaml.cs",
+              "RelativeToolTip": "Interfaccia_C#\\HotelPage.xaml.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAswBMAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-29T23:58:39.723Z",
+              "WhenOpened": "2025-02-07T09:42:59.595Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "RegisterPage.xaml.cs",
-              "DocumentMoniker": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\RegisterPage.xaml.cs",
-              "RelativeDocumentMoniker": "Interfaccia_C#\\RegisterPage.xaml.cs",
-              "ToolTip": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\RegisterPage.xaml.cs",
-              "RelativeToolTip": "Interfaccia_C#\\RegisterPage.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Title": "UserShell.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\UserShell.xaml.cs",
+              "RelativeDocumentMoniker": "Interfaccia_C#\\UserShell.xaml.cs",
+              "ToolTip": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\UserShell.xaml.cs",
+              "RelativeToolTip": "Interfaccia_C#\\UserShell.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-29T23:27:32.864Z",
-              "EditorCaption": ""
-            }
-          ]
-        },
-        {
-          "DockedWidth": 344,
-          "SelectedChildIndex": 1,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Hotel.cs",
-              "DocumentMoniker": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\Model\\Hotel.cs",
-              "RelativeDocumentMoniker": "Interfaccia_C#\\Model\\Hotel.cs",
-              "ToolTip": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\Model\\Hotel.cs",
-              "RelativeToolTip": "Interfaccia_C#\\Model\\Hotel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-29T21:01:36.005Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "ProfileHostPage.xaml",
-              "DocumentMoniker": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\ProfileHostPage.xaml",
-              "RelativeDocumentMoniker": "Interfaccia_C#\\ProfileHostPage.xaml",
-              "ToolTip": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\ProfileHostPage.xaml",
-              "RelativeToolTip": "Interfaccia_C#\\ProfileHostPage.xaml",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAACUAAAA3AAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-01-29T21:02:48.857Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "RegisterPage.xaml",
-              "DocumentMoniker": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\RegisterPage.xaml",
-              "RelativeDocumentMoniker": "Interfaccia_C#\\RegisterPage.xaml",
-              "ToolTip": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\RegisterPage.xaml",
-              "RelativeToolTip": "Interfaccia_C#\\RegisterPage.xaml",
-              "ViewState": "AgIAAIkAAAAAAAAAAAAAwJYAAAAqAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-01-29T21:48:28.594Z",
+              "WhenOpened": "2025-02-07T09:09:15.408Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "ProfilHostPageViewModel.cs",
-              "DocumentMoniker": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\ViewModel\\ProfilHostPageViewModel.cs",
-              "RelativeDocumentMoniker": "Interfaccia_C#\\ViewModel\\ProfilHostPageViewModel.cs",
-              "ToolTip": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\ViewModel\\ProfilHostPageViewModel.cs",
-              "RelativeToolTip": "Interfaccia_C#\\ViewModel\\ProfilHostPageViewModel.cs",
-              "ViewState": "AgIAAAQBAAAAAAAAAAAgwAsBAAA9AAAAAAAAAA==",
+              "Title": "Hotel.cs",
+              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\Model\\Hotel.cs",
+              "RelativeDocumentMoniker": "Interfaccia_C#\\Model\\Hotel.cs",
+              "ToolTip": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\Model\\Hotel.cs",
+              "RelativeToolTip": "Interfaccia_C#\\Model\\Hotel.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAA+wBAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-29T20:56:44.785Z",
+              "WhenOpened": "2025-02-07T08:48:20.549Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "UserShell.xaml",
-              "DocumentMoniker": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\UserShell.xaml",
-              "RelativeDocumentMoniker": "Interfaccia_C#\\UserShell.xaml",
-              "ToolTip": "D:\\Archivio\\Ultimo\\Progetto-APL\\Interfaccia_C#\\UserShell.xaml",
-              "RelativeToolTip": "Interfaccia_C#\\UserShell.xaml",
-              "ViewState": "AgIAAAgAAAAAAAAAAAAAwB0AAAAHAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "MainPage.xaml",
+              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\MainPage.xaml",
+              "RelativeDocumentMoniker": "Interfaccia_C#\\MainPage.xaml",
+              "ToolTip": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\MainPage.xaml",
+              "RelativeToolTip": "Interfaccia_C#\\MainPage.xaml",
+              "ViewState": "AgIAADcAAAAAAAAAAAAAAEUAAABTAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2025-01-29T22:28:09.004Z",
+              "WhenOpened": "2025-02-07T08:48:15.19Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MainPageViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\ViewModel\\MainPageViewModel.cs",
+              "RelativeDocumentMoniker": "Interfaccia_C#\\ViewModel\\MainPageViewModel.cs",
+              "ToolTip": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\ViewModel\\MainPageViewModel.cs",
+              "RelativeToolTip": "Interfaccia_C#\\ViewModel\\MainPageViewModel.cs",
+              "ViewState": "AgIAAJIAAAAAAAAAAAAkwJgAAABWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-07T08:48:11.29Z",
               "EditorCaption": ""
             }
           ]
