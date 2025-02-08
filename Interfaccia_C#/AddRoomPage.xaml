@@ -93,7 +93,7 @@
             </StackLayout>
 
             <!-- Bottone per aggiungere stanza -->
-            <Button Text="Aggiungi Hotel e Prima Stanza" 
+            <Button Text="Aggiungi Stanza" 
                     Command="{Binding AddRoomCommand}"
                     BackgroundColor="#28A745" 
                     TextColor="White" 

@@ -40,6 +40,94 @@ namespace Interfaccia_C_.ViewModel
                 OnPropertyChanged();
             }
         }
+        private string _roomName;
+        private string _roomDescription;
+        private string _pricePerNight;
+        private string _maxGuests;
+        private string _roomType;
+        private bool _isRoomImageUploaded;
+
+     
+        public string RoomName
+        {
+            get => _roomName;
+            set
+            {
+                if (_roomName != value)
+                {
+                    _roomName = value;
+                    OnPropertyChanged(nameof(RoomName));
+                }
+            }
+        }
+
+        public string RoomDescription
+        {
+            get => _roomDescription;
+            set
+            {
+                if (_roomDescription != value)
+                {
+                    _roomDescription = value;
+                    OnPropertyChanged(nameof(RoomDescription));
+                }
+            }
+        }
+
+        public string PricePerNight
+        {
+            get => _pricePerNight;
+            set
+            {
+                if (_pricePerNight != value)
+                {
+                    _pricePerNight = value;
+                    OnPropertyChanged(nameof(PricePerNight));
+                }
+            }
+        }
+
+        public string MaxGuests
+        {
+            get => _maxGuests;
+            set
+            {
+                if (_maxGuests != value)
+                {
+                    _maxGuests = value;
+                    OnPropertyChanged(nameof(MaxGuests));
+                }
+            }
+        }
+
+        public string RoomType
+        {
+            get => _roomType;
+            set
+            {
+                if (_roomType != value)
+                {
+                    _roomType = value;
+                    OnPropertyChanged(nameof(RoomType));
+                }
+            }
+        }
+
+        public bool IsRoomImageUploaded
+        {
+            get => _isRoomImageUploaded;
+            set
+            {
+                if (_isRoomImageUploaded != value)
+                {
+                    _isRoomImageUploaded = value;
+                    OnPropertyChanged(nameof(IsRoomImageUploaded));
+                }
+            }
+        }
+
+      
+
         public string ServiziStringa { get; set; }
         public ICommand AddRoomCommand { get; set; }
         public ICommand UploadRoomImageCommand { get; }
@@ -48,16 +136,45 @@ namespace Interfaccia_C_.ViewModel
         {
             Name = hotel.Name;
             Location = hotel.Location;
-            AddRoomCommand = new Command<Hotel>(AddRoom);
+            AddRoomCommand = new Command(async () => await AddRoom());
             UploadRoomImageCommand = new Command(async () => await OnUploadRoomImage());
 
         }
 
 
-        private void AddRoom(Hotel selectedHotel)
+        private async Task AddRoom()
         {
+            var payload = new
+            {
+                RoomName = RoomName,
+                RoomDescription = RoomDescription,
+                PricePerNight = PricePerNight,
+                MaxGuests = MaxGuests,
+                RoomType = RoomType,
+                RoomImage = RoomImagePath
 
+            };
+            // Converte il payload in JSON per migliorare la leggibilità
+            var json = JsonSerializer.Serialize(payload);
+
+            // Stampa il payload nella console di debug
+            Debug.WriteLine("=== PAYLOAD DELLA STANZA ===");
+            Debug.WriteLine(json);
+
+            using var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/addRoom");
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.SendAsync(request);
+            if (response.IsSuccessStatusCode)
+            {
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                await Microsoft.Maui.Controls.Application.Current.MainPage.DisplayAlert("Errore", errorContent, "OK");
+            }
         }
+
         private async Task OnUploadRoomImage()
         {
             try
