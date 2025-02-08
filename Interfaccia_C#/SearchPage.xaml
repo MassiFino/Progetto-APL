@@ -152,7 +152,7 @@
  
 
 
-        <ScrollView HeightRequest="420">
+        <ScrollView HeightRequest="420" BackgroundColor="AliceBlue">
             <CollectionView ItemsSource="{Binding OwnedHotels}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>

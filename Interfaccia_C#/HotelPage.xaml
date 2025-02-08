@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Interfaccia_C_.HotelPage"
+             Title="Dettagli Hotel"
              BackgroundColor="AliceBlue"
              Padding="0">
 
@@ -11,31 +12,56 @@
             <Label Text="{Binding Name}" 
                    FontSize="24" 
                    FontAttributes="Bold"
-                   HorizontalOptions="Center" TextColor="Black"/>
+                   HorizontalOptions="Center" 
+                   TextColor="Black"/>
+
+            <!-- Immagine principale -->
+            <Image Source="{Binding ImageSource}" 
+                   Aspect="AspectFill" 
+                   HeightRequest="400" 
+                   WidthRequest="400"
+                   HorizontalOptions="Fill"
+                   VerticalOptions="Center" />
 
             <!-- Descrizione dell'hotel -->
+            <Label Text="Descrizione" FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
             <Label Text="{Binding Description}" 
                    FontSize="14" 
                    LineBreakMode="WordWrap"
-                   HorizontalOptions="Start" TextColor="Black" />
+                   HorizontalOptions="Start" 
+                   TextColor="Black" />
 
             <!-- Location dell'hotel -->
             <Label Text="{Binding Location}" 
                    FontSize="16"
-                   HorizontalOptions="Start" TextColor="Black"/>
+                   HorizontalOptions="Start" 
+                   TextColor="Black"/>
 
             <!-- Rating dell'hotel -->
+            <Label Text="Valutazione" FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
             <Label Text="{Binding Rating}" 
                    FontSize="16"
-                   HorizontalOptions="Start" TextColor="Black"/>
+                   HorizontalOptions="Start" 
+                   TextColor="Black"/>
 
-            <!-- Immagine dell'hotel -->
-            <Image Source="{Binding ImageSource}" 
-       Aspect="AspectFill" 
-       HeightRequest="400" 
-       WidthRequest="400"
-       HorizontalOptions="Fill"
-       VerticalOptions="Center" />
+            <!-- Sezione Disponibilità -->
+            <Label Text="Stanze disponibili" FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
+            <Grid>
+          
+            </Grid>
+
+            <!-- Recensioni degli ospiti -->
+            <Label Text="Recensioni degli ospiti" FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
+            <CollectionView ItemsSource="{Binding Reviews}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <StackLayout>
+                            <Label Text="{Binding ReviewerName}" FontAttributes="Bold"/>
+                            <Label Text="{Binding Comment}" MaxLines="3"/>
+                        </StackLayout>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
         </VerticalStackLayout>
     </ScrollView>

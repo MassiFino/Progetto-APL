@@ -33,17 +33,41 @@ namespace Interfaccia_C_.ViewModel
         private string role;
         private ImageSource _profileImage;
         private string message;
+        public ICommand GuardaCommand { get; set; }
+        public ICommand AddRoomCommand { get; set; }
 
         public ProfilHostPageViewModel()
         {
             // Inizializza la lista degli hotel
             OwnedHotels = new ObservableCollection<Hotel>();
+            // Comando per 'Guarda Offerta'
+            GuardaCommand = new Command<Hotel>(async (hotelSelezionato) =>
+            {
+                // Naviga con Shell, passando l'oggetto hotel
+                var navParams = new Dictionary<string, object>
+                {
+                    ["hotel"] = hotelSelezionato
+                };
+
+                await Shell.Current.GoToAsync("HotelPage", navParams);
+            });
 
             // Imposta il comando per il pulsante "Visualizza"
             ViewHotelCommand = new Command<Hotel>(OnViewHotel);
 
             // Comando che naviga a una pagina "AddHotelPage" (shell route)
             AddHotelCommand = new Command(async () => await Shell.Current.GoToAsync("//AddHotelPage"));
+            AddRoomCommand = new Command<Hotel>(async (hotelSelezionato) =>
+            {
+                // Naviga con Shell, passando l'oggetto hotel
+                var navParams = new Dictionary<string, object>
+                {
+                    ["hotel"] = hotelSelezionato
+                };
+
+                await Shell.Current.GoToAsync("AddRoomPage", navParams);
+            });
+
 
             // Carica dati utente e dati hotel
             LoadUserData();
@@ -199,7 +223,7 @@ namespace Interfaccia_C_.ViewModel
                     var hotels = JsonSerializer.Deserialize<List<Hotel>>(jsonR);
                     if (hotels != null && hotels.Count > 0)
                     {
-                        Message = "Questi sono i tuoi Hotel";
+                        Message = "Questi sono i tuoi Hotel : ";
                         OwnedHotels.Clear();
 
                         foreach (var hotel in hotels)

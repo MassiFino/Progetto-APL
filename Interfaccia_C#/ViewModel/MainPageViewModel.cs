@@ -42,7 +42,7 @@ namespace Interfaccia_C_.ViewModel
 
         public MainPageViewModel()
         {
-            GoToSearchCommand = new Command(async () => await Shell.Current.GoToAsync("//SearchPage"));
+            GoToSearchCommand = new Command(async () => await Shell.Current.GoToAsync("SearchPage"));
 
             // Comando per 'Guarda Offerta'
             GuardaOffertaCommand = new Command<Hotel>(async (hotelSelezionato) =>

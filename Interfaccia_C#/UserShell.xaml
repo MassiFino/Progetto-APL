@@ -26,15 +26,6 @@
     </ShellContent>
 
     <ShellContent
-        Title="SearchPage"
-        ContentTemplate="{DataTemplate local:SearchPage}"
-        Route="SearchPage">
-        <ShellContent.Icon>
-            <FileImageSource File="search.png" />
-        </ShellContent.Icon>
-    </ShellContent>
-
-    <ShellContent
     Title="Profilo"
     ContentTemplate="{DataTemplate local:ProfileUserPage}"
     Route="ProfileUserPage">

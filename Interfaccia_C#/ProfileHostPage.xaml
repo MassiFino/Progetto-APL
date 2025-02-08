@@ -9,7 +9,9 @@
 
         <!-- Profilo Utente -->
         <Border Stroke="#20B2AA" StrokeThickness="1" BackgroundColor="#00CED1" Padding="20"
-               HorizontalOptions="Center" VerticalOptions="Center">
+               HorizontalOptions="Center" VerticalOptions="Center"                StrokeShape="RoundRectangle 20">
+
+
             <Grid Margin="10" ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
                 <Border Stroke="LightGray" StrokeThickness="1" Padding="5" Grid.RowSpan="5" HorizontalOptions="Center" VerticalOptions="Center" StrokeShape="RoundRectangle 10">
                     <Image Source="{Binding ProfileImage}" WidthRequest="80" HeightRequest="80" VerticalOptions="CenterAndExpand"/>
@@ -33,7 +35,8 @@
 
   
         <HorizontalStackLayout Spacing="10">
-           
+            <Label Text="{Binding Message}" FontSize="20" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" 
+          IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
             <Button Text="Aggiungi un hotel"
                     Command="{Binding AddHotelCommand}"
                     BackgroundColor="#28A745"
@@ -41,12 +44,11 @@
                     CornerRadius="20"
                     HeightRequest="40"
                     WidthRequest="150" />
-            <Label Text="{Binding Message}" FontSize="20" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" 
-                   IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
+         
         </HorizontalStackLayout>
 
         <!-- Scorrimento solo per la lista degli hotel -->
-        <ScrollView HeightRequest="420">
+        <ScrollView HeightRequest="440">
             <CollectionView ItemsSource="{Binding OwnedHotels}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
@@ -68,17 +70,23 @@
 
                                     <StackLayout Orientation="Horizontal" Spacing="10">
                                         <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding Rating}" FontSize="12" TextColor="#D2691E"/>
+                                        <Label Text="{Binding rating}" FontSize="12" TextColor="#D2691E"/>
                                     </StackLayout>
                                     <HorizontalStackLayout Spacing="20">
                                         <Button Text="Visualizza"
                                             BackgroundColor="#FF1493"
                                             TextColor="White"
                                             CornerRadius="10"
-                                            Command="{Binding ViewHotelCommand}"
-                                            CommandParameter="{Binding .}" />
-
-                                       
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProfilHostPageViewModel}}, Path= GuardaCommand}"
+                                            CommandParameter="{Binding .}" 
+                                            Margin="0,10,0,0" />
+                                            <Button Text="Aggiungi una stanza"
+                                            BackgroundColor="#FF1493"
+                                            TextColor="White"
+                                            CornerRadius="10"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProfilHostPageViewModel}}, Path= AddRoomCommand}"
+                                            CommandParameter="{Binding .}" 
+                                            Margin="0,10,0,0" />       
 
                                     </HorizontalStackLayout>
                                     

@@ -8,8 +8,9 @@ public partial class UserShell : Shell
             InitializeComponent();
 
             Routing.RegisterRoute("HotelPage", typeof(HotelPage));
+        Routing.RegisterRoute("SearchPage", typeof(SearchPage));
 
-            BindingContext = new UserShellViewModel();
+        BindingContext = new UserShellViewModel();
         }
     }
     

@@ -6,9 +6,14 @@ public partial class HostShell : Shell
 
         public HostShell()
         {
-            InitializeComponent();
-            BindingContext = new HostShellViewModel();
-        }
+        InitializeComponent();
+        BindingContext = new HostShellViewModel();
+        Routing.RegisterRoute("HotelPage", typeof(HotelPage));
+        Routing.RegisterRoute("AddHotelPage", typeof(AddHotelPage));
+        Routing.RegisterRoute("AddRoomPage", typeof(AddRoomPage));
+
 
     }
+
+}
          

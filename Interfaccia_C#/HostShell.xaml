@@ -33,15 +33,7 @@
         </ShellContent.Icon>
     </ShellContent>
     
-    <ShellContent     
-     Title="Add Room "
-     ContentTemplate="{DataTemplate local:AddRoomPage}"
-     Route="AddRoomPage" 
-     IsVisible="False">
-        <ShellContent.Icon>
-            <FileImageSource File="room.png" />
-        </ShellContent.Icon>
-    </ShellContent>
+
 
     <!-- Logout con Command -->
     <MenuItem

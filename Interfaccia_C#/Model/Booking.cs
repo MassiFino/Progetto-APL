@@ -64,12 +64,7 @@ namespace Interfaccia_C_.Model
                 }
             }
         }
-        public class Review
-        {
-            public string createdAt { get; set; }  // Data della recensione
-            public string review { get; set; }     // Commento della recensione
-            public decimal rating { get; set; }     // Voto della recensione
-        }
+     
 
         private bool _isReviewSectionVisible;
         public bool IsReviewSectionVisible
