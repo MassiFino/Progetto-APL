@@ -146,12 +146,13 @@ namespace Interfaccia_C_.ViewModel
         {
             var payload = new
             {
+                HotelName = Name,
                 RoomName = RoomName,
                 RoomDescription = RoomDescription,
                 PricePerNight = PricePerNight,
                 MaxGuests = MaxGuests,
                 RoomType = RoomType,
-                RoomImage = RoomImagePath
+                RoomImagePath
 
             };
             // Converte il payload in JSON per migliorare la leggibilità

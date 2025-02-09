@@ -364,3 +364,146 @@ func GetOfferteImperdibili(db *sql.DB) ([]types.ResponseOffertaImperdibile, erro
 	}
 	return offerte, nil
 }
+
+func AddRoomHotel(db *sql.DB, name, location, description string, services []string, userHost, hotelImage, roomName, roomDescription string, prezzoPerNotte float64, maxGuest int, roomType, roomImages string) error {
+
+	servicesStr := strings.Join(services, ",")
+
+	// Inserimento dell'hotel
+	query := "INSERT INTO hotels (Name, Location, Description, Services, UserHost, Images) VALUES (?, ?, ?, ?, ?, ?)"
+
+	_, err := db.Exec(query, name, location, description, servicesStr, userHost, hotelImage)
+
+	if err != nil {
+		log.Printf("Errore durante l'inserimento dell'hotel: %v", err)
+		return fmt.Errorf("errore durante l'inserimento dell'hotel: %w", err)
+	}
+
+	// Query per ottenere l'ID dell'hotel appena inserito
+	query = "SELECT HotelID FROM hotels WHERE Name = ? AND Location = ? AND UserHost = ?"
+	var hotelID int
+	err = db.QueryRow(query, name, location, userHost).Scan(&hotelID)
+	if err != nil {
+		log.Printf("Errore durante la ricerca dell'ID dell'hotel: %v", err)
+		return fmt.Errorf("errore durante la ricerca dell'ID dell'hotel: %w", err)
+	}
+
+	// Inserimento della stanza
+	query = "INSERT INTO rooms (HotelID, Name, Description, PricePerNight, MaxGuests, TipologiaStanza, Images) VALUES (?, ?, ?, ?, ?, ?, ?)"
+	_, err = db.Exec(query, hotelID, roomName, roomDescription, prezzoPerNotte, maxGuest, roomType, roomImages)
+	if err != nil {
+		log.Printf("Errore durante l'inserimento della stanza: %v", err)
+		return fmt.Errorf("errore durante l'inserimento della stanza: %w", err)
+	}
+
+	return nil
+}
+
+func AddRoom(db *sql.DB, hotelName, roomName, roomDescription string, pricePerNight float64, maxGuests int, roomType, roomImage string) error {
+
+	// Query per ottenere l'ID dell'hotel
+	query := "SELECT HotelID FROM hotels WHERE Name = ?"
+	var hotelID int
+	err := db.QueryRow(query, hotelName).Scan(&hotelID)
+	if err != nil {
+		log.Printf("Errore durante la ricerca dell'ID dell'hotel: %v", err)
+		return fmt.Errorf("errore durante la ricerca dell'ID dell'hotel: %w", err)
+	}
+
+	// Inserimento della stanza
+	query = "INSERT INTO rooms (HotelID, Name, Description, PricePerNight, MaxGuests, TipologiaStanza, Images) VALUES (?, ?, ?, ?, ?, ?, ?)"
+	_, err = db.Exec(query, hotelID, roomName, roomDescription, pricePerNight, maxGuests, roomType, roomImage)
+	if err != nil {
+		log.Printf("Errore durante l'inserimento della stanza: %v", err)
+		return fmt.Errorf("errore durante l'inserimento della stanza: %w", err)
+	}
+
+	return nil
+}
+
+func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, services []string) ([]types.HotelResponse, error) {
+	// Costruzione della query SQL di base.
+	// La query:
+	// - seleziona gli hotel e le relative informazioni
+	// - unisce la tabella hotels con rooms (almeno una stanza deve rispettare i criteri)
+	// - filtra per location (usando LIKE)
+	// - verifica che la stanza abbia capacità >= guest e sia marcata come disponibile
+	// - controlla che non esistano booking che si sovrappongano all'intervallo [checkIn, checkOut]
+	query := `
+        SELECT DISTINCT 
+            h.HotelID, 
+            h.Name, 
+            h.Location, 
+            h.Description, 
+            h.Services, 
+            h.Rating, 
+            h.Images
+        FROM hotels h
+        JOIN rooms r ON h.HotelID = r.HotelID
+        WHERE h.Location LIKE ?
+          AND r.MaxGuests >= ?
+          AND r.IsAvailable = 1
+          AND NOT EXISTS (
+              SELECT 1 FROM bookings b
+              WHERE b.RoomID = r.RoomID
+                AND (b.CheckInDate < ? AND b.CheckOutDate > ?)
+          )
+    `
+
+	// Prepara i parametri:
+	// - Per la location usiamo il pattern LIKE (ad es. "%Milano%")
+	// - Per la disponibilità delle date, usiamo checkOut e checkIn (nell'ordine corretto per la condizione)
+	params := []interface{}{
+		"%" + location + "%",
+		guest,
+		checkOut, // Se un booking inizia prima della data di check-out...
+		checkIn,  // ... e finisce dopo la data di check-in, allora si sovrappone.
+	}
+
+	// Aggiungiamo dinamicamente le condizioni per i servizi richiesti.
+	// Poiché in hotels il campo Services è una stringa (ad esempio: "Free Wi-Fi,Free Parking,Gym,Spa,Restaurant"),
+	// per ogni servizio richiesto aggiungiamo una condizione che verifichi che la stringa contenga quel servizio.
+	for _, service := range services {
+		query += " AND h.Services LIKE ?"
+		params = append(params, "%"+service+"%")
+	}
+
+	// Eseguiamo la query
+	rows, err := db.Query(query, params...)
+	if err != nil {
+		return nil, fmt.Errorf("errore durante l'esecuzione della query: %v", err)
+	}
+	defer rows.Close()
+
+	// Prepariamo l'array di risposta
+	var hotels []types.HotelResponse
+	for rows.Next() {
+		var hotelID int
+		var name, loc, desc, servicesStr, images string
+		var rating float64
+
+		if err := rows.Scan(&hotelID, &name, &loc, &desc, &servicesStr, &rating, &images); err != nil {
+			return nil, fmt.Errorf("errore durante la scansione delle righe: %v", err)
+		}
+
+		// Convertiamo la stringa dei servizi in una slice, eliminando eventuali spazi in eccesso.
+		serviceList := strings.Split(servicesStr, ",")
+		for i, s := range serviceList {
+			serviceList[i] = strings.TrimSpace(s)
+		}
+
+		hotel := types.HotelResponse{
+			Name:        name,
+			Location:    loc,
+			Description: desc,
+			Services:    serviceList,
+			Rating:      rating,
+			Images:      images,
+		}
+		hotels = append(hotels, hotel)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, fmt.Errorf("errore durante l'iterazione delle righe: %v", err)
+	}
+	return hotels, nil
+}

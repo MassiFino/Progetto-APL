@@ -9,6 +9,7 @@ using System.Windows.Input;
 using Microsoft.Maui.Storage;
 using System.Text.Json;
 using System.Diagnostics;
+using System.Net.Http.Headers;
 
 namespace Interfaccia_C_.ViewModel
 {
@@ -368,6 +369,28 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
+        private string _additionalRoomImagePath;
+        public string AdditionalRoomImagePath
+        {
+            get => _additionalRoomImagePath;
+            set
+            {
+                _additionalRoomImagePath = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string _additionalRoomImageNames;
+        public string AdditionalRoomImageNames
+        {
+            get => _additionalRoomImageNames;
+            set
+            {
+                _additionalRoomImageNames = value;
+                OnPropertyChanged();
+            }
+        }
+
         public bool IsErrorVisible
         {
             get => _isErrorVisible;
@@ -393,6 +416,7 @@ namespace Interfaccia_C_.ViewModel
         public ICommand ShowAddRoomCommand { get; }
         public ICommand UploadHotelImageCommand { get; }
         public ICommand UploadRoomImageCommand { get; }
+        public ICommand UploadAdditionalRoomImageCommand { get; }
         public ICommand AddRoomCommand { get; }
 
         public AddHotelPageViewModel()
@@ -402,6 +426,7 @@ namespace Interfaccia_C_.ViewModel
             UploadHotelImageCommand = new Command(async () => await OnUploadHotelImage());
             UploadRoomImageCommand = new Command(async () => await OnUploadRoomImage());
             AddRoomCommand = new Command(async () => await OnAddSecondRoom());
+            UploadAdditionalRoomImageCommand = new Command(async () => await OnUploadAdditionalRoomImage());
         }
 
         private async Task OnUploadHotelImage()
@@ -442,37 +467,16 @@ namespace Interfaccia_C_.ViewModel
 
         private async Task OnUploadRoomImage()
         {
-            try
+            var (imagePath, imageName) = await UploadImageAsync("RoomPictures", "Seleziona un'immagine per la stanza");
+            if (imagePath != null)
             {
-                var result = await FilePicker.PickAsync(new PickOptions
-                {
-                    PickerTitle = "Seleziona un'immagine per la stanza",
-                    FileTypes = FilePickerFileType.Images
-                });
-
-                if (result != null)
-                {
-                    string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName;
-                    var localPath = Path.Combine(projectDirectory, "Pictures", "RoomPictures");
-                    Directory.CreateDirectory(localPath);
-
-                    var filePath = Path.Combine(localPath, result.FileName);
-                    var relativePath = Path.Combine("Pictures", "RoomPictures", result.FileName);
-
-                    using (var stream = await result.OpenReadAsync())
-                    using (var localFile = File.Create(filePath))
-                    {
-                        await stream.CopyToAsync(localFile);
-                    }
-
-                    RoomImagePath = relativePath;
-                    RoomImageNames = $"Immagine caricata: {result.FileName}";
-                }
+                RoomImagePath = imagePath;
+                RoomImageNames = $"Immagine caricata: {imageName}";
             }
-            catch (Exception ex)
+            else
             {
                 RoomImagePath = null;
-                RoomImageNames = $"Errore: {ex.Message}";
+                RoomImageNames = $"Errore: {imageName}";
             }
         }
 
@@ -494,6 +498,8 @@ namespace Interfaccia_C_.ViewModel
 
             var activeServices = GetActiveServices();
 
+            var token = await SecureStorage.GetAsync("jwt_token");
+
             var payload = new
             {
                 HotelName = this.HotelName,
@@ -509,6 +515,7 @@ namespace Interfaccia_C_.ViewModel
                 RoomImagePath
             };
             // Debug: stampiamo i valori finali
+            //Manca User Host
             Debug.WriteLine($"HotelName: {HotelName}");
             Debug.WriteLine($"Location: {Location}");
             Debug.WriteLine($"Description: {Description}");
@@ -526,6 +533,9 @@ namespace Interfaccia_C_.ViewModel
             {
                 using var client = new HttpClient();
                 var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/addRoomHotel");
+                request.Headers.Authorization =
+                    new AuthenticationHeaderValue("Bearer", token);
+
                 var json = JsonSerializer.Serialize(payload);
                 request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -579,7 +589,8 @@ namespace Interfaccia_C_.ViewModel
                 RoomDescription = this.AdditionalRoomDescription,
                 PricePerNight = this.AdditionalPricePerNight,
                 MaxGuests = this.AdditionalMaxGuests,
-                RoomType = this.AdditionalRoomType
+                RoomType = this.AdditionalRoomType,
+                RoomImagePath
             };
 
             try
@@ -634,5 +645,60 @@ namespace Interfaccia_C_.ViewModel
             IsAddHotelVisible = false;
             IsAddRoomVisible = true;
         }
+
+
+        private async Task<(string imagePath, string imageName)> UploadImageAsync(string folder, string pickerTitle)
+        {
+            try
+            {
+                var result = await FilePicker.PickAsync(new PickOptions
+                {
+                    PickerTitle = pickerTitle,
+                    FileTypes = FilePickerFileType.Images
+                });
+
+                if (result != null)
+                {
+                    // Calcola il percorso del progetto (modifica in base alla tua struttura)
+                    string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName;
+                    var localPath = Path.Combine(projectDirectory, "Pictures", folder);
+                    Directory.CreateDirectory(localPath);
+
+                    var filePath = Path.Combine(localPath, result.FileName);
+                    var relativePath = Path.Combine("Pictures", folder, result.FileName);
+
+                    using (var stream = await result.OpenReadAsync())
+                    using (var localFile = File.Create(filePath))
+                    {
+                        await stream.CopyToAsync(localFile);
+                    }
+
+                    return (relativePath, result.FileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                // In caso di errore, restituisci un messaggio nell'imageName
+                return (null, $"Errore: {ex.Message}");
+            }
+            return (null, null);
+        }
+
+
+        private async Task OnUploadAdditionalRoomImage()
+        {
+            var (imagePath, imageName) = await UploadImageAsync("RoomPictures", "Seleziona un'immagine per la seconda stanza");
+            if (imagePath != null)
+            {
+                AdditionalRoomImagePath = imagePath;
+                AdditionalRoomImageNames = $"Immagine caricata: {imageName}";
+            }
+            else
+            {
+                AdditionalRoomImagePath = null;
+                AdditionalRoomImageNames = $"Errore: {imageName}";
+            }
+        }
+
     }
 }

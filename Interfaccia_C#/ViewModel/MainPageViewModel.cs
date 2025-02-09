@@ -21,7 +21,6 @@ namespace Interfaccia_C_.ViewModel
 
         private HttpClient _httpClient;
 
-        // Ora usi 'Hotel' al posto di MeteGettonateModel / OffertaImperdibileModel
         private ObservableCollection<Hotel> _meteGettonate;
         private ObservableCollection<Hotel> _offerteImperdibili;
 

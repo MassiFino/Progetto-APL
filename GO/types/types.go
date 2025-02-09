@@ -112,3 +112,37 @@ type ResponseOffertaImperdibile struct {
 	PrezzoMinimo float64 `json:"Prezzo"`
 	MediaVoto    float64 `json:"Rating"` // Nuovo campo per il voto medio
 }
+
+type RoomHotelRequest struct {
+	HotelName       string   `json:"HotelName"`
+	Location        string   `json:"Location"`
+	Description     string   `json:"Description"`
+	Services        []string `json:"ActiveServices"`
+	HostHotel       string   `json:"HostHotel"`
+	HotelImagePath  string   `json:"HotelImage"`
+	RoomName        string   `json:"RoomName"`
+	RoomDescription string   `json:"RoomDescription"`
+	PricePerNight   float64  `json:"PricePerNight"`
+	MaxGuests       int      `json:"MaxGuests"`
+	RoomType        string   `json:"RoomType"`
+	RoomImagePath   string   `json:"RoomImage"`
+}
+
+type RoomRequest struct {
+	HotelName       string  `json:"HotelName"`
+	RoomName        string  `json:"RoomName"`
+	RoomDescription string  `json:"RoomDescription"`
+	PricePerNight   float64 `json:"PricePerNight"`
+	MaxGuests       int     `json:"MaxGuests"`
+	RoomType        string  `json:"RoomType"`
+	RoomImagePath   string  `json:"RoomImage"`
+}
+
+type SearchRequest struct {
+	City         string   `json:"City"`
+	CheckInDate  string   `json:"CheckInDate"`
+	CheckOutDate string   `json:"CheckOutDate"`
+	Guests       int      `json:"Guests"`
+	Services     []string `json:"Services"`
+	OrderBy      *string  `json:"OrderBy,omitempty"` // Campo opzionale
+}

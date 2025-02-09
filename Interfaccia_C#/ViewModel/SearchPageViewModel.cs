@@ -4,6 +4,11 @@ using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Threading.Tasks;  // Per simulare chiamate asincrone
 using System.Diagnostics;     // Per il debug
+using System.Text.Json;
+using System.Text;
+using System.Collections.ObjectModel;
+using Interfaccia_C_.Model;  // Per usare la classe Hotel
+
 
 namespace Interfaccia_C_.ViewModel
 {
@@ -23,11 +28,24 @@ namespace Interfaccia_C_.ViewModel
         private bool _isRestaurantEnabled;
         private bool _isAirConditioningEnabled;
 
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        // Proprietà per visualizzare i risultati della ricerca
+        private ObservableCollection<Hotel> _researchHotels;
+        public ObservableCollection<Hotel> ResearchHotels
+        {
+            get => _researchHotels;
+            set
+            {
+                _researchHotels = value;
+                OnPropertyChanged();
+            }
         }
 
         public string SearchCity
@@ -171,12 +189,38 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
+        private string _selectedOrderBy = "Order by"; // Valore di default
+        public string SelectedOrderBy
+        {
+            get => _selectedOrderBy;
+            set
+            {
+                _selectedOrderBy = value;
+                OnPropertyChanged();
+            }
+        }
+
         // Comando per eseguire la ricerca
         public ICommand SearchCommand { get; }
 
+        public ICommand ViewHotelCommand { get; set; }
+
         public SearchPageViewModel()
         {
+            ResearchHotels = new ObservableCollection<Hotel>();
+
             SearchCommand = new Command(async () => await ExecuteSearch());
+
+            ViewHotelCommand = new Command<Hotel>(async (hotelSelezionato) =>
+            {
+                // Naviga con Shell, passando l'oggetto hotel
+                var navParams = new Dictionary<string, object>
+                {
+                    ["hotel"] = hotelSelezionato
+                };
+
+                await Shell.Current.GoToAsync("HotelPage", navParams);
+            });
         }
 
 
@@ -220,6 +264,108 @@ namespace Interfaccia_C_.ViewModel
             Debug.WriteLine($"Aria Condizionata: {IsAirConditioningEnabled}");
 
             // Qui potresti fare una chiamata a un'API per ottenere i risultati
+
+
+            var searchParameters = new Dictionary<string, object>
+            {
+                { "City", this.SearchCity },
+                { "CheckInDate", this.CheckInDate },
+                { "CheckOutDate", this.CheckOutDate },
+                { "Guests", this.SelectedGuest },
+                { "Services", activeServices }
+            };
+
+            if (!string.IsNullOrWhiteSpace(SelectedOrderBy) && SelectedOrderBy != "Order by")
+            {
+                searchParameters.Add("OrderBy", SelectedOrderBy);
+            }
+
+            // Serializza i parametri in JSON
+            var json = JsonSerializer.Serialize(searchParameters);
+
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    var content = new StringContent(json, Encoding.UTF8, "application/json");
+                    // Sostituisci con l'URL del tuo endpoint Python
+                    var response = await client.PostAsync("http://localhost:9000/searchHotels", content);
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        // Leggi e gestisci i risultati della ricerca (ad esempio, deserializza il JSON di risposta)
+                        var resultJson = await response.Content.ReadAsStringAsync();
+
+                        var hotels = JsonSerializer.Deserialize<List<Hotel>>(resultJson);
+
+                        Debug.WriteLine("Risultati ricerca: " + resultJson);
+                        // Qui potresti aggiornare una proprietà come OwnedHotels nel ViewModel
+                        if (hotels != null)
+                        {
+                            // Pulisce la collezione esistente
+                            ResearchHotels.Clear();
+                            foreach (var hotel in hotels)
+                            {
+                                // Se la lista dei servizi è null, la inizializzi
+                                if (hotel.Services == null)
+                                    hotel.Services = new List<string>();
+
+                                // Debug per vedere i servizi
+                                foreach (var service in hotel.Services)
+                                {
+                                    Debug.WriteLine($"Servizio dell'hotel: {service}");
+                                }
+                                hotel.ServiziStringa = string.Join(", ", hotel.Services);
+                                Debug.WriteLine($"Servizi tutti : {hotel.ServiziStringa}");
+
+                                // Gestione delle immagini:
+                                // Se il campo Images non è vuoto, esegui lo split per ottenere (ad esempio) la prima immagine
+                                if (!string.IsNullOrEmpty(hotel.Images?.Trim()))
+                                {
+                                    var imageList = hotel.Images.Split(',');
+                                    var firstImage = imageList[0].Trim();
+
+                                    // Costruisci il percorso completo usando il project directory
+                                    string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName;
+                                    var imagePath = Path.Combine(projectDirectory, firstImage);
+
+                                    hotel.ImageSource = GetImageSource(imagePath);
+                                }
+
+                                // I servizi dovrebbero essere già una lista (se il backend li restituisce come array).
+                                // Se invece sono una stringa, potresti fare:
+                                // hotel.Services = hotel.ServicesString.Split(',').Select(s => s.Trim()).ToList();
+
+                                ResearchHotels.Add(hotel);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.WriteLine("Errore nella ricerca: " + response.StatusCode);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Eccezione durante la ricerca: " + ex.Message);
+            }
         }
+
+        public ImageSource GetImageSource(string imagePath)
+        {
+            if (File.Exists(imagePath))
+            {
+                Debug.WriteLine("Immagine trovata: " + imagePath);
+                return ImageSource.FromFile(imagePath);
+            }
+            else
+            {
+                Debug.WriteLine("Immagine non trovata: " + imagePath);
+                return null;
+            }
+        }
+
+
     }
 }

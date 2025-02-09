@@ -45,6 +45,37 @@ class DeleteReviewRequest(BaseModel):
     RoomID: int
 
 
+class AddRoomHotelRequest(BaseModel):
+    HotelName: str
+    Location: str
+    Description: str
+    Services: list[str]
+    HotelImagePath: str
+    RoomName: str
+    RoomDescription: str
+    PricePerNight: float
+    MaxGuests: int
+    RoomType: str
+    RoomImagePath: str
+
+class AddRoomRequest(BaseModel):
+    HotelName: str
+    RoomName: str
+    RoomDescription: str
+    PricePerNight: float
+    MaxGuests: int
+    RoomType: str
+    RoomImagePath: str
+
+class SearchRequest(BaseModel):
+    City: str
+    CheckInDate: str
+    CheckOutDate: str
+    Guests: int
+    Services: list[str]
+    OrderBy: Optional[str] = None  # Campo opzionale
+
+
 @app.post("/login")
 def login(request: LoginRequest):
     payload = {"Username": request.Username, "Password": request.Password}
@@ -262,3 +293,71 @@ def get_offerte_imperdibili():
         return response
     except ConnectionError as e:
         raise HTTPException(status_code=502, detail=str(e))
+
+
+@app.post("/addRoomHotel")
+def add_room_hotel(
+    request: AddRoomHotelRequest,
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    try:
+        print("funzione addRoomHotel")
+        # 1. Estrai il token dall'header
+        token = credentials.credentials
+
+        # 2. Decodifica il token per ottenere i claims
+        payload_token = decode_jwt_token(token)
+        username = payload_token.get("username")
+
+        if not username:
+            raise HTTPException(status_code=400, detail="Claim 'username' mancante nel token")
+
+        print ("richiesta: " + str(request.dict()))
+        # 3. Prepara il payload da inviare al servizio Go
+        data = request.dict()
+        # Aggiungi il campo UserHost (o come lo chiami tu nel servizio Go)
+        data["HostHotel"] = username
+
+        # Se il campo Services deve essere una stringa (es. separata da virgole), puoi fare:
+        # data["Services"] = ",".join(data["Services"])
+        print("Data da inviare a Go:", data)
+        # 4. Invia la richiesta al servizio Go
+        response = connect_go("addRoomHotel", data)
+        return response
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token scaduto")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Token non valido")
+    except ConnectionError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+
+@app.post("/addRoom")
+def add_room(
+    request: AddRoomRequest
+):
+    try:
+    
+        print ("richiesta: " + str(request.dict()))
+        # 3. Prepara il payload da inviare al servizio Go
+
+        response = connect_go("addRoom", request.dict())
+        return response
+
+    except ConnectionError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+@app.post("/searchHotels")
+def search_hotels(request: SearchRequest):
+    # Stampa i parametri per debug
+    print("Parametri ricevuti:", request.dict())
+
+    try:
+
+        response = connect_go("searchHotels", request.dict())
+
+        return response
+    except ConnectionError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+    

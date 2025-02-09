@@ -396,6 +396,91 @@ func getOfferteImperdibiliHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func addRoomHotelHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.RoomHotelRequest
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Printf("Dati ricevuti: %+v\n", req)
+
+	//devo passare l'host
+	// Aggiungi la stanza all'hotel
+	err = database.AddRoomHotel(db, req.HotelName, req.Location, req.Description, req.Services, req.HostHotel, req.HotelImagePath, req.RoomName, req.RoomDescription, req.PricePerNight, req.MaxGuests, req.RoomType, req.RoomImagePath)
+	if err != nil {
+		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
+		return
+	}
+
+	// Aggiunta della stanza riuscita
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status": "success", "message": "Stanza aggiunta con successo!"}`))
+}
+
+func addRoomHadler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.RoomRequest
+
+	err := json.NewDecoder(r.Body).Decode(&req)
+	if err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Printf("Dati ricevuti: %+v\n", req)
+
+	// Aggiungi la stanza all'hotel
+	err = database.AddRoom(db, req.HotelName, req.RoomName, req.RoomDescription, req.PricePerNight, req.MaxGuests, req.RoomType, req.RoomImagePath)
+	if err != nil {
+		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
+		return
+	}
+
+	// Aggiunta della stanza riuscita
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status": "success", "message": "Stanza aggiunta con successo!"}`))
+}
+
+func searchHotelsHandler(w http.ResponseWriter, r *http.Request) {
+	var req types.SearchRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Bad request", http.StatusBadRequest)
+		return
+	}
+
+	//da implementare l'ordinamento se richiesto
+	var orderBy string
+	if req.OrderBy != nil {
+		orderBy = *req.OrderBy
+		fmt.Println("Ordinamento richiesto:", orderBy)
+	} else {
+		orderBy = "default"
+		fmt.Println("Ordinamento di default")
+	}
+
+	results, err := database.SearchHotels(db, req.City, req.CheckInDate, req.CheckOutDate, req.Guests, req.Services)
+
+	if err != nil {
+		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(results)
+}
+
 func main() {
 	db = initializeDatabase() // Inizializza la connessione al database
 	defer db.Close()          // Chiude la connessione al termine del server
@@ -411,6 +496,9 @@ func main() {
 	http.HandleFunc("/deleteReview", deleteReviewHandler)
 	http.HandleFunc("/getMeteGettonate", getMeteGettonateHandler)
 	http.HandleFunc("/getOfferteImperdibili", getOfferteImperdibiliHandler)
+	http.HandleFunc("/addRoomHotel", addRoomHotelHandler)
+	http.HandleFunc("/addRoom", addRoomHadler)
+	http.HandleFunc("/searchHotels", searchHotelsHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)

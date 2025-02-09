@@ -2,8 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel"
+             xmlns:model="clr-namespace:Interfaccia_C_.Model"
              x:Class="Interfaccia_C_.SearchPage"
              x:DataType="vm:SearchPageViewModel"
+             x:Name="PageRoot"
              Title="Hotel Offers"
              BackgroundColor="White"
              Padding="0">
@@ -153,9 +155,9 @@
 
 
         <ScrollView HeightRequest="420" BackgroundColor="AliceBlue">
-            <CollectionView ItemsSource="{Binding OwnedHotels}">
+            <CollectionView ItemsSource="{Binding ResearchHotels}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate x:DataType="model:Hotel">
                         <Border Padding="10" Margin="0,0" BackgroundColor="LightYellow" Stroke="#FFA500" StrokeShape="RoundRectangle 20">
                             <HorizontalStackLayout Spacing="20">
                                 <Frame HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent" CornerRadius="20" Padding="0" HeightRequest="150" WidthRequest="150">
@@ -163,32 +165,29 @@
                                 </Frame>
 
                                 <StackLayout VerticalOptions="CenterAndExpand" Spacing="10" HorizontalOptions="FillAndExpand">
-                                    <Label Text="{Binding name}" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
-                                    <Label Text="{Binding location}" FontSize="14" TextColor="#FFD700"/>
-                                    <Label Text="{Binding description}" FontSize="12" TextColor="#4682B4"/>
+                                    <!-- Usa il nome corretto della proprietà -->
+                                    <Label Text="{Binding Name}" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
+                                    <Label Text="{Binding Location}" FontSize="14" TextColor="#FFD700"/>
+                                    <Label Text="{Binding Description}" FontSize="12" TextColor="#4682B4"/>
 
                                     <StackLayout Orientation="Horizontal" Spacing="10">
                                         <Label Text="Servizi:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding services[0]}" FontSize="12" TextColor="#D2691E"/>
+                                        <!-- Se vuoi mostrare tutti i servizi, puoi usare la proprietà concatenata (ServiziStringa) -->
+                                        <Label Text="{Binding ServiziStringa}" FontSize="12" TextColor="#D2691E"/>
                                     </StackLayout>
 
                                     <StackLayout Orientation="Horizontal" Spacing="10">
                                         <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding rating}" FontSize="12" TextColor="#D2691E"/>
+                                        <Label Text="{Binding Rating}" FontSize="12" TextColor="#D2691E"/>
                                     </StackLayout>
                                     <HorizontalStackLayout Spacing="20">
                                         <Button Text="Visualizza"
                                             BackgroundColor="#FF1493"
                                             TextColor="White"
                                             CornerRadius="10"
-                                            Command="{Binding ViewHotelCommand}"
-                                            CommandParameter="{Binding .}" />
-
-
-
+                                            Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.ViewHotelCommand}"
+                                        CommandParameter="{Binding .}" />
                                     </HorizontalStackLayout>
-
-
                                 </StackLayout>
                             </HorizontalStackLayout>
                         </Border>

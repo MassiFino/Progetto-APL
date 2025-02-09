@@ -12,97 +12,97 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Interfaccia_C_
-build_property.ProjectDir = C:\Users\Massi\Progetto-APL-2\Progetto-APL\Interfaccia_C#\
+build_property.ProjectDir = C:\Users\Massi\Progetto-APL\Progetto-APL\Interfaccia_C#\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/AddHotelPage.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/AddHotelPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.AddHotelPage.xaml
 build_metadata.AdditionalFiles.TargetPath = AddHotelPage.xaml
 build_metadata.AdditionalFiles.RelativePath = AddHotelPage.xaml
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/AddRoomPage.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/AddRoomPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.AddRoomPage.xaml
 build_metadata.AdditionalFiles.TargetPath = AddRoomPage.xaml
 build_metadata.AdditionalFiles.RelativePath = AddRoomPage.xaml
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/App.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/App.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.App.xaml
 build_metadata.AdditionalFiles.TargetPath = App.xaml
 build_metadata.AdditionalFiles.RelativePath = App.xaml
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/AppShell.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/AppShell.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.AppShell.xaml
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/HostShell.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/HostShell.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.HostShell.xaml
 build_metadata.AdditionalFiles.TargetPath = HostShell.xaml
 build_metadata.AdditionalFiles.RelativePath = HostShell.xaml
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/HotelPage.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/HotelPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.HotelPage.xaml
 build_metadata.AdditionalFiles.TargetPath = HotelPage.xaml
 build_metadata.AdditionalFiles.RelativePath = HotelPage.xaml
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/LoginPage.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/LoginPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.LoginPage.xaml
 build_metadata.AdditionalFiles.TargetPath = LoginPage.xaml
 build_metadata.AdditionalFiles.RelativePath = LoginPage.xaml
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/MainPage.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/MainPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.MainPage.xaml
 build_metadata.AdditionalFiles.TargetPath = MainPage.xaml
 build_metadata.AdditionalFiles.RelativePath = MainPage.xaml
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/ProfileHostPage.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/ProfileHostPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.ProfileHostPage.xaml
 build_metadata.AdditionalFiles.TargetPath = ProfileHostPage.xaml
 build_metadata.AdditionalFiles.RelativePath = ProfileHostPage.xaml
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/ProfileUserPage.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/ProfileUserPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.ProfileUserPage.xaml
 build_metadata.AdditionalFiles.TargetPath = ProfileUserPage.xaml
 build_metadata.AdditionalFiles.RelativePath = ProfileUserPage.xaml
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/RegisterPage.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/RegisterPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.RegisterPage.xaml
 build_metadata.AdditionalFiles.TargetPath = RegisterPage.xaml
 build_metadata.AdditionalFiles.RelativePath = RegisterPage.xaml
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/Resources/Styles/Colors.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/Resources/Styles/Colors.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.Resources.Styles.Colors.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/Resources/Styles/Styles.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/Resources/Styles/Styles.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/SearchPage.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/SearchPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.SearchPage.xaml
 build_metadata.AdditionalFiles.TargetPath = SearchPage.xaml
 build_metadata.AdditionalFiles.RelativePath = SearchPage.xaml
 
-[C:/Users/Massi/Progetto-APL-2/Progetto-APL/Interfaccia_C\#/UserShell.xaml]
+[C:/Users/Massi/Progetto-APL/Progetto-APL/Interfaccia_C\#/UserShell.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.UserShell.xaml
 build_metadata.AdditionalFiles.TargetPath = UserShell.xaml

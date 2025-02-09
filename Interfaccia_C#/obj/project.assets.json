@@ -26418,11 +26418,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj",
+      "projectUniqueName": "C:\\Users\\Massi\\Progetto-APL\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj",
       "projectName": "Interfaccia_C_",
-      "projectPath": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj",
+      "projectPath": "C:\\Users\\Massi\\Progetto-APL\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj",
       "packagesPath": "C:\\Users\\Massi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Massi\\Progetto-APL-2\\Progetto-APL\\Interfaccia_C#\\obj\\",
+      "outputPath": "C:\\Users\\Massi\\Progetto-APL\\Progetto-APL\\Interfaccia_C#\\obj\\",
       "projectStyle": "PackageReference",
       "crossTargeting": true,
       "fallbackFolders": [
