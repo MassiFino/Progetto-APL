@@ -138,7 +138,7 @@ namespace Interfaccia_C_.ViewModel
         // CARICAMENTO DATI
         // ----------------
 
-        private async Task LoadUserData()
+        public async Task LoadUserData()
         {
             try
             {
@@ -237,15 +237,19 @@ namespace Interfaccia_C_.ViewModel
                             {
                                 Debug.WriteLine($"Servizio dell'hotel: {service}");
                             }
+                            Debug.WriteLine($"Servizi tutti : {hotel.Name}");
+
                             hotel.ServiziStringa = string.Join(", ", hotel.Services);
+
                             Debug.WriteLine($"Servizi tutti : {hotel.ServiziStringa}");
                             // Se dal server arriva una proprietà "Images" con più percorsi separati da virgola
                             // Esempio: "Pictures\\Hotel1.png, Pictures\\Hotel2.png"
                             if (!string.IsNullOrEmpty(hotel.Images?.Trim()))
                             {
-                                // Divido la stringa in più immagini
-                                var imageList = hotel.Images.Split(',');
-                                // Prendo la prima
+                                // Divido la stringa in più immagini usando il delimitatore corretto (;)
+                                var imageList = hotel.Images.Split(';', StringSplitOptions.RemoveEmptyEntries);
+
+                                // Verifico che ci sia almeno un elemento prima di accedere all'indice 0
                                 var firstImage = imageList[0].Trim();
 
                                 Debug.WriteLine("Path immagine (prima del combine): " + firstImage);

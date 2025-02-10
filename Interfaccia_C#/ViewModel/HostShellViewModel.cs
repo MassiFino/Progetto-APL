@@ -18,11 +18,14 @@ namespace Interfaccia_C_.ViewModel
     {
         // Comando di logout
         public ICommand LogoutCommand { get; }
+        public ICommand ProfileCommand { get; }
 
         public HostShellViewModel()
         {
             // Inizializza il comando
             LogoutCommand = new Command(ExecuteLogout);
+            ProfileCommand = new Command(ExecuteProfileUserNavigation);
+
         }
 
         // Metodo che esegue il logout
@@ -42,6 +45,18 @@ namespace Interfaccia_C_.ViewModel
 
             // Naviga alla pagina di login
             await appShell.GoToAsync("//LoginPage");
+        }
+        //da verificare se servirà
+        private async void ExecuteProfileUserNavigation()
+        {
+            // Prima carica i dati dell'utente
+            var viewModel = new ProfilHostPageViewModel();
+            viewModel.LoadUserData();
+            viewModel.LoadHotelData();
+            // Carica i dati prima di navigare
+            Debug.WriteLine("Sono qui dentro");
+            // Poi naviga alla pagina del profilo
+            await Shell.Current.GoToAsync("ProfileHostPage");
         }
     }
 }

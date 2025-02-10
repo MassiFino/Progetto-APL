@@ -32,8 +32,8 @@
             <FileImageSource File="hotel.png" />
         </ShellContent.Icon>
     </ShellContent>
-    
 
+ 
 
     <!-- Logout con Command -->
     <MenuItem

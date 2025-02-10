@@ -428,34 +428,93 @@ namespace Interfaccia_C_.ViewModel
             AddRoomCommand = new Command(async () => await OnAddSecondRoom());
             UploadAdditionalRoomImageCommand = new Command(async () => await OnUploadAdditionalRoomImage());
         }
-
         private async Task OnUploadHotelImage()
         {
             try
             {
-                var result = await FilePicker.PickAsync(new PickOptions
+                List<string> imagePaths = new List<string>();
+                List<string> imageNames = new List<string>();
+                int maxImages = 5;
+
+                while (imagePaths.Count < maxImages)
                 {
-                    PickerTitle = "Seleziona un'immagine per l'hotel",
-                    FileTypes = FilePickerFileType.Images
-                });
-
-                if (result != null)
-                {
-                    string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName;
-                    var localPath = Path.Combine(projectDirectory, "Pictures", "HotelPictures");
-                    Directory.CreateDirectory(localPath);
-
-                    var filePath = Path.Combine(localPath, result.FileName);
-                    var relativePath = Path.Combine("Pictures", "HotelPictures", result.FileName);
-
-                    using (var stream = await result.OpenReadAsync())
-                    using (var localFile = File.Create(filePath))
+                    var result = await FilePicker.PickAsync(new PickOptions
                     {
-                        await stream.CopyToAsync(localFile);
+                        PickerTitle = $"Seleziona un'immagine ({imagePaths.Count}/{maxImages})",
+                        FileTypes = FilePickerFileType.Images
+                    });
+
+                    if (result != null)
+                    {
+                        // Aggiungi l'immagine selezionata alla lista
+                        imagePaths.Add(result.FullPath);
+                        imageNames.Add(result.FileName);
+                    }
+                    else
+                    {
+                        break; // L'utente ha annullato
                     }
 
-                    HotelImagePath = relativePath;
-                    HotelImageNames = $"Immagine caricata: {result.FileName}";
+                    // Se ha raggiunto il massimo, mostra un avviso
+                    if (imagePaths.Count == maxImages)
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Limite raggiunto",
+                            "Hai selezionato il numero massimo di 5 immagini.", "OK");
+                    }
+                }
+
+                // Se ci sono immagini selezionate, chiedi conferma
+                if (imagePaths.Any())
+                {
+                    // Mostra anteprima delle immagini
+                    string previewMessage = "Immagini selezionate:\n" + string.Join("\n", imageNames);
+                    bool confirm = await Application.Current.MainPage.DisplayAlert(
+                        "Conferma Selezione",
+                        previewMessage + "\n\nVai avanti con il salvataggio?",
+                        "Sì",
+                        "Riprova");
+
+                    if (confirm)
+                    {
+                        // Salva le immagini localmente
+                        string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName;
+                        var localPath = Path.Combine(projectDirectory, "Pictures", "HotelPictures");
+                        Directory.CreateDirectory(localPath);
+
+                        foreach (var result in imagePaths)
+                        {
+                            var fileName = Path.GetFileName(result);
+                            var filePath = Path.Combine(localPath, fileName);
+                            var Pat = Path.Combine("Pictures", "HotelPictures", fileName);
+
+                            // Aggiungi il percorso relativo a HotelImagePath, separato da ";" se ci sono più immagini
+                            if (!string.IsNullOrEmpty(HotelImagePath))
+                            {
+                                HotelImagePath += ";"; // Aggiungi un separatore se c'è già un percorso
+                            }
+                            HotelImagePath += Pat; // Concatenazione del percorso relativo
+                            using (var stream = File.OpenRead(result))
+                            using (var localFile = File.Create(filePath))
+                            {
+                                await stream.CopyToAsync(localFile);
+                            }
+                        }
+
+                        HotelImageNames = $"Immagini caricate: {string.Join(", ", imageNames)}";
+                    }
+                    else
+                    {
+                        // Se l'utente rifiuta, consenti una nuova selezione
+                        await Application.Current.MainPage.DisplayAlert("Riprova", "Puoi selezionare nuovamente le immagini.", "OK");
+                        imagePaths.Clear();
+                        imageNames.Clear();
+                        HotelImagePath = string.Empty;
+                        await OnUploadHotelImage();  // Chiama di nuovo il metodo per selezionare le immagini
+                    }
+                }
+                else
+                {
+                    HotelImageNames = "Nessuna immagine selezionata.";
                 }
             }
             catch (Exception ex)
@@ -464,6 +523,7 @@ namespace Interfaccia_C_.ViewModel
                 HotelImageNames = $"Errore: {ex.Message}";
             }
         }
+
 
         private async Task OnUploadRoomImage()
         {
@@ -479,7 +539,7 @@ namespace Interfaccia_C_.ViewModel
                 RoomImageNames = $"Errore: {imageName}";
             }
         }
-
+        public string ImageHotel;
 
         private async Task OnAddHotelAndRoom()
         {// Controllo dei campi obbligatori
@@ -514,18 +574,20 @@ namespace Interfaccia_C_.ViewModel
                 RoomType = this.RoomType,
                 RoomImagePath
             };
+
             // Debug: stampiamo i valori finali
             //Manca User Host
             Debug.WriteLine($"HotelName: {HotelName}");
             Debug.WriteLine($"Location: {Location}");
             Debug.WriteLine($"Description: {Description}");
+            Debug.WriteLine($"Immagini dell'hotel: {ImageHotel}");
+
             Debug.WriteLine($"Services: {string.Join(", ", activeServices)}");
             Debug.WriteLine($"RoomName: {RoomName}");
             Debug.WriteLine($"RoomDescription: {RoomDescription}");
             Debug.WriteLine($"PricePerNight: {PricePerNight}");
             Debug.WriteLine($"MaxGuests: {MaxGuests}");
             Debug.WriteLine($"RoomType: {RoomType}");
-            Debug.WriteLine($"Hote: {HotelImagePath}");
 
             Debug.WriteLine($"Stampo tutto il paylod: {payload}");
            

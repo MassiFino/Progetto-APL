@@ -70,10 +70,10 @@
 
                                     <StackLayout Orientation="Horizontal" Spacing="10">
                                         <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding rating}" FontSize="12" TextColor="#D2691E"/>
+                                        <Label Text="{Binding Rating}" FontSize="12" TextColor="#D2691E"/>
                                     </StackLayout>
                                     <HorizontalStackLayout Spacing="20">
-                                        <Button Text="Visualizza"
+                                        <Button Text="Visualizza Hotel"
                                             BackgroundColor="#FF1493"
                                             TextColor="White"
                                             CornerRadius="10"

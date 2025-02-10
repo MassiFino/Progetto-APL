@@ -117,15 +117,15 @@ type RoomHotelRequest struct {
 	HotelName       string   `json:"HotelName"`
 	Location        string   `json:"Location"`
 	Description     string   `json:"Description"`
-	Services        []string `json:"ActiveServices"`
-	HostHotel       string   `json:"HostHotel"`
-	HotelImagePath  string   `json:"HotelImage"`
+	Services        []string `json:"Services"`
+	HotelImagePath  string   `json:"HotelImagePath"`
 	RoomName        string   `json:"RoomName"`
 	RoomDescription string   `json:"RoomDescription"`
 	PricePerNight   float64  `json:"PricePerNight"`
 	MaxGuests       int      `json:"MaxGuests"`
 	RoomType        string   `json:"RoomType"`
-	RoomImagePath   string   `json:"RoomImage"`
+	RoomImagePath   string   `json:"RoomImagePath"`
+	HostHotel       string   `json:"HostHotel"`
 }
 
 type RoomRequest struct {
