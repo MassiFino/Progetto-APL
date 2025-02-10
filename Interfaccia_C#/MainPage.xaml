@@ -6,6 +6,7 @@
     xmlns:model="clr-namespace:Interfaccia_C_.Model"
     x:Class="Interfaccia_C_.MainPage"
     x:DataType="vm:MainPageViewModel"
+    x:Name="PageRoot"
     Title="Hotel Offers"
     BackgroundColor="White"
     Padding="0">
@@ -75,6 +76,11 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:Hotel">
                         <Border Stroke="LightGoldenrodYellow" StrokeThickness="1" Padding="10" Margin="5" BackgroundColor="GreenYellow" WidthRequest="180" HeightRequest="250" StrokeShape="RoundRectangle 20">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.GuardaOffertaCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
                             <VerticalStackLayout>
                                 <Image Source="{Binding ImageSource}" HeightRequest="120" Aspect="AspectFill" />
                                 <Label Text="{Binding Name}" FontAttributes="Bold" Margin="0,5,0,0"  TextColor="Green" />

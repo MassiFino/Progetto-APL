@@ -146,3 +146,15 @@ type SearchRequest struct {
 	Services     []string `json:"Services"`
 	OrderBy      *string  `json:"OrderBy,omitempty"` // Campo opzionale
 }
+
+type SearchResponse struct {
+	Name        string   `json:"Name"`             // Nome dell'hotel
+	Location    string   `json:"Location"`         // Posizione dell'hotel
+	Description string   `json:"Description"`      // Descrizione dell'hotel
+	Services    []string `json:"Services"`         // Lista dei servizi
+	Rating      float64  `json:"Rating,omitempty"` // Valutazione dell'hotel
+	Images      string   `json:"Images"`           // Stringa contenente i percorsi delle immagini (separati da virgola)
+	Price       float64  `json:"Prezzo"`           // Prezzo minimo delle stanze (campo aggiuntivo)
+	// Puoi avere anche altre proprietà, ad esempio per la visualizzazione:
+	// ImageSource ImageSource `json:"-"`  (non serializzato)
+}

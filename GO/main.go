@@ -9,6 +9,7 @@ import (
 	"progetto-go/database"
 	"progetto-go/types"
 	"progetto-go/utils"
+	"time"
 )
 
 var db *sql.DB // Variabile globale per la connessione al database
@@ -470,12 +471,19 @@ func searchHotelsHandler(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("Ordinamento di default")
 	}
 
+	fmt.Printf("Dati ricevuti: %+v\n", req)
+
 	results, err := database.SearchHotels(db, req.City, req.CheckInDate, req.CheckOutDate, req.Guests, req.Services)
+
+	fmt.Printf("Risultati della ricerca: %+v\n", results)
 
 	if err != nil {
 		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
 		return
 	}
+
+	// Ordina esternamente i risultati in base al criterio selezionato
+	results = utils.OrderResults(results, orderBy)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(results)
@@ -484,6 +492,8 @@ func searchHotelsHandler(w http.ResponseWriter, r *http.Request) {
 func main() {
 	db = initializeDatabase() // Inizializza la connessione al database
 	defer db.Close()          // Chiude la connessione al termine del server
+
+	utils.StartPeriodicRatingUpdate(db, 10*time.Minute)
 
 	http.HandleFunc("/login", LogInHandler)
 	http.HandleFunc("/signup", SignUPHandler)

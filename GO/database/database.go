@@ -421,7 +421,7 @@ func AddRoom(db *sql.DB, hotelName, roomName, roomDescription string, pricePerNi
 	return nil
 }
 
-func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, services []string) ([]types.HotelResponse, error) {
+func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, services []string) ([]types.SearchResponse, error) {
 	// Costruzione della query SQL di base.
 	// La query:
 	// - seleziona gli hotel e le relative informazioni
@@ -437,7 +437,8 @@ func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, ser
             h.Description, 
             h.Services, 
             h.Rating, 
-            h.Images
+            h.Images,
+			MIN(r.PricePerNight) AS minPrice
         FROM hotels h
         JOIN rooms r ON h.HotelID = r.HotelID
         WHERE h.Location LIKE ?
@@ -448,6 +449,7 @@ func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, ser
               WHERE b.RoomID = r.RoomID
                 AND (b.CheckInDate < ? AND b.CheckOutDate > ?)
           )
+		GROUP BY h.HotelID, h.Name, h.Location, h.Description, h.Services, h.Rating, h.Images
     `
 
 	// Prepara i parametri:
@@ -476,13 +478,14 @@ func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, ser
 	defer rows.Close()
 
 	// Prepariamo l'array di risposta
-	var hotels []types.HotelResponse
+	var hotels []types.SearchResponse
 	for rows.Next() {
 		var hotelID int
 		var name, loc, desc, servicesStr, images string
 		var rating float64
+		var price float64
 
-		if err := rows.Scan(&hotelID, &name, &loc, &desc, &servicesStr, &rating, &images); err != nil {
+		if err := rows.Scan(&hotelID, &name, &loc, &desc, &servicesStr, &rating, &images, &price); err != nil {
 			return nil, fmt.Errorf("errore durante la scansione delle righe: %v", err)
 		}
 
@@ -492,13 +495,14 @@ func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, ser
 			serviceList[i] = strings.TrimSpace(s)
 		}
 
-		hotel := types.HotelResponse{
+		hotel := types.SearchResponse{
 			Name:        name,
 			Location:    loc,
 			Description: desc,
 			Services:    serviceList,
 			Rating:      rating,
 			Images:      images,
+			Price:       price,
 		}
 		hotels = append(hotels, hotel)
 	}
@@ -506,4 +510,21 @@ func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, ser
 		return nil, fmt.Errorf("errore durante l'iterazione delle righe: %v", err)
 	}
 	return hotels, nil
+}
+
+func UpdateAllHotelsRating(db *sql.DB) error {
+	query := `
+        UPDATE hotels h 
+        SET Rating = (
+            SELECT AVG(r.rating)
+            FROM reviews r
+            JOIN rooms ro ON r.roomID = ro.RoomID
+            WHERE ro.HotelID = h.HotelID
+        )
+    `
+	_, err := db.Exec(query)
+	if err != nil {
+		return fmt.Errorf("errore nell'aggiornamento dei rating: %w", err)
+	}
+	return nil
 }

@@ -1,7 +1,12 @@
 package utils
 
 import (
+	"database/sql"
+	"log"
+	"progetto-go/database"
 	"progetto-go/types"
+	"sort"
+	"time"
 )
 
 // MetaConPunteggio include i dati della meta e il punteggio calcolato.
@@ -33,4 +38,45 @@ func CalcolaPunteggi(mete []types.ResponseMeta) []MetaConPunteggio {
 		})
 	}
 	return risultati
+}
+
+func OrderResults(results []types.SearchResponse, orderBy string) []types.SearchResponse {
+
+	switch orderBy {
+	case "Prezzo: crescente":
+		sort.Slice(results, func(i, j int) bool {
+			return results[i].Price < results[j].Price
+		})
+	case "Prezzo: decrescente":
+		sort.Slice(results, func(i, j int) bool {
+			return results[i].Price > results[j].Price
+		})
+	case "Valutazione: migliore":
+		sort.Slice(results, func(i, j int) bool {
+			return results[i].Rating > results[j].Rating
+		})
+	default:
+		sort.Slice(results, func(i, j int) bool {
+			return results[i].Name < results[j].Name
+		})
+	}
+	return results
+}
+
+func StartPeriodicRatingUpdate(db *sql.DB, interval time.Duration) {
+	ticker := time.NewTicker(interval)
+	go func() {
+		for {
+			select {
+			case <-ticker.C:
+				// Ogni "interval" esegui l'aggiornamento
+				err := database.UpdateAllHotelsRating(db)
+				if err != nil {
+					log.Printf("Errore durante l'aggiornamento dei rating: %v", err)
+				} else {
+					log.Println("Aggiornamento dei rating completato con successo")
+				}
+			}
+		}
+	}()
 }
