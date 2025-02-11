@@ -797,6 +797,13 @@ namespace Interfaccia_C_.ViewModel
                     }
                     else
                     {
+                        AdditionalRoomName = string.Empty;
+                        AdditionalRoomDescription = string.Empty;
+                        AdditionalPricePerNight = 0;
+                        AdditionalMaxGuests = 0;
+                        AdditionalRoomType = string.Empty;
+                        RoomImagePath = string.Empty;
+                        AdditionalRoomImageNames = string.Empty;
                         // Reset delle visibilità per la schermata dell'hotel
                         IsHotelSaved = false;
                         IsSuccessVisible = false;

@@ -42,8 +42,8 @@ namespace Interfaccia_C_.ViewModel
         }
         private string _roomName;
         private string _roomDescription;
-        private string _pricePerNight;
-        private string _maxGuests;
+        private double _pricePerNight;
+        private int _maxGuests;
         private string _roomType;
         private bool _isRoomImageUploaded;
 
@@ -74,29 +74,24 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-        public string PricePerNight
+        public double PricePerNight
         {
             get => _pricePerNight;
             set
             {
-                if (_pricePerNight != value)
-                {
-                    _pricePerNight = value;
-                    OnPropertyChanged(nameof(PricePerNight));
-                }
+                _pricePerNight = value;
+                OnPropertyChanged();
             }
         }
 
-        public string MaxGuests
+
+        public int MaxGuests
         {
             get => _maxGuests;
             set
             {
-                if (_maxGuests != value)
-                {
-                    _maxGuests = value;
-                    OnPropertyChanged(nameof(MaxGuests));
-                }
+                _maxGuests = value;
+                OnPropertyChanged();
             }
         }
 
@@ -168,6 +163,14 @@ namespace Interfaccia_C_.ViewModel
             var response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)
             {
+               // Svuota i campi
+                RoomName = string.Empty;            // Svuota il nome della stanza
+                RoomDescription = string.Empty;     // Svuota la descrizione della stanza
+                PricePerNight = 0;                  // Svuota il prezzo per notte (imposta a 0)
+                MaxGuests = 0;                           // Svuota il numero massimo di ospiti (imposta a 0)
+                RoomType = string.Empty;            // Svuota la tipologia di stanza
+                RoomImagePath = string.Empty;       // Svuota il percorso dell'immagine
+                RoomImageNames= string.Empty;
             }
             else
             {
