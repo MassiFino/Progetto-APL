@@ -294,17 +294,22 @@ func DeleteReview(db *sql.DB, roomID int, username string) error {
 func GetMeteFromDB(db *sql.DB) ([]types.ResponseMeta, error) {
 	query := `
         SELECT 
-            h.Location AS NomeMeta,
+            h.HotelID,
+            h.Name,
+            h.Location,
+            h.Description,
+            h.Services,
+            COALESCE(h.Rating, 0) AS Rating,
+            h.Images,
             COUNT(DISTINCT h.HotelID) AS NumeroHotel,
             AVG(r.PricePerNight) AS PrezzoMedio,
-            COUNT(b.BookingID) AS NumeroPrenotazioni,
-            COALESCE(AVG(rv.Rating), 0) AS MediaVoto,
-            MAX(h.Images) AS Immagine
+            COUNT(b.BookingID) AS NumeroPrenotazioni
         FROM hotels h
         JOIN rooms r ON h.HotelID = r.HotelID
         LEFT JOIN bookings b ON r.RoomID = b.RoomID
         LEFT JOIN reviews rv ON r.RoomID = rv.RoomID
-        GROUP BY h.Location
+        GROUP BY 
+            h.HotelID, h.Name, h.Location, h.Description, h.Services, h.Rating, h.Images
         ORDER BY NumeroHotel DESC
         LIMIT 10;
     `
@@ -317,8 +322,18 @@ func GetMeteFromDB(db *sql.DB) ([]types.ResponseMeta, error) {
 	var mete []types.ResponseMeta
 	for rows.Next() {
 		var m types.ResponseMeta
-		if err := rows.Scan(&m.NomeMeta, &m.NumeroHotel, &m.PrezzoMedio, &m.NumeroPrenotazioni, &m.MediaVoto, &m.Immagine); err != nil {
+
+		var servicesStr string
+		// L'ordine degli Scan deve corrispondere all'ordine dei campi selezionati
+		if err := rows.Scan(&m.HotelID, &m.Name, &m.Location, &m.Description, &servicesStr, &m.MediaVoto, &m.Images, &m.NumeroHotel, &m.PrezzoMedio, &m.NumeroPrenotazioni); err != nil {
 			return nil, err
+		}
+
+		// Trasforma la stringa dei servizi in un array di stringhe
+
+		m.Services = strings.Split(servicesStr, ",")
+		for i, s := range m.Services {
+			m.Services[i] = strings.TrimSpace(s)
 		}
 		mete = append(mete, m)
 	}
@@ -332,16 +347,20 @@ func GetOfferteImperdibili(db *sql.DB) ([]types.ResponseOffertaImperdibile, erro
 	query := `
         SELECT 
             h.HotelID,
-            h.Name AS NomeHotel,
-            h.Images AS Immagine,
-            MIN(r.PricePerNight) AS PrezzoMinimo,
-            AVG(rv.Rating) AS MediaVoto
+            h.Name,
+            h.Description,
+            h.Services,
+			h.Rating,
+            h.Location,
+            h.Images,
+            MIN(r.PricePerNight) AS PrezzoMinimo
         FROM hotels h
         JOIN rooms r ON h.HotelID = r.HotelID
         LEFT JOIN reviews rv ON r.RoomID = rv.RoomID
         WHERE r.IsAvailable = TRUE
-        GROUP BY h.HotelID, h.Name, h.Images
-        HAVING COALESCE(AVG(rv.Rating), 0) >= 3.0  -- Filtra per ottenere solo offerte con un voto medio decente
+        GROUP BY 
+            h.HotelID, h.Name, h.Description, h.Services, h.Rating, h.Location, h.Images
+        HAVING COALESCE(AVG(h.Rating), 0) >= 3.0
         ORDER BY PrezzoMinimo ASC
         LIMIT 10;
     `
@@ -354,8 +373,16 @@ func GetOfferteImperdibili(db *sql.DB) ([]types.ResponseOffertaImperdibile, erro
 	var offerte []types.ResponseOffertaImperdibile
 	for rows.Next() {
 		var off types.ResponseOffertaImperdibile
-		if err := rows.Scan(&off.HotelID, &off.NomeHotel, &off.Immagine, &off.PrezzoMinimo, &off.MediaVoto); err != nil {
+
+		var servicesStr string
+
+		if err := rows.Scan(&off.HotelID, &off.Name, &off.Description, &servicesStr, &off.MediaVoto, &off.Location, &off.Images, &off.PrezzoMinimo); err != nil {
 			return nil, err
+		}
+
+		off.Services = strings.Split(servicesStr, ",")
+		for i, s := range off.Services {
+			off.Services[i] = strings.TrimSpace(s)
 		}
 		offerte = append(offerte, off)
 	}
@@ -527,4 +554,57 @@ func UpdateAllHotelsRating(db *sql.DB) error {
 		return fmt.Errorf("errore nell'aggiornamento dei rating: %w", err)
 	}
 	return nil
+}
+
+func GetRooms(db *sql.DB, hotelID int) ([]types.Room, error) {
+	query := `
+        SELECT RoomID, Name, Description, PricePerNight, MaxGuests, TipologiaStanza, Images
+        FROM rooms
+        WHERE HotelID = ?
+    `
+	rows, err := db.Query(query, hotelID)
+	if err != nil {
+		return nil, fmt.Errorf("errore durante l'esecuzione della query GetRooms: %v", err)
+	}
+	defer rows.Close()
+
+	var rooms []types.Room
+	for rows.Next() {
+		var room types.Room
+		if err := rows.Scan(&room.RoomID, &room.RoomName, &room.RoomDescription, &room.PricePerNight, &room.MaxGuests, &room.RoomType, &room.Images); err != nil {
+			return nil, fmt.Errorf("errore durante la scansione in GetRooms: %v", err)
+		}
+		rooms = append(rooms, room)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("errore durante l'iterazione in GetRooms: %v", err)
+	}
+	return rooms, nil
+}
+
+func GetHotelReviews(db *sql.DB, hotelID int) ([]types.Review, error) {
+	query := `
+        SELECT r.RoomID, r.Name AS RoomName, rv.Username, rv.review, rv.rating
+        FROM rooms r
+        LEFT JOIN reviews rv ON r.RoomID = rv.roomID
+        WHERE r.HotelID = ?
+    `
+	rows, err := db.Query(query, hotelID)
+	if err != nil {
+		return nil, fmt.Errorf("errore durante l'esecuzione della query GetHotelReviews: %v", err)
+	}
+	defer rows.Close()
+
+	var reviews []types.Review
+	for rows.Next() {
+		var rev types.Review
+		if err := rows.Scan(&rev.RoomID, &rev.RoomName, &rev.Username, &rev.Comment, &rev.Rating); err != nil {
+			return nil, fmt.Errorf("errore durante la scansione in GetHotelReviews: %v", err)
+		}
+		reviews = append(reviews, rev)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("errore durante l'iterazione in GetHotelReviews: %v", err)
+	}
+	return reviews, nil
 }

@@ -17,5 +17,15 @@ public partial class HotelPage : ContentPage, IQueryAttributable
             BindingContext = new HotelPageViewModel(hotel);
         }
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is HotelPageViewModel viewModel)
+        {
+            await viewModel.LoadRoomsAsync();
+            await viewModel.LoadReviewsAsync();
+        }
+    }
 }
 

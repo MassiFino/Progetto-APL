@@ -490,6 +490,41 @@ func searchHotelsHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(results)
 }
 
+func getRoomsHandler(w http.ResponseWriter, r *http.Request) {
+	var req types.GetRoomsReviewsRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	rooms, err := database.GetRooms(db, req.HotelID)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore in GetRooms: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(rooms)
+}
+
+// Handler per ottenere le recensioni per l’hotel
+func getHotelReviewsHandler(w http.ResponseWriter, r *http.Request) {
+	var req types.GetRoomsReviewsRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	reviews, err := database.GetHotelReviews(db, req.HotelID)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore in GetHotelReviews: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(reviews)
+}
+
 func main() {
 	db = initializeDatabase() // Inizializza la connessione al database
 	defer db.Close()          // Chiude la connessione al termine del server
@@ -510,6 +545,8 @@ func main() {
 	http.HandleFunc("/addRoomHotel", addRoomHotelHandler)
 	http.HandleFunc("/addRoom", addRoomHadler)
 	http.HandleFunc("/searchHotels", searchHotelsHandler)
+	http.HandleFunc("/getRooms", getRoomsHandler)
+	http.HandleFunc("/getHotelReviews", getHotelReviewsHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)

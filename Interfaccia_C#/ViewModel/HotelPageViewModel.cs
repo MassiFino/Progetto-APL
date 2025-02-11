@@ -10,13 +10,16 @@ using Microsoft.Maui.Controls;
 using System.Text.Json;
 using System.Diagnostics;
 using Interfaccia_C_.Model;
+using System.Collections.ObjectModel;
+using System.Net.Http;
 
 
 namespace Interfaccia_C_.ViewModel
 {
-    public class HotelPageViewModel
+    public class HotelPageViewModel : INotifyPropertyChanged
     {
-       
+
+        public int HotelID { get; }
         public string Name { get; }
         public string Location { get; }
         public string Description { get; }
@@ -26,11 +29,36 @@ namespace Interfaccia_C_.ViewModel
 
         public string ServiziStringa { get; set; }
 
+
+        public class Room
+        {
+            public int RoomID { get; set; }
+            public string RoomName { get; set; }
+            public string RoomDescription { get; set; }
+            public double PricePerNight { get; set; }
+            public int MaxGuests { get; set; }
+            public string RoomType { get; set; }
+            public string Images { get; set; }
+            public ImageSource ImageSource { get; set; }
+        }
+
+        public class Review
+        {
+            public string ReviewerName { get; set; }
+            public string Comment { get; set; }
+            public double Rating { get; set; }
+        }
+
+
+        // Nuove proprietà per le stanze e le recensioni
+        public ObservableCollection<Room> Rooms { get; set; } = new ObservableCollection<Room>();
+        public ObservableCollection<Review> Reviews { get; set; } = new ObservableCollection<Review>();
+
         // Costruttore che accetta un oggetto Hotel
         public HotelPageViewModel(Hotel hotel)
         {
-            
 
+            HotelID = hotel.HotelID;
             Name = hotel.Name;
             Location = hotel.Location;
             Description = hotel.Description;
@@ -71,6 +99,93 @@ namespace Interfaccia_C_.ViewModel
                 return null;
             }
         }
+
+
+        public async System.Threading.Tasks.Task LoadRoomsAsync()
+        {
+            try
+            {
+                using var client = new HttpClient();
+
+                var json = JsonSerializer.Serialize(new { HotelID = HotelID });
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync("http://localhost:9000/getRooms", content);
+
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonR = await response.Content.ReadAsStringAsync();
+                    var rooms = JsonSerializer.Deserialize<List<Room>>(jsonR);
+                    if (rooms != null)
+                    {
+                        Rooms.Clear();
+                        foreach (var room in rooms)
+                        {
+                            // Se il campo Images contiene più percorsi, puoi gestirlo in modo simile
+                            if (!string.IsNullOrEmpty(room.Images?.Trim()))
+                            {
+                                var imageList = room.Images.Split(',');
+                                var firstImage = imageList[0].Trim();
+                                string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName;
+                                var imagePath = System.IO.Path.Combine(projectDirectory, firstImage);
+                                room.ImageSource = GetImageSource(imagePath);
+                            }
+                            Rooms.Add(room);
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine($"Errore nel recupero delle stanze: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Eccezione durante il caricamento delle stanze: {ex.Message}");
+            }
+        }
+
+
+        // Funzione per recuperare le recensioni per l'hotel (o per una delle sue stanze)
+        public async System.Threading.Tasks.Task LoadReviewsAsync()
+        {
+            try
+            {
+                using var client = new HttpClient();
+
+                var payload = JsonSerializer.Serialize(new { HotelID = HotelID });
+                var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                var response = await client.PostAsync("http://localhost:9000/getHotelReviews", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var reviews = JsonSerializer.Deserialize<List<Review>>(json);
+                    if (reviews != null)
+                    {
+                        Reviews.Clear();
+                        foreach (var review in reviews)
+                        {
+                            Reviews.Add(review);
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine($"Errore nel recupero delle recensioni: {response.StatusCode}");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Eccezione durante il caricamento delle recensioni: {ex.Message}");
+            }
+        }
+
+        // INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
 

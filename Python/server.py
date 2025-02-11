@@ -75,6 +75,9 @@ class SearchRequest(BaseModel):
     Services: list[str]
     OrderBy: Optional[str] = None  # Campo opzionale
 
+class GetRoomsReviewsRequest(BaseModel):
+    HotelID: int
+
 
 @app.post("/login")
 def login(request: LoginRequest):
@@ -359,5 +362,23 @@ def search_hotels(request: SearchRequest):
 
         return response
     except ConnectionError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+    
+
+@app.post("/getRooms")
+def get_rooms(request: GetRoomsReviewsRequest):
+    try:
+        # Inoltra la richiesta al backend Go
+        response = connect_go("getRooms", request.dict())
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+@app.post("/getHotelReviews")
+def get_hotel_reviews(request: GetRoomsReviewsRequest):
+    try:
+        response = connect_go("getHotelReviews", request.dict())
+        return response
+    except Exception as e:
         raise HTTPException(status_code=502, detail=str(e))
     

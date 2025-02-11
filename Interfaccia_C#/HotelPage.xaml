@@ -83,20 +83,19 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <StackLayout Padding="10">
-                            <!-- Dettagli di ogni recensione -->
+                            <!-- Nome del recensore -->
                             <Label Text="{Binding ReviewerName}" FontAttributes="Bold" FontSize="16"/>
-                            <Label Text="{Binding Comment}" MaxLines="3" FontSize="14"/>
 
-                            <!-- Dettagli aggiuntivi della recensione, visibili se IsReviewSectionVisible è true -->
+                            <!-- Sezione dettagli recensione, visibile solo se IsReviewSectionVisible è true -->
                             <StackLayout IsVisible="{Binding IsReviewSectionVisible}" Spacing="5" Padding="5">
                                 <Label Text="Data Recensione:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
                                 <Label Text="{Binding CreatedAt}" FontSize="12" TextColor="Black"/>
                                 <Label Text="Commento:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                <Label Text="{Binding Review}" FontSize="12" TextColor="Black"/>
+                                <!-- Usa il binding a Comment se è il campo corretto -->
+                                <Label Text="{Binding Comment}" FontSize="12" TextColor="Black"/>
                                 <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
                                 <Label Text="{Binding Rating}" FontSize="12" TextColor="Black"/>
                             </StackLayout>
-
                         </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
