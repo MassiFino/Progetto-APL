@@ -153,6 +153,7 @@ func getHotelsHostHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
 		return
 	}
+
 	fmt.Printf("email ricevuta: %+v\n", req.Username)
 
 	// Recupera gli hotel dal database usando la funzione getHotelsByHost
@@ -174,7 +175,7 @@ func getHotelsHostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	// Stampa degli hotel trovati per il debug
 	for i, hotel := range hotels {
-		fmt.Printf("Hotel #%d: %+v\n", i+1, hotel)
+		fmt.Printf("Hotel che ho trovato #%d: %+v\n", i+1, hotel)
 	}
 
 	// Rispondi con i dati degli hotel in formato JSON

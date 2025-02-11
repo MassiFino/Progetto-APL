@@ -43,21 +43,60 @@
                    FontSize="16"
                    HorizontalOptions="Start" 
                    TextColor="Black"/>
-
             <!-- Sezione Disponibilità -->
-            <Label Text="Stanze disponibili" FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
+            <Label Text="Stanze disponibili" FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+
+            <!-- Grid per visualizzare le stanze -->
             <Grid>
-          
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Aggiungi CollectionView per visualizzare le stanze -->
+                <CollectionView ItemsSource="{Binding Rooms}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <StackLayout Padding="10">
+                                <!-- Dettagli della stanza -->
+                                <Label Text="{Binding RoomName}" FontAttributes="Bold" FontSize="16"/>
+                                <Label Text="{Binding RoomDescription}" MaxLines="3" FontSize="14"/>
+                                <Label Text="Prezzo per notte:" FontAttributes="Bold" FontSize="14"/>
+                                <Label Text="{Binding PricePerNight}" FontSize="12"/>
+                            </StackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
             </Grid>
 
             <!-- Recensioni degli ospiti -->
-            <Label Text="Recensioni degli ospiti" FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
+            <Label Text="Recensioni degli ospiti" FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+
+            <!-- CollectionView per le recensioni -->
             <CollectionView ItemsSource="{Binding Reviews}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <StackLayout>
-                            <Label Text="{Binding ReviewerName}" FontAttributes="Bold"/>
-                            <Label Text="{Binding Comment}" MaxLines="3"/>
+                        <StackLayout Padding="10">
+                            <!-- Dettagli di ogni recensione -->
+                            <Label Text="{Binding ReviewerName}" FontAttributes="Bold" FontSize="16"/>
+                            <Label Text="{Binding Comment}" MaxLines="3" FontSize="14"/>
+
+                            <!-- Dettagli aggiuntivi della recensione, visibili se IsReviewSectionVisible è true -->
+                            <StackLayout IsVisible="{Binding IsReviewSectionVisible}" Spacing="5" Padding="5">
+                                <Label Text="Data Recensione:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                <Label Text="{Binding CreatedAt}" FontSize="12" TextColor="Black"/>
+                                <Label Text="Commento:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                <Label Text="{Binding Review}" FontSize="12" TextColor="Black"/>
+                                <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                <Label Text="{Binding Rating}" FontSize="12" TextColor="Black"/>
+                            </StackLayout>
+
                         </StackLayout>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

@@ -7,7 +7,7 @@
              x:DataType="vm:SearchPageViewModel"
              x:Name="PageRoot"
              Title="Hotel Offers"
-             BackgroundColor="White"
+             BackgroundColor="AliceBlue"
              Padding="0">
 
     <VerticalStackLayout Margin="10" Spacing="15">
@@ -18,10 +18,10 @@
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
                     <!-- Campo di Ricerca città -->
                     <Entry Placeholder="Cerca città" 
-       WidthRequest="200" 
-       HeightRequest="40" 
-       TextColor="Black"
-       Text="{Binding SearchCity, Mode=TwoWay}" />
+                       WidthRequest="200" 
+                       HeightRequest="40" 
+                       TextColor="Black"
+                       Text="{Binding SearchCity, Mode=TwoWay}" />  
 
                     <!-- DatePicker per il check-in -->
                      <DatePicker Format="dd/MM/yyyy" 
@@ -38,13 +38,12 @@
                     TextColor="Black" 
                     Date="{Binding CheckOutDate}" />
 
-
                     <Picker WidthRequest="200"
-                                    HeightRequest="40"
-                                    TextColor="White"
-                                    BackgroundColor="Blue"
-                                    SelectedIndex="0"
-                                    SelectedItem="{Binding SelectedGuest, Mode=TwoWay}">
+                    HeightRequest="40"
+                    TextColor="Black"
+                     BackgroundColor="LightBlue"
+                     SelectedIndex="0"
+                     SelectedItem="{Binding SelectedGuest, Mode=TwoWay}">
                         <Picker.Items>
                             <x:String>Numero ospiti</x:String>
                             <!-- Opzione Placeholder -->
@@ -59,12 +58,12 @@
 
 
                     <!-- Bottone di ricerca -->
-                    <Button Text="Cerca" 
-        WidthRequest="100" 
-        HeightRequest="40"
-        Command="{Binding SearchCommand}" 
-        BackgroundColor="#800080"
-        TextColor="White"/>
+                <Button Text="Cerca" 
+                WidthRequest="100" 
+                HeightRequest="40"
+                Command="{Binding SearchCommand}" 
+                BackgroundColor="#800080"
+                TextColor="White"/>
 
                 </HorizontalStackLayout>
 
@@ -138,8 +137,8 @@
             <Picker 
             WidthRequest="200"
             HeightRequest="50"
-            TextColor="White"
-            BackgroundColor="blue"
+            TextColor="Black"
+            BackgroundColor="LightBlue"
             SelectedIndex="0"
             SelectedItem="{Binding SelectedOrderBy, Mode=TwoWay}">
                 <Picker.Items>
@@ -151,9 +150,10 @@
                     <x:String>Distanza: più vicino</x:String>
                 </Picker.Items>
             </Picker>
- 
 
 
+        <Label Text="{Binding Message}" FontSize="20" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" 
+        IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
         <ScrollView HeightRequest="420" BackgroundColor="AliceBlue">
             <CollectionView ItemsSource="{Binding ResearchHotels}">
                 <CollectionView.ItemTemplate>

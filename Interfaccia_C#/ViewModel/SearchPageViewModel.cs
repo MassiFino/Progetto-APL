@@ -27,6 +27,7 @@ namespace Interfaccia_C_.ViewModel
         private bool _isPetsAllowed;
         private bool _isRestaurantEnabled;
         private bool _isAirConditioningEnabled;
+        private string message;
 
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -199,6 +200,15 @@ namespace Interfaccia_C_.ViewModel
                 OnPropertyChanged();
             }
         }
+        public string Message
+        {
+            get => message;
+            set
+            {
+                message = value;
+                OnPropertyChanged(nameof(Message));
+            }
+        }
 
         // Comando per eseguire la ricerca
         public ICommand SearchCommand { get; }
@@ -243,9 +253,21 @@ namespace Interfaccia_C_.ViewModel
         // Metodo che simula una ricerca
         private async Task ExecuteSearch()
         {
+
             // Simuliamo un piccolo ritardo per vedere che il comando funziona
             var activeServices = GetActiveServices();
-
+            if (string.IsNullOrWhiteSpace(SearchCity) ||
+                CheckInDate == null ||
+                CheckOutDate == null)
+                
+            { 
+                await Application.Current.MainPage.DisplayAlert(
+                    "Attenzione",
+                    "Attenzione, non ha inserito tutti i campi richiesti.",
+                    "OK"
+                );
+                return; // Interrompe l'esecuzione se i dati non sono validi
+            }
             // Stampa i parametri di ricerca nella console (puoi sostituirlo con la tua logica)
             Debug.WriteLine($"🔍 Ricerca avviata con i seguenti parametri:");
             Debug.WriteLine($"🔍 Ricerca avviata per la città: {SearchCity}");
@@ -331,6 +353,7 @@ namespace Interfaccia_C_.ViewModel
 
                                     hotel.ImageSource = GetImageSource(imagePath);
                                 }
+                               
 
                                 // I servizi dovrebbero essere già una lista (se il backend li restituisce come array).
                                 // Se invece sono una stringa, potresti fare:
@@ -338,6 +361,10 @@ namespace Interfaccia_C_.ViewModel
 
                                 ResearchHotels.Add(hotel);
                             }
+                        }
+                        else
+                        {
+                            Message = "Non ho trovato hotel per le date selezionate";
                         }
                     }
                     else

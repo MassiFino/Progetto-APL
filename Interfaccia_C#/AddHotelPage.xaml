@@ -105,11 +105,7 @@
                     <Label Text="Prezzo per notte (€)" FontSize="16" TextColor="Black"/>
                     <Entry x:Name="PricePerNightEntry" Placeholder="Es. 100.00" TextColor="Black"
                        Text="{Binding PricePerNight}" Keyboard="Numeric" HeightRequest="45"/>
-
-                    <Label Text="Numero massimo di ospiti" FontSize="16" TextColor="Black"/>
-                    <Entry x:Name="MaxGuestsEntry" Placeholder="Es. 2" TextColor="Black"
-                       Text="{Binding MaxGuests}" Keyboard="Numeric" HeightRequest="45"/>
-
+                 
                     <Label Text="Tipologia di stanza" FontSize="16" TextColor="Black"/>
                     <Picker x:Name="RoomTypePicker" 
                              HeightRequest="40"
@@ -123,7 +119,6 @@
                             <x:String>Quadrupla</x:String>
                             <x:String>Suite</x:String>
                             <x:String>Deluxe</x:String>
-                            <x:String>Accessible Room</x:String>
                         </Picker.Items>
                     </Picker>
 
@@ -164,7 +159,6 @@
                     <Entry x:Name="AdditionalPricePerNightEntry" Placeholder="Es. 100.00" 
                            Text="{Binding AdditionalPricePerNight}" Keyboard="Numeric" HeightRequest="45"/>
 
-                    <Label Text="Numero massimo di ospiti" FontSize="16" TextColor="Black"/>
                     <Entry x:Name="MaxGuests" Placeholder="Es. 2" 
                            Text="{Binding AdditionalMaxGuests}" Keyboard="Numeric" HeightRequest="45"/>
 
@@ -182,7 +176,6 @@
                             <x:String>Quadrupla</x:String>
                             <x:String>Suite</x:String>
                             <x:String>Deluxe</x:String>
-                            <x:String>Accessible Room</x:String>
                         </Picker.Items>
                     </Picker>
 

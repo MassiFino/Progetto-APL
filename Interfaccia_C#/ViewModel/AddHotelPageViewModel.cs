@@ -273,10 +273,41 @@ namespace Interfaccia_C_.ViewModel
             get => _roomType;
             set
             {
-                _roomType = value;
-                OnPropertyChanged();
+                if (_roomType != value)
+                {
+                    _roomType = value;
+
+                    // Logica per aggiornare MaxGuests in base alla selezione di RoomType
+                    switch (_roomType)
+                    {
+                        case "Singola":
+                            MaxGuests = 1;
+                            break;
+                        case "Doppia":
+                            MaxGuests = 2;
+                            break;
+                        case "Tripla":
+                            MaxGuests = 3;
+                            break;
+                        case "Quadrupla":
+                            MaxGuests = 4;
+                            break;
+                        case "Suite":
+                            MaxGuests = 5;
+                            break;
+                        case "Deluxe":
+                            MaxGuests = 6;
+                            break;
+                        default:
+                            MaxGuests = 0; // O un altro valore di default
+                            break;
+                    }
+
+                    OnPropertyChanged();
+                }
             }
         }
+
 
         // Proprietà per la seconda stanza
         public string AdditionalRoomName
@@ -318,16 +349,46 @@ namespace Interfaccia_C_.ViewModel
                 OnPropertyChanged();
             }
         }
-
         public string AdditionalRoomType
         {
             get => _additionalRoomType;
             set
             {
-                _additionalRoomType = value;
-                OnPropertyChanged();
+                if (_additionalRoomType != value)
+                {
+                    _additionalRoomType = value;
+
+                    // Logica per aggiornare AdditionalMaxGuests in base alla selezione di AdditionalRoomType
+                    switch (_additionalRoomType)
+                    {
+                        case "Singola":
+                            AdditionalMaxGuests = 1;
+                            break;
+                        case "Doppia":
+                            AdditionalMaxGuests = 2;
+                            break;
+                        case "Tripla":
+                            AdditionalMaxGuests = 3;
+                            break;
+                        case "Quadrupla":
+                            AdditionalMaxGuests = 4;
+                            break;
+                        case "Suite":
+                            AdditionalMaxGuests = 5;
+                            break;
+                        case "Deluxe":
+                            AdditionalMaxGuests = 6;
+                            break;
+                        default:
+                            AdditionalMaxGuests = 0; // O un altro valore di default
+                            break;
+                    }
+
+                    OnPropertyChanged();
+                }
             }
         }
+
 
         public string HotelImagePath
         {
@@ -544,7 +605,8 @@ namespace Interfaccia_C_.ViewModel
         private async Task OnAddHotelAndRoom()
         {// Controllo dei campi obbligatori
             if (string.IsNullOrWhiteSpace(HotelName) || string.IsNullOrWhiteSpace(Location) || string.IsNullOrWhiteSpace(RoomName) ||
-                string.IsNullOrWhiteSpace(RoomDescription) || PricePerNight <= 0 || MaxGuests <= 0)
+                string.IsNullOrWhiteSpace(RoomDescription) || PricePerNight <= 0 ||  MaxGuests <= 0 ||
+        string.IsNullOrWhiteSpace(RoomType))  // Verifica che RoomType non sia null o vuoto
             {
                 // Mostra un avviso all'utente se uno dei campi obbligatori è vuoto
                 await Application.Current.MainPage.DisplayAlert("Attenzione", "Attenzione, non ha inserito tutti i campi richiesti.", "OK");
@@ -602,24 +664,67 @@ namespace Interfaccia_C_.ViewModel
                 request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
                 var response = await client.SendAsync(request);
-
                 if (response.IsSuccessStatusCode)
                 {
-                    IsHotelSaved = true;
+                    string previewMessage = "Stanza e hotel aggiunto con successo";
 
-                    IsSuccessVisible = true;
-                    IsErrorVisible = false;
-                    IsAddHotelVisible = false;
-                    IsAddRoomVisible = true;
+                    bool confirm = await Application.Current.MainPage.DisplayAlert(
+                        "Conferma Selezione",
+                        previewMessage + "\n\nVuoi inserire un'altra stanza?",
+                        "Sì",
+                        "No");
+                    if (confirm)
+                    {
+                        IsHotelSaved = true;
+                        IsSuccessVisible = true;
+                        IsErrorVisible = false;
+                        IsAddHotelVisible = false;
+                        IsAddRoomVisible = true;
+                        // Svuota tutti i campi
+                        HotelName = string.Empty;
+                        Location = string.Empty;
+                        Description = string.Empty;
+                        ImageHotel = null; // Supponendo che ImageHotel sia un oggetto o un percorso dell'immagine
+                        HotelImageNames = string.Empty;
+                    }
+                    else
+                    {
+                        // Svuota tutti i campi
+                        HotelName = string.Empty;
+                        Location = string.Empty;
+                        Description = string.Empty;
+                        ImageHotel = null; // Supponendo che ImageHotel sia un oggetto o un percorso dell'immagine
+                        HotelImageNames = string.Empty;
+                        activeServices.Clear(); // Svuota la lista dei servizi
+                        RoomName = string.Empty;
+                        RoomDescription = string.Empty;
+                        PricePerNight = 0; // Imposta un valore predefinito per il prezzo
+                        MaxGuests = 0; // Imposta il valore predefinito per il numero di ospiti
+                        RoomType = string.Empty;
+                        RoomImageNames= string.Empty;
+
+
+                        // Mostra un altro messaggio
+                        await Application.Current.MainPage.DisplayAlert(
+                            "Nuovo Hotel",
+                            "Se vuoi, puoi inserire un nuovo hotel.",
+                            "OK");
+
+                        // Reset delle visibilità per la schermata dell'hotel
+                        IsHotelSaved = false;
+                        IsSuccessVisible = false;
+                        IsErrorVisible = false;
+                        IsAddHotelVisible = true;
+                        IsAddRoomVisible = false;
+                    }
                 }
                 else
                 {
+                   
                     IsHotelSaved = false;
-
                     IsSuccessVisible = false;
                     IsErrorVisible = true;
                 }
-
                 OnPropertyChanged(nameof(IsSuccessVisible));
                 OnPropertyChanged(nameof(IsErrorVisible));
                 OnPropertyChanged(nameof(IsAddHotelVisible));
@@ -633,11 +738,13 @@ namespace Interfaccia_C_.ViewModel
                 OnPropertyChanged(nameof(IsErrorVisible));
             }
         }
-
         private async Task OnAddSecondRoom()
         {
-            if (string.IsNullOrWhiteSpace(AdditionalRoomName) || string.IsNullOrWhiteSpace(AdditionalRoomDescription) ||
-                AdditionalPricePerNight <= 0 || AdditionalMaxGuests <= 0)
+            if (string.IsNullOrWhiteSpace(AdditionalRoomName) ||
+                string.IsNullOrWhiteSpace(AdditionalRoomDescription) ||
+                AdditionalPricePerNight <= 0 ||
+                AdditionalMaxGuests <= 0     || string.IsNullOrWhiteSpace(AdditionalRoomType))  // Verifica che RoomType non sia null o vuoto
+
             {
                 IsErrorVisible = true;
                 IsSuccessVisible = false;
@@ -652,7 +759,7 @@ namespace Interfaccia_C_.ViewModel
                 PricePerNight = this.AdditionalPricePerNight,
                 MaxGuests = this.AdditionalMaxGuests,
                 RoomType = this.AdditionalRoomType,
-                RoomImagePath
+                RoomImagePath = this.RoomImagePath // Qui era mancante l'assegnazione corretta
             };
 
             try
@@ -668,6 +775,35 @@ namespace Interfaccia_C_.ViewModel
                 {
                     IsSuccessVisible = true;
                     IsErrorVisible = false;
+
+                    string previewMessage = "Stanza e hotel aggiunto con successo";
+                    bool confirm = await Application.Current.MainPage.DisplayAlert(
+                        "Conferma Selezione",
+                        previewMessage + "\n\nVuoi inserire un'altra stanza?",
+                        "Sì",
+                        "No");
+
+                    if (confirm)
+                    {
+                        // Svuotamento dei campi
+                        AdditionalRoomName = string.Empty;
+                        AdditionalRoomDescription = string.Empty;
+                        AdditionalPricePerNight = 0;
+                        AdditionalMaxGuests = 0;
+                        AdditionalRoomType = string.Empty;
+                        RoomImagePath = string.Empty;
+                        AdditionalRoomImageNames = string.Empty;
+
+                    }
+                    else
+                    {
+                        // Reset delle visibilità per la schermata dell'hotel
+                        IsHotelSaved = false;
+                        IsSuccessVisible = false;
+                        IsErrorVisible = false;
+                        IsAddHotelVisible = true;
+                        IsAddRoomVisible = false;
+                    }
                 }
                 else
                 {
@@ -684,6 +820,7 @@ namespace Interfaccia_C_.ViewModel
                 IsErrorVisible = true;
             }
         }
+
 
         private List<string> GetActiveServices()
         {
