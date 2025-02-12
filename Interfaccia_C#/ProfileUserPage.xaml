@@ -117,7 +117,7 @@
                                             <Label Text="Commento:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
                                             <Label Text="{Binding review}" FontSize="12" TextColor="Black"/>
                                             <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                            <Label Text="{Binding rating}" FontSize="12" TextColor="Black"/>
+                                            <Label Text="{Binding Rating}" FontSize="12" TextColor="Black"/>
                                         </StackLayout>
                                     </Grid>
                                     <!-- Pulsante per eliminare la prenotazione -->

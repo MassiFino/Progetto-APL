@@ -159,9 +159,7 @@
                     <Entry x:Name="AdditionalPricePerNightEntry" Placeholder="Es. 100.00" 
                            Text="{Binding AdditionalPricePerNight}" Keyboard="Numeric" HeightRequest="45"/>
 
-                    <Entry x:Name="MaxGuests" Placeholder="Es. 2" 
-                           Text="{Binding AdditionalMaxGuests}" Keyboard="Numeric" HeightRequest="45"/>
-
+                   
                     <Label Text="Tipologia di stanza" FontSize="16" TextColor="Black"/>
                     <Picker x:Name="AdditionalRoomTypePicker" 
                              HeightRequest="40"

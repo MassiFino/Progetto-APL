@@ -681,7 +681,6 @@ namespace Interfaccia_C_.ViewModel
                         IsAddHotelVisible = false;
                         IsAddRoomVisible = true;
                         // Svuota tutti i campi
-                        HotelName = string.Empty;
                         Location = string.Empty;
                         Description = string.Empty;
                         ImageHotel = null; // Supponendo che ImageHotel sia un oggetto o un percorso dell'immagine
@@ -691,6 +690,7 @@ namespace Interfaccia_C_.ViewModel
                     {
                         // Svuota tutti i campi
                         HotelName = string.Empty;
+
                         Location = string.Empty;
                         Description = string.Empty;
                         ImageHotel = null; // Supponendo che ImageHotel sia un oggetto o un percorso dell'immagine
@@ -750,6 +750,14 @@ namespace Interfaccia_C_.ViewModel
                 IsSuccessVisible = false;
                 return;
             }
+            Debug.WriteLine($"HotelName: {this.HotelName}");
+            Debug.WriteLine($"RoomName: {this.AdditionalRoomName}");
+            Debug.WriteLine($"RoomDescription: {this.AdditionalRoomDescription}");
+            Debug.WriteLine($"PricePerNight: {this.AdditionalPricePerNight}");
+            Debug.WriteLine($"MaxGuests: {this.AdditionalMaxGuests}");
+            Debug.WriteLine($"RoomType: {this.AdditionalRoomType}");
+            Debug.WriteLine($"RoomImagePath: {this.RoomImagePath}");
+
 
             var payload = new
             {
@@ -759,11 +767,13 @@ namespace Interfaccia_C_.ViewModel
                 PricePerNight = this.AdditionalPricePerNight,
                 MaxGuests = this.AdditionalMaxGuests,
                 RoomType = this.AdditionalRoomType,
-                RoomImagePath = this.RoomImagePath // Qui era mancante l'assegnazione corretta
+                RoomImagePath = this.RoomImagePath
             };
 
             try
             {
+                Debug.WriteLine("Sono qui dentro");
+
                 using var client = new HttpClient();
                 var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/addRoom");
                 var json = JsonSerializer.Serialize(payload);

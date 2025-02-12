@@ -14,14 +14,27 @@
                    FontAttributes="Bold"
                    HorizontalOptions="Center" 
                    TextColor="Black"/>
+                <!-- CarouselView per visualizzare una sola immagine alla volta -->
+                <CarouselView ItemsSource="{Binding ImageList}" HeightRequest="400" WidthRequest="400">
+                    <CarouselView.ItemsLayout>
+                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="60" />
+                    </CarouselView.ItemsLayout>
+                    <CarouselView.ItemTemplate>
+                        <DataTemplate>
+                            <VerticalStackLayout Padding="10">
+                           <Image Source="{Binding .}" 
+                       Aspect="AspectFill" 
+                       WidthRequest="400" 
+                       HeightRequest="400"
+                       HorizontalOptions="Center"
+                       VerticalOptions="CenterAndExpand" />
 
-            <!-- Immagine principale -->
-            <Image Source="{Binding ImageSource}" 
-                   Aspect="AspectFill" 
-                   HeightRequest="400" 
-                   WidthRequest="400"
-                   HorizontalOptions="Fill"
-                   VerticalOptions="Center" />
+                        </VerticalStackLayout>
+
+                        </DataTemplate>
+                    </CarouselView.ItemTemplate>
+                </CarouselView>
+               
 
             <!-- Descrizione dell'hotel -->
             <Label Text="Descrizione" FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
@@ -36,7 +49,13 @@
                    FontSize="16"
                    HorizontalOptions="Start" 
                    TextColor="Black"/>
+            <!-- Services dell'hotel -->
+            <Label Text="Servizi offerti dall'hotel" FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
 
+            <Label Text="{Binding Services}" 
+           FontSize="16"
+           HorizontalOptions="Start" 
+           TextColor="Black"/>
             <!-- Rating dell'hotel -->
             <Label Text="Valutazione" FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
             <Label Text="{Binding Rating}" 
@@ -46,61 +65,103 @@
             <!-- Sezione Disponibilità -->
             <Label Text="Stanze disponibili" FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
 
-            <!-- Grid per visualizzare le stanze -->
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
+            <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightGreen" Padding="20"
+       HorizontalOptions="Center" VerticalOptions="Center">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="30" />
+                </Border.StrokeShape>
 
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+                <!-- Layout contenitore per i DatePicker -->
+                <VerticalStackLayout Spacing="20" HorizontalOptions="Center" VerticalOptions="Center">
+                    <!-- DatePicker per il check-in -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                        <DatePicker Format="dd/MM/yyyy" 
+                        WidthRequest="150" 
+                        HeightRequest="40" 
+                        TextColor="Black" 
+                        Date="{Binding CheckInDate}" />
+                        <DatePicker Format="dd/MM/yyyy" 
+                        WidthRequest="150" 
+                        HeightRequest="40" 
+                        TextColor="Black" 
+                        Date="{Binding CheckOutDate}" />
+                        <!-- Bottone per prenotare la stanza -->
+                        <Button Text="Cerca stanza" 
+            WidthRequest="200" 
+            HeightRequest="30" 
+            Command="{Binding CercaStanzaCommand}" />
+                    </HorizontalStackLayout>
+                     
+                    <!-- Aggiungi CollectionView per visualizzare le stanze -->
+                    <CollectionView ItemsSource="{Binding Rooms}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightYellow" Padding="10"
+                            HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="30" />
+                                    </Border.StrokeShape>
 
-                <!-- Aggiungi CollectionView per visualizzare le stanze -->
-                <CollectionView ItemsSource="{Binding Rooms}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate>
-                            <StackLayout Padding="10">
-                                <!-- Dettagli della stanza -->
-                                <Label Text="{Binding RoomName}" FontAttributes="Bold" FontSize="16"/>
-                                <Label Text="{Binding RoomDescription}" MaxLines="3" FontSize="14"/>
-                                <Label Text="Prezzo per notte:" FontAttributes="Bold" FontSize="14"/>
-                                <Label Text="{Binding PricePerNight}" FontSize="12"/>
-                            </StackLayout>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Frame HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent"
+                                   CornerRadius="20" Padding="0" HeightRequest="150" WidthRequest="150">
+                                            <Image Source="{Binding ImageSource}" Aspect="AspectFill" WidthRequest="150" HeightRequest="150"
+                                       VerticalOptions="CenterAndExpand" />
+                                        </Frame>
 
-            </Grid>
+                                        <VerticalStackLayout>
+                                            <Label Text="{Binding RoomName}" FontAttributes="Bold" FontSize="16" TextColor="Black" />
+                                            <Label Text="{Binding RoomDescription}" MaxLines="3" FontSize="14" TextColor="Black" />
+                                            <Label Text="Prezzo per notte:" FontAttributes="Bold" FontSize="14" TextColor="Black" />
+                                            <Label Text="{Binding PricePerNight}" FontSize="12" TextColor="Black" />
+                                            <Button Text="Prenota stanza" WidthRequest="200" HeightRequest="30"
+                                                FontSize="14" Padding="5"
+                                                HorizontalOptions="Start"
+                                                Command="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.PrenotaStanzaCommand}"
+                                                CommandParameter="{Binding .}" />
+                                        </VerticalStackLayout>
+                                    </HorizontalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+
 
             <!-- Recensioni degli ospiti -->
             <Label Text="Recensioni degli ospiti" FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+            <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="DarkOrange" Padding="10" 
+              HorizontalOptions="Center" VerticalOptions="Center"
+              StrokeShape="RoundRectangle 30">
+                <!-- CollectionView per le recensioni -->
+                <CollectionView ItemsSource="{Binding Reviews}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightSalmon" Padding="10" 
+                                HorizontalOptions="Center" VerticalOptions="Center"
+                                StrokeShape="RoundRectangle 30">
+                                <StackLayout Padding="10">
+                                    <!-- Nome del recensore -->
+                                    <Label Text="{Binding ReviewerName}" FontAttributes="Bold" FontSize="16"/>
 
-            <!-- CollectionView per le recensioni -->
-            <CollectionView ItemsSource="{Binding Reviews}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <StackLayout Padding="10">
-                            <!-- Nome del recensore -->
-                            <Label Text="{Binding ReviewerName}" FontAttributes="Bold" FontSize="16"/>
-
-                            <!-- Sezione dettagli recensione, visibile solo se IsReviewSectionVisible è true -->
-                            <StackLayout IsVisible="{Binding IsReviewSectionVisible}" Spacing="5" Padding="5">
-                                <Label Text="Data Recensione:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                <Label Text="{Binding CreatedAt}" FontSize="12" TextColor="Black"/>
-                                <Label Text="Commento:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                <!-- Usa il binding a Comment se è il campo corretto -->
-                                <Label Text="{Binding Comment}" FontSize="12" TextColor="Black"/>
-                                <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                <Label Text="{Binding Rating}" FontSize="12" TextColor="Black"/>
-                            </StackLayout>
-                        </StackLayout>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-
+                                    <!-- Sezione dettagli recensione, visibile solo se IsReviewSectionVisible è true -->
+                                    <StackLayout IsVisible="{Binding IsReviewSectionVisible}" Spacing="5" Padding="5">
+                                        <Label Text="Data Recensione:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                        <Label Text="{Binding CreatedAt}" FontSize="12" TextColor="Black"/>
+                                        <Label Text="Commento:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                        <!-- Usa il binding a Comment se è il campo corretto -->
+                                        <Label Text="{Binding Comment}" FontSize="12" TextColor="Black"/>
+                                        <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                        <Label Text="{Binding Rating}" FontSize="12" TextColor="Black"/>
+                                    </StackLayout>
+                                </StackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Border>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
