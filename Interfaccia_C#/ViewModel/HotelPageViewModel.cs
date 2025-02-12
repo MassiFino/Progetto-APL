@@ -12,6 +12,7 @@ using System.Diagnostics;
 using Interfaccia_C_.Model;
 using System.Collections.ObjectModel;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 
 namespace Interfaccia_C_.ViewModel
@@ -53,6 +54,7 @@ namespace Interfaccia_C_.ViewModel
                 {
                     _checkInDate = value;
                     OnPropertyChanged(nameof(CheckInDate)); // Notifica la modifica
+                    ValidateSearchDates();
                 }
             }
         }
@@ -66,13 +68,17 @@ namespace Interfaccia_C_.ViewModel
                 {
                     _checkOutDate = value;
                     OnPropertyChanged(nameof(CheckOutDate)); // Notifica la modifica
+                    ValidateSearchDates();
                 }
             }
         }
         // Comando per il bottone "Prenota stanza"
         public ICommand CercaStanzaCommand { get; }
-        public class Room
+        public class Room : INotifyPropertyChanged
         {
+
+            private bool _canBook = true;
+
             public int RoomID { get; set; }
             public string RoomName { get; set; }
             public string RoomDescription { get; set; }
@@ -81,6 +87,24 @@ namespace Interfaccia_C_.ViewModel
             public string RoomType { get; set; }
             public string Images { get; set; }
             public ImageSource ImageSource { get; set; }
+
+
+            public bool CanBook
+            {
+                get => _canBook;
+                set
+                {
+                    if (_canBook != value)
+                    {
+                        _canBook = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
 
@@ -97,6 +121,53 @@ namespace Interfaccia_C_.ViewModel
         public ObservableCollection<Review> Reviews { get; set; } = new ObservableCollection<Review>();
         public ICommand PrenotaStanzaCommand { get; }
 
+        private bool _isSearchMode;
+        public bool IsSearchMode
+        {
+            get => _isSearchMode;
+            set
+            {
+                if (_isSearchMode != value)
+                {
+                    _isSearchMode = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(NoRoomsAvailable));
+                }
+            }
+        }
+
+        private bool _isSearchEnabled;
+        private string _searchErrorMessage;
+
+        public bool IsSearchEnabled
+        {
+            get => _isSearchEnabled;
+            set
+            {
+                if (_isSearchEnabled != value)
+                {
+                    _isSearchEnabled = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string SearchErrorMessage
+        {
+            get => _searchErrorMessage;
+            set
+            {
+                if (_searchErrorMessage != value)
+                {
+                    _searchErrorMessage = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        // Proprietà calcolata per mostrare il messaggio "Nessuna stanza disponibile..."
+        public bool NoRoomsAvailable => IsSearchMode && Rooms.Count == 0;
+
         // Costruttore che accetta un oggetto Hotel
         public HotelPageViewModel(Hotel hotel)
         {
@@ -110,7 +181,23 @@ namespace Interfaccia_C_.ViewModel
             Rating = hotel.Rating;
             Services = string.Join(", ", hotel.Services);
 
-            CercaStanzaCommand = new Command(CercaStanza);
+            CheckInDate = DateTime.Today;
+            CheckOutDate = DateTime.Today.AddDays(1);
+
+            ValidateSearchDates(); // Imposta il valore iniziale
+
+            // Inizialmente non siamo in modalità ricerca
+
+            IsSearchMode = false;
+            CercaStanzaCommand = new Command(CercaStanza, () => IsSearchEnabled);
+
+            this.PropertyChanged += (sender, e) =>
+            {
+                if (e.PropertyName == nameof(IsSearchEnabled))
+                {
+                    ((Command)CercaStanzaCommand).ChangeCanExecute();
+                }
+            };
 
             if (!string.IsNullOrEmpty(hotel.Images?.Trim()))
             {
@@ -154,37 +241,123 @@ namespace Interfaccia_C_.ViewModel
         private async void CercaStanza()
         {                 // Si deve inserire quello fatto nel load Room
 
-            var payload = new
+            try
             {
-                CheckIn = CheckInDate,
-                CheckOut = CheckOutDate
-            };
+                using var client = new HttpClient();
 
-            // Esegui la logica per il payload, ad esempio inviare i dati al server o visualizzare un messaggio
-            // Qui possiamo fare qualcosa con il payload, come inviarlo a un servizio, eseguire una prenotazione, etc.
-            await Application.Current.MainPage.DisplayAlert("Prenotazione",
-                $"Check-in: {payload.CheckIn.ToShortDateString()} - Check-out: {payload.CheckOut.ToShortDateString()}",
-                "OK");
+                // Costruisci il payload con HotelID, CheckInDate e CheckOutDate formattate (ISO "yyyy-MM-dd")
+                var payload = new
+                {
+                    HotelID = this.HotelID,
+                    CheckInDate = this.CheckInDate.ToString("yyyy-MM-dd"),
+                    CheckOutDate = this.CheckOutDate.ToString("yyyy-MM-dd")
+                };
+
+                var json = JsonSerializer.Serialize(payload);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                Rooms.Clear();
+
+                // Chiama l'endpoint dedicato alle stanze disponibili
+                var response = await client.PostAsync("http://localhost:9000/getAvailableRooms", content);
+
+                Debug.WriteLine($"Response: {response}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    // Assumiamo che l'endpoint restituisca una lista di Room
+                    var availableRooms = JsonSerializer.Deserialize<List<Room>>(jsonResponse);
+                    if (availableRooms != null)
+                    {
+                        foreach (var room in availableRooms)
+                        {
+                            // Se il campo Images contiene più percorsi, prendi la prima immagine
+                            if (!string.IsNullOrWhiteSpace(room.Images))
+                            {
+                                var imageList = room.Images.Split(',');
+                                var firstImage = imageList.First().Trim();
+                                string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)
+                                    ?.Parent?.Parent?.Parent?.FullName;
+                                var imagePath = Path.Combine(projectDirectory, firstImage);
+                                room.ImageSource = GetImageSource(imagePath);
+                            }
+                            Rooms.Add(room);
+                        }
+                    }
+                    IsSearchMode = true;
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Errore", "Impossibile recuperare le stanze disponibili", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Eccezione in CercaStanza: {ex.Message}");
+                await Application.Current.MainPage.DisplayAlert("Errore", ex.Message, "OK");
+            }
         }
         private async Task PrenotaStanza(Room room)
         {
-            //Inserire la logica per prenotare le stanza query inserimento
-            // Creare un oggetto che rappresenta la prenotazione (ad esempio con le date)
+            // Controllo se la sessione (token) è attiva
+            var token = await SecureStorage.GetAsync("jwt_token");
+
+            // Calcola il numero di notti
+            int nights = (int)(CheckOutDate.Date - CheckInDate.Date).TotalDays;
+            if (nights <= 0)
+            {
+                await Application.Current.MainPage.DisplayAlert("Errore", "Il numero di notti deve essere maggiore di zero.", "OK");
+                return;
+            }
+
+            // Calcola l'importo totale
+            double totalAmount = room.PricePerNight * nights;
+
+            // Recupera l'username dal token oppure da una proprietà del ViewModel (se lo hai già estratto in precedenza)
+            // Qui presumo di avere un metodo GetLoggedUsername() che lo estrae dal token
+            // Crea il payload per la prenotazione
             var payload = new
             {
-                Room = room,
-                CheckIn = CheckInDate,
-                CheckOut = CheckOutDate
+                RoomID = room.RoomID,
+                CheckInDate = CheckInDate.ToString("yyyy-MM-dd"),
+                CheckOutDate = CheckOutDate.ToString("yyyy-MM-dd"),
+                TotalAmount = totalAmount,
+                Status = "Confirmed"
             };
 
-            // Qui puoi inviare la prenotazione al server, salvarla localmente, etc.
-            // Per il momento, mostriamo solo un messaggio di conferma
-            await Application.Current.MainPage.DisplayAlert("Prenotazione",
-                $"Hai prenotato la stanza: {room.RoomName}\n" +
-                $"Check-in: {payload.CheckIn.ToShortDateString()}\n" +
-                $"Check-out: {payload.CheckOut.ToShortDateString()}",
-                "OK");
+            var json = JsonSerializer.Serialize(payload);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            try
+            {
+                using var client = new HttpClient();
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var response = await client.PostAsync("http://localhost:9000/addBooking", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    await Application.Current.MainPage.DisplayAlert("Prenotazione Effettuata",
+                        $"Hai prenotato la stanza: {room.RoomName}\n" +
+                        $"Check-in: {CheckInDate.ToShortDateString()}\n" +
+                        $"Check-out: {CheckOutDate.ToShortDateString()}\n" +
+                        $"Totale: {totalAmount:C}",
+                        "OK");
+
+                    room.CanBook = false;
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Errore", "Si è verificato un errore durante la prenotazione. Riprova.", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Eccezione in PrenotaStanza: {ex.Message}");
+                await Application.Current.MainPage.DisplayAlert("Errore", ex.Message, "OK");
+            }
         }
+
 
         public async System.Threading.Tasks.Task LoadRoomsAsync()
         {
@@ -289,6 +462,30 @@ namespace Interfaccia_C_.ViewModel
             else
             {
                 return null;
+            }
+        }
+
+
+        private void ValidateSearchDates()
+        {
+
+            if (CheckInDate.Date < DateTime.Today)
+            {
+                IsSearchEnabled = false;
+                SearchErrorMessage = "La data di check-in non può essere nel passato.";
+                return;
+            }
+
+            // Se le date sono predefinite o non coerenti, disabilita la ricerca
+            if (CheckOutDate <= CheckInDate)
+            {
+                IsSearchEnabled = false;
+                SearchErrorMessage = "La data di check-out deve essere successiva a quella di check-in.";
+            }
+            else
+            {
+                IsSearchEnabled = true;
+                SearchErrorMessage = string.Empty;
             }
         }
 

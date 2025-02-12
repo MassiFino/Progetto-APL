@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Interfaccia_C_.HotelPage"
+             x:Name="HotelPageViewRoot"
              Title="Dettagli Hotel"
              BackgroundColor="AliceBlue"
              Padding="0">
@@ -15,26 +16,24 @@
                    HorizontalOptions="Center" 
                    TextColor="Black"/>
                 <!-- CarouselView per visualizzare una sola immagine alla volta -->
-                <CarouselView ItemsSource="{Binding ImageList}" HeightRequest="400" WidthRequest="400">
-                    <CarouselView.ItemsLayout>
-                        <LinearItemsLayout Orientation="Horizontal" ItemSpacing="60" />
-                    </CarouselView.ItemsLayout>
-                    <CarouselView.ItemTemplate>
-                        <DataTemplate>
-                            <VerticalStackLayout Padding="10">
-                           <Image Source="{Binding .}" 
-                       Aspect="AspectFill" 
-                       WidthRequest="400" 
-                       HeightRequest="400"
-                       HorizontalOptions="Center"
-                       VerticalOptions="CenterAndExpand" />
+            <CarouselView ItemsSource="{Binding ImageList}" HeightRequest="400" WidthRequest="400">
+                <CarouselView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
+                </CarouselView.ItemsLayout>
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <!-- Usa un Grid che riempie lo spazio disponibile -->
+                        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                            <Image Source="{Binding .}" 
+               Aspect="AspectFit"
+               HorizontalOptions="Center"
+               VerticalOptions="Center" />
+                        </Grid>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
 
-                        </VerticalStackLayout>
 
-                        </DataTemplate>
-                    </CarouselView.ItemTemplate>
-                </CarouselView>
-               
 
             <!-- Descrizione dell'hotel -->
             <Label Text="Descrizione" FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
@@ -75,23 +74,27 @@
                 <VerticalStackLayout Spacing="20" HorizontalOptions="Center" VerticalOptions="Center">
                     <!-- DatePicker per il check-in -->
                     <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                        <DatePicker Format="dd/MM/yyyy" 
-                        WidthRequest="150" 
-                        HeightRequest="40" 
-                        TextColor="Black" 
-                        Date="{Binding CheckInDate}" />
-                        <DatePicker Format="dd/MM/yyyy" 
-                        WidthRequest="150" 
-                        HeightRequest="40" 
-                        TextColor="Black" 
-                        Date="{Binding CheckOutDate}" />
-                        <!-- Bottone per prenotare la stanza -->
+                        <DatePicker Date="{Binding CheckInDate}" Format="dd/MM/yyyy" WidthRequest="150" HeightRequest="40"/>
+                        <DatePicker Date="{Binding CheckOutDate}" Format="dd/MM/yyyy" WidthRequest="150" HeightRequest="40"/>
+                        <!-- Bottone per la ricerca: abilitato solo se IsSearchEnabled è true -->
                         <Button Text="Cerca stanza" 
-            WidthRequest="200" 
-            HeightRequest="30" 
-            Command="{Binding CercaStanzaCommand}" />
+                            Command="{Binding CercaStanzaCommand}"
+                            IsEnabled="{Binding IsSearchEnabled}"
+                            WidthRequest="200" HeightRequest="30"/>
                     </HorizontalStackLayout>
-                     
+
+                    <!-- Label che mostra il messaggio di errore se SearchErrorMessage non è vuoto -->
+                    <Label Text="{Binding SearchErrorMessage}" 
+                        FontSize="14" 
+                        TextColor="Red"
+                        HorizontalOptions="Center" />
+                    
+                    <Label Text="Nessuna stanza è disponibile per tale data" 
+                        FontSize="16" 
+                        HorizontalOptions="Center"
+                        TextColor="Red"
+                        IsVisible="{Binding NoRoomsAvailable}" />
+
                     <!-- Aggiungi CollectionView per visualizzare le stanze -->
                     <CollectionView ItemsSource="{Binding Rooms}">
                         <CollectionView.ItemTemplate>
@@ -115,10 +118,11 @@
                                             <Label Text="Prezzo per notte:" FontAttributes="Bold" FontSize="14" TextColor="Black" />
                                             <Label Text="{Binding PricePerNight}" FontSize="12" TextColor="Black" />
                                             <Button Text="Prenota stanza" WidthRequest="200" HeightRequest="30"
-                                                FontSize="14" Padding="5"
-                                                HorizontalOptions="Start"
+                                                FontSize="14" Padding="5" HorizontalOptions="Start"
                                                 Command="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.PrenotaStanzaCommand}"
-                                                CommandParameter="{Binding .}" />
+                                                CommandParameter="{Binding .}"
+                                                IsVisible="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.IsSearchMode}"
+                                                IsEnabled="{Binding CanBook}"/>
                                         </VerticalStackLayout>
                                     </HorizontalStackLayout>
                                 </Border>

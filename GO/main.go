@@ -115,7 +115,7 @@ func getUserDataHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
 		return
 	}
-	fmt.Printf("Dati ricevuti: %+v\n", req)
+	//fmt.Printf("Dati ricevuti: %+v\n", req)
 	// Recupera i dati dell'utente dal database usando la funzione GetUser
 	user, err := database.GetUser(db, req.Username)
 	if err != nil {
@@ -173,10 +173,8 @@ func getHotelsHostHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-	// Stampa degli hotel trovati per il debug
-	for i, hotel := range hotels {
-		fmt.Printf("Hotel che ho trovato #%d: %+v\n", i+1, hotel)
-	}
+
+	fmt.Println("Hotel trovati: ", hotels)
 
 	// Rispondi con i dati degli hotel in formato JSON
 	w.Header().Set("Content-Type", "application/json")
@@ -525,6 +523,53 @@ func getHotelReviewsHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(reviews)
 }
 
+func getAvailableRoomsHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.AvailableRoomsRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	// Chiama la funzione del package database per ottenere le stanze disponibili
+	rooms, err := database.GetAvailableRooms(db, req.HotelID, req.CheckOutDate, req.CheckInDate)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore nel recupero delle stanze disponibili: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(rooms); err != nil {
+		http.Error(w, "Errore durante la codifica della risposta JSON", http.StatusInternalServerError)
+	}
+}
+
+func addBookingHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.BookingRoomRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	// Chiama la funzione per inserire la prenotazione nel database
+	if err := database.AddBooking(db, req.Username, req.RoomID, req.CheckInDate, req.CheckOutDate, req.TotalAmount, req.Status); err != nil {
+		http.Error(w, fmt.Sprintf("Errore durante l'inserimento della prenotazione: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status": "success", "message": "Prenotazione effettuata con successo!"}`))
+}
+
 func main() {
 	db = initializeDatabase() // Inizializza la connessione al database
 	defer db.Close()          // Chiude la connessione al termine del server
@@ -547,6 +592,8 @@ func main() {
 	http.HandleFunc("/searchHotels", searchHotelsHandler)
 	http.HandleFunc("/getRooms", getRoomsHandler)
 	http.HandleFunc("/getHotelReviews", getHotelReviewsHandler)
+	http.HandleFunc("/getAvailableRooms", getAvailableRoomsHandler)
+	http.HandleFunc("/addBooking", addBookingHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)

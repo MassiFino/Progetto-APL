@@ -78,6 +78,18 @@ class SearchRequest(BaseModel):
 class GetRoomsReviewsRequest(BaseModel):
     HotelID: int
 
+class AvailableRoomsRequest(BaseModel):
+    HotelID: int
+    CheckInDate: str  
+    CheckOutDate: str
+
+class BookingRequest(BaseModel):
+    RoomID: int
+    CheckInDate: str 
+    CheckOutDate: str 
+    TotalAmount: float
+    Status: str
+
 
 @app.post("/login")
 def login(request: LoginRequest):
@@ -381,4 +393,42 @@ def get_hotel_reviews(request: GetRoomsReviewsRequest):
         return response
     except Exception as e:
         raise HTTPException(status_code=502, detail=str(e))
+
+@app.post("/getAvailableRooms")
+def get_available_rooms(request: AvailableRoomsRequest):
+    try:
+
+        print("Richiesta ricevuta:", request.dict())
+        # Inoltra la richiesta al backend Go usando connect_go
+        response = connect_go("getAvailableRooms", request.dict())
+
+        print("Risposta ricevuta:", response)
+        return response
+    except ConnectionError as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+
+@app.post("/addBooking")
+def add_booking(request: BookingRequest, credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    try:
+        # Decodifica il token per estrarre lo username
+        payload = decode_jwt_token(token)
+        username = payload.get("username")
+        if not username:
+            raise HTTPException(status_code=400, detail="Username non trovato nei claims")
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token scaduto")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Token non valido")
     
+    # Aggiungi lo username al payload da inoltrare al servizio Go
+    data = request.dict()
+    data["Username"] = username
+
+    try:
+        # Inoltra la richiesta al servizio Go tramite connect_go
+        response = connect_go("addBooking", data)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))

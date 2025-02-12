@@ -188,3 +188,18 @@ type Review struct {
 type GetRoomsReviewsRequest struct {
 	HotelID int `json:"HotelID"`
 }
+
+type AvailableRoomsRequest struct {
+	HotelID      int    `json:"HotelID"`
+	CheckInDate  string `json:"CheckInDate"`  // ad es. "2025-03-01"
+	CheckOutDate string `json:"CheckOutDate"` // ad es. "2025-03-05"
+}
+
+type BookingRoomRequest struct {
+	Username     string  `json:"Username"`
+	RoomID       int     `json:"RoomID"`
+	CheckInDate  string  `json:"CheckInDate"`
+	CheckOutDate string  `json:"CheckOutDate"`
+	TotalAmount  float64 `json:"TotalAmount"`
+	Status       string  `json:"Status"`
+}

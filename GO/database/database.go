@@ -108,7 +108,7 @@ func GetUser(db *sql.DB, username string) (*types.UserResponse, error) {
 		return nil, fmt.Errorf("errore durante la ricerca dell'utente: %v", err)
 	}
 	// Log dei dati dell'utente recuperati
-	fmt.Println("Dati dell'utente recuperati:", user)
+	//fmt.Println("Dati dell'utente recuperati:", user)
 	return &user, nil
 }
 
@@ -122,44 +122,36 @@ func GetHotelsHost(db *sql.DB, username string) ([]types.HotelResponse, error) {
 	}
 	defer rows.Close()
 
-	fmt.Println("Esecuzione query per l'utente:", username)
-
 	var hotels []types.HotelResponse
 
-	// Itera su ogni riga restituita dalla query
 	for rows.Next() {
-		fmt.Println("Iterazione su una nuova riga dell'hotel")
-
 		var hotel types.HotelResponse
 		var services string
-		var rating float64 // tipo float64 per il Rating
+		var rating float64
 
-		// Scansione dei dati dalla query
 		err := rows.Scan(&hotel.Name, &hotel.Location, &hotel.Description, &services, &rating, &hotel.Images)
 		if err != nil {
 			return nil, fmt.Errorf("errore durante la scansione delle righe: %v", err)
 		}
 
-		// Assegna il valore di rating direttamente alla proprietà dell'hotel
 		hotel.Rating = rating
+		// Pulizia dei servizi: rimuovo spazi aggiuntivi per ogni elemento
+		var serviceList []string
+		for _, s := range strings.Split(services, ",") {
+			serviceList = append(serviceList, strings.TrimSpace(s))
+		}
+		hotel.Services = serviceList
 
-		fmt.Printf("Services prima della divisione: %s\n", services)
-		hotel.Services = strings.Split(services, ",")
-		fmt.Printf("Hotel dopo scansione: %+v\n", hotel)
-
-		// Aggiungi l'hotel alla lista
 		hotels = append(hotels, hotel)
 	}
 
-	// Gestione degli errori delle righe
 	if err := rows.Err(); err != nil {
-		fmt.Printf("Errore durante l'iterazione delle righe: %v\n", err)
 		return nil, fmt.Errorf("errore durante l'iterazione delle righe: %v", err)
 	}
 
-	fmt.Printf("Gli hotel trovati sono: %d\n", len(hotels))
 	return hotels, nil
 }
+
 func GetBookings(db *sql.DB, username string) ([]types.BookingResponse, error) {
 	fmt.Printf("Cerco prenotazioni per l'utente: %s\n", username)
 
@@ -607,4 +599,50 @@ func GetHotelReviews(db *sql.DB, hotelID int) ([]types.Review, error) {
 		return nil, fmt.Errorf("errore durante l'iterazione in GetHotelReviews: %v", err)
 	}
 	return reviews, nil
+}
+
+func GetAvailableRooms(db *sql.DB, hotelID int, checkOutDate, checkInDate string) ([]types.Room, error) {
+	query := `
+        SELECT RoomID, Name, Description, PricePerNight, MaxGuests, TipologiaStanza, Images
+		FROM rooms
+		WHERE HotelID = ?
+		AND IsAvailable = TRUE
+		AND NOT EXISTS (
+    		SELECT 1 FROM bookings
+    		WHERE bookings.RoomID = rooms.RoomID
+      		AND (DATE(bookings.CheckInDate) < ? AND DATE(bookings.CheckOutDate) > ?)
+	);
+    `
+
+	rows, err := db.Query(query, hotelID, checkOutDate, checkInDate)
+	if err != nil {
+		return nil, fmt.Errorf("errore durante l'esecuzione della query: %w", err)
+	}
+	defer rows.Close()
+
+	var rooms []types.Room
+	for rows.Next() {
+		var room types.Room
+		// Assicurati che i campi della struct types.Room corrispondano all'ordine dei campi selezionati
+		if err := rows.Scan(&room.RoomID, &room.RoomName, &room.RoomDescription, &room.PricePerNight, &room.MaxGuests, &room.RoomType, &room.Images); err != nil {
+			return nil, fmt.Errorf("errore durante la scansione dei dati: %w", err)
+		}
+		rooms = append(rooms, room)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return rooms, nil
+}
+
+func AddBooking(db *sql.DB, username string, roomID int, checkInDate, checkOutDate string, totalAmount float64, status string) error {
+	query := `
+		INSERT INTO bookings (Username, RoomID, CheckInDate, CheckOutDate, TotalAmount, Status, CreatedAt)
+		VALUES (?, ?, ?, ?, ?, ?, NOW())
+	`
+	_, err := db.Exec(query, username, roomID, checkInDate, checkOutDate, totalAmount, status)
+	if err != nil {
+		return fmt.Errorf("errore durante l'inserimento della prenotazione: %w", err)
+	}
+	return nil
 }
