@@ -33,6 +33,7 @@ type UserResponse struct {
 	Email    string `json:"Email"`
 	PImage   string `json:"PImage"`
 	Role     string `json:"Role"`
+	Points   int    `json:"Points"`
 }
 
 type HotelRequest struct {
@@ -204,4 +205,9 @@ type BookingRoomRequest struct {
 	CheckOutDate string  `json:"CheckOutDate"`
 	TotalAmount  float64 `json:"TotalAmount"`
 	Status       string  `json:"Status"`
+}
+
+type UpdatePointsRequest struct {
+	Username    string `json:"Username"`
+	PointsToAdd int    `json:"PointsToAdd"`
 }

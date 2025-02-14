@@ -189,7 +189,9 @@ namespace Interfaccia_C_.ViewModel
                     hotelID = hotel.HotelID, // Passa l'ID dell'hotel
                     hotelName = hotel.Name, // Nome dell'hotel
                     hotelLocation = this.Location, // Posizione dell'hotel
-                                                   // Aggiungi eventualmente altre proprietà come l'immagine della stanza
+                    roomType = roomSelezionata.RoomType,
+                    guests = roomSelezionata.MaxGuests,
+                    nights = (CheckOutDate - CheckInDate).Days,
                 };
                 // Naviga alla pagina di prenotazione e passa l'oggetto Booking come parametro
                 var navParams = new Dictionary<string, object>

@@ -24,7 +24,6 @@ namespace Interfaccia_C_.ViewModel
         public string HotelName { get; set; }
         public int BookingID { get; set; }
         public int RoomID { get; set; }
-        public string Username { get; set; }
         public DateTime CheckInDate { get; set; }
         public DateTime CheckOutDate { get; set; }
         private double _totalAmount;
@@ -37,6 +36,9 @@ namespace Interfaccia_C_.ViewModel
                 if (_totalAmount != value)
                 {
                     _totalAmount = value;
+
+                    Debug.WriteLine($"TotalAmount updated to: {value}");
+
                     OnPropertyChanged(); // Notifica la UI del cambiamento
                 }
             }
@@ -61,6 +63,20 @@ namespace Interfaccia_C_.ViewModel
         public ICommand ConfermaPrenotazioneCommand { get; }
         public ICommand ApplicaScontoCommand { get; }
 
+        private int _pointsSpent;
+        public int PointsSpent
+        {
+            get => _pointsSpent;
+            set
+            {
+                if (_pointsSpent != value)
+                {
+                    _pointsSpent = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
 
         public BookingPageViewModel(Booking booking)
         {
@@ -68,7 +84,6 @@ namespace Interfaccia_C_.ViewModel
             HotelID = booking.hotelID;
             BookingID = booking.bookingID;
             RoomID = booking.roomID;
-            Username = booking.username;
             CheckInDate = booking.checkInDate;
             CheckOutDate = booking.checkOutDate;
             TotalAmount = booking.totalAmount;
@@ -83,7 +98,6 @@ namespace Interfaccia_C_.ViewModel
 
             Debug.WriteLine($"Booking ID: {booking.bookingID}");
             Debug.WriteLine($"Room ID: {booking.roomID}");
-            Debug.WriteLine($"Username: {booking.username}");
             Debug.WriteLine($"Check-in Date: {booking.checkInDate}");
             Debug.WriteLine($"Check-out Date: {booking.checkOutDate}");
             Debug.WriteLine($"Total Amount: {booking.totalAmount:C}");
@@ -112,7 +126,7 @@ namespace Interfaccia_C_.ViewModel
 
 
             ConfermaPrenotazioneCommand = new Command(() => PrenotaStanza(booking));
-            ApplicaScontoCommand = new Command(() => ApplicaSconto());
+            ApplicaScontoCommand = new Command(async () => await ApplicaSconto());
         }
             public ImageSource GetImageSource(string imagePath)
         {
@@ -129,12 +143,82 @@ namespace Interfaccia_C_.ViewModel
 
      
 
-        private void ApplicaSconto()
+        private async Task ApplicaSconto()
         {
-            // Esempio di sconto del 10%
-            Application.Current.MainPage.DisplayAlert("Sconto Applicato", "È stato applicato uno sconto del 10%.", "OK");
-            //esempio cambia total amount
+            try
+            {
+                var token = await SecureStorage.GetAsync("jwt_token");
+                if (string.IsNullOrEmpty(token))
+                {
+                    await Application.Current.MainPage.DisplayAlert("Errore", "Token mancante", "OK");
+                    return;
+                }
 
+                // Costruisci payload
+                var requestBody = new
+                {
+                    TotalAmount = this.TotalAmount
+                };
+
+                var json = JsonSerializer.Serialize(requestBody);
+
+                Debug.WriteLine(json);
+
+                using var client = new HttpClient();
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await client.PostAsync("http://localhost:9000/previewDiscount", content);
+
+                var responseStr = await response.Content.ReadAsStringAsync();
+
+                Debug.WriteLine(responseStr);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Deserializzi la risposta
+                    var result = JsonSerializer.Deserialize<PreviewDiscountResponse>(responseStr);
+
+                    // Adesso hai:
+                    double discountedPrice = result.discounted_price;
+                    int pointsUsed = result.points_used;
+
+                    // Qui controlli se i punti usati sono 0 => "Non hai abbastanza punti..."
+                    if (pointsUsed == 0)
+                    {
+                        await Application.Current.MainPage.DisplayAlert(
+                            "Nessuno sconto applicabile",
+                            "Non hai abbastanza punti per ottenere uno sconto.",
+                            "OK"
+                        );
+                        return;
+                    }
+
+                    // Altrimenti mostri la preview con sconto > 0
+                    await Application.Current.MainPage.DisplayAlert(
+                        "Anteprima Sconto",
+                        $"Prezzo originale: {this.TotalAmount}\n" +
+                        $"Prezzo scontato: {discountedPrice}\n" +
+                        $"Punti usati: {pointsUsed}",
+                        "OK"
+                    );
+                    await Microsoft.Maui.ApplicationModel.MainThread.InvokeOnMainThreadAsync(() =>
+                    {
+                        this.TotalAmount = discountedPrice;
+                        this.PointsSpent = pointsUsed;
+                    });
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Errore", responseStr, "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Errore", ex.Message, "OK");
+            }
 
         }
 
@@ -163,8 +247,13 @@ namespace Interfaccia_C_.ViewModel
                 RoomID = booking.roomID,
                 CheckInDate = booking.checkInDate.ToString("yyyy-MM-dd"),
                 CheckOutDate = booking.checkOutDate.ToString("yyyy-MM-dd"),
-                TotalAmount = booking.totalAmount,
-                Status = "Confirmed"
+                TotalAmount = this.TotalAmount,
+                Status = "Confirmed",
+                RoomType = booking.roomType,
+                Guests = booking.guests,
+                Nights = booking.nights,
+
+                PointsSpent = this.PointsSpent
             };
 
             var json = JsonSerializer.Serialize(payload);
@@ -183,10 +272,10 @@ namespace Interfaccia_C_.ViewModel
                         $"Hai prenotato la stanza: {booking.roomName}\n" +
                         $"Check-in: {booking.checkInDate.ToShortDateString()}\n" +
                         $"Check-out: {booking.checkOutDate.ToShortDateString()}\n" +
-                        $"Totale: {booking.totalAmount:C}",
+                        $"Totale: {this.TotalAmount:C}",
                         "OK");
 
-                    await Shell.Current.GoToAsync("MainPage");
+                    await Shell.Current.GoToAsync("//MainPage");
 
                 }
                 else
@@ -200,6 +289,15 @@ namespace Interfaccia_C_.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Errore", ex.Message, "OK");
             }
         }
+
+        public class PreviewDiscountResponse
+        {
+            public string status { get; set; }
+            public double discounted_price { get; set; }
+            public int points_used { get; set; }
+            public double original_price { get; set; }
+        }
+
 
     }
 

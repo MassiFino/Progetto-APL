@@ -43,6 +43,8 @@ namespace Interfaccia_C_.ViewModel
             public string Role { get; set; }
             public string PImage { get; set; }
 
+            public int Points { get; set; }
+
         }
         // Proprietà per il binding
         public string UserName
@@ -61,6 +63,20 @@ namespace Interfaccia_C_.ViewModel
         {
             get => role;
             set => SetProperty(ref role, value);
+        }
+
+        private int _puntiFedelta;
+        public int PuntiFedelta
+        {
+            get => _puntiFedelta;
+            set
+            {
+                if (_puntiFedelta != value)
+                {
+                    _puntiFedelta = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         public ImageSource ProfileImage
@@ -187,6 +203,8 @@ namespace Interfaccia_C_.ViewModel
                         UserName = userData.Username;
                         Email = userData.Email;
                         Role = userData.Role;
+
+                        PuntiFedelta = userData.Points;
 
                         // Gestisci il percorso dell'immagine
                         string image = userData.PImage;

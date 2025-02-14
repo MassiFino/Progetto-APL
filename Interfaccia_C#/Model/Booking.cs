@@ -1,6 +1,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
+//using AudioUnit;
 
 namespace Interfaccia_C_.Model
 {
@@ -22,8 +23,13 @@ namespace Interfaccia_C_.Model
         public string hotelLocation { get; set; }
         public ImageSource ImageSource { get; set; }
 
-        public int hotelID { get; set; }  // URL o percorso dell'immagine della stanza
+        public int hotelID { get; set; }
+        
+        public string roomType { get; set; }
 
+        public int guests { get; set; }
+
+        public int nights { get; set; }
         // Proprietà UI: Sezione “Lascia Recensione”
         private bool isReviewVisible;
         public bool IsReviewVisible

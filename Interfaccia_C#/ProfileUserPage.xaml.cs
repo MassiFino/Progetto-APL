@@ -12,10 +12,11 @@ public partial class ProfileUserPage : ContentPage
         _viewModel = new ProfilUserPageViewModel(); // Crei un'istanza del ViewModel
         BindingContext = _viewModel;
     }
-    protected override void OnAppearing()
+    protected override async void OnAppearing()
     {
         base.OnAppearing();
-        _viewModel?.LoadUserData();  // Richiama la funzione di caricamento dei dati ogni volta che la pagina appare
+        await _viewModel.LoadUserData();
+        await _viewModel.LoadBookingData();
     }
     // Carica i dati dell'utente all'avvio
 

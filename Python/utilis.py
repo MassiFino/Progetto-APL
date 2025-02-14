@@ -155,3 +155,20 @@ def assign_points_for_review(review_text: str) -> int:
     points = base_points + bonus_for_length
     return points
 
+def apply_discount_by_points_euro(total_amount: float, user_points: int) -> tuple[float, int]:
+    """
+    Ogni punto vale 0.10€ di sconto,
+    con massimo sconto al 50% dell'importo.
+    Ritorna (discounted_price, points_used).
+    """
+    max_discount = total_amount * 0.5
+
+    potential_discount_value = user_points * 0.10
+
+    actual_discount = min(potential_discount_value, max_discount)
+
+    discounted_price = total_amount - actual_discount
+
+    points_used = int(actual_discount / 0.10)
+    
+    return discounted_price, points_used

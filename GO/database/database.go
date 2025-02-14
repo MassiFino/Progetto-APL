@@ -95,20 +95,23 @@ func RegisterUser(db *sql.DB, username, password, email, role string, pImage *st
 // Funzione che recupera i dati dell'utente dal database in base all'email
 func GetUser(db *sql.DB, username string) (*types.UserResponse, error) {
 	var user types.UserResponse
+	// Assumendo che la tabella users abbia colonna points (INT DEFAULT 0)
+	query := `SELECT Username, Email, ProfileImage, Role, points FROM users WHERE Username = ?`
 
-	query := "SELECT Username, Email, ProfileImage,role FROM users WHERE Username = ?"
-	row := db.QueryRow(query, username)
-
-	err := row.Scan(&user.Username, &user.Email, &user.PImage, &user.Role)
+	err := db.QueryRow(query, username).Scan(
+		&user.Username,
+		&user.Email,
+		&user.PImage,
+		&user.Role,
+		&user.Points,
+	)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			// Utente non trovato
 			return nil, nil
 		}
-		return nil, fmt.Errorf("errore durante la ricerca dell'utente: %v", err)
+		return nil, fmt.Errorf("errore QueryRow: %w", err)
 	}
-	// Log dei dati dell'utente recuperati
-	//fmt.Println("Dati dell'utente recuperati:", user)
+
 	return &user, nil
 }
 
@@ -578,11 +581,17 @@ func GetRooms(db *sql.DB, hotelID int) ([]types.Room, error) {
 
 func GetHotelReviews(db *sql.DB, hotelID int) ([]types.Review, error) {
 	query := `
-        SELECT r.RoomID, r.Name AS RoomName, rv.Username, rv.review, rv.rating
-        FROM rooms r
-        LEFT JOIN reviews rv ON r.RoomID = rv.roomID
-        WHERE r.HotelID = ?
-    `
+	SELECT 
+		r.RoomID, 
+		r.Name AS RoomName, 
+		rv.Username, 
+		rv.review, 
+		rv.rating
+	FROM rooms r
+	LEFT JOIN reviews rv ON r.RoomID = rv.roomID
+	WHERE r.HotelID = ?
+	`
+
 	rows, err := db.Query(query, hotelID)
 	if err != nil {
 		return nil, fmt.Errorf("errore durante l'esecuzione della query GetHotelReviews: %v", err)
@@ -590,16 +599,40 @@ func GetHotelReviews(db *sql.DB, hotelID int) ([]types.Review, error) {
 	defer rows.Close()
 
 	var reviews []types.Review
+
 	for rows.Next() {
 		var rev types.Review
-		if err := rows.Scan(&rev.RoomID, &rev.RoomName, &rev.Username, &rev.Comment, &rev.Rating); err != nil {
+		var username sql.NullString
+		var comment sql.NullString
+		var rating sql.NullFloat64
+
+		if err := rows.Scan(&rev.RoomID, &rev.RoomName, &username, &comment, &rating); err != nil {
 			return nil, fmt.Errorf("errore durante la scansione in GetHotelReviews: %v", err)
 		}
-		reviews = append(reviews, rev)
+		// Assegna i valori convertendo i valori NULL:
+		rev.Username = ""
+		if username.Valid {
+			rev.Username = username.String
+		}
+		rev.Comment = ""
+		if comment.Valid {
+			rev.Comment = comment.String
+		}
+		if rating.Valid {
+			rev.Rating = rating.Float64
+		} else {
+			rev.Rating = 0
+		}
+		// Aggiungi la recensione solo se almeno uno dei campi è valorizzato
+		if username.Valid || comment.Valid || rating.Valid {
+			reviews = append(reviews, rev)
+		}
 	}
+
 	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("errore durante l'iterazione in GetHotelReviews: %v", err)
+		return nil, fmt.Errorf("errore durancte l'iterazione delle righe in GetHotelReviews: %v", err)
 	}
+
 	return reviews, nil
 }
 
@@ -645,6 +678,19 @@ func AddBooking(db *sql.DB, username string, roomID int, checkInDate, checkOutDa
 	_, err := db.Exec(query, username, roomID, checkInDate, checkOutDate, totalAmount, status)
 	if err != nil {
 		return fmt.Errorf("errore durante l'inserimento della prenotazione: %w", err)
+	}
+	return nil
+}
+
+func UpdateUserPoints(db *sql.DB, username string, pointsToAdd int) error {
+	query := `
+        UPDATE users
+        SET points = points + ?
+        WHERE Username = ?
+    `
+	_, err := db.Exec(query, pointsToAdd, username)
+	if err != nil {
+		return fmt.Errorf("errore update punti: %w", err)
 	}
 	return nil
 }
