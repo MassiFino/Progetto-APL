@@ -8,63 +8,116 @@
              Padding="0">
 
     <ScrollView>
-        <VerticalStackLayout Padding="10">
-            <!-- Nome dell'hotel -->
-            <Label Text="{Binding Name}" 
-                   FontSize="24" 
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center" 
-                   TextColor="Black"/>
-                <!-- CarouselView per visualizzare una sola immagine alla volta -->
-            <CarouselView ItemsSource="{Binding ImageList}" HeightRequest="400" WidthRequest="400">
-                <CarouselView.ItemsLayout>
-                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="10" />
-                </CarouselView.ItemsLayout>
-                <CarouselView.ItemTemplate>
-                    <DataTemplate>
-                        <!-- Usa un Grid che riempie lo spazio disponibile -->
-                        <Grid HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
-                            <Image Source="{Binding .}" 
-               Aspect="AspectFit"
+        <VerticalStackLayout Padding="15" Spacing="25">
+
+            <!-- Sezione Nome dell'Hotel -->
+            <Label Text="{Binding Name}"
+           FontSize="36"
+           FontAttributes="Bold"
+           HorizontalOptions="Center"
+           TextColor="#FF6347"
+           Margin="0,10"/>
+
+            <!-- Immagine principale dell'hotel con effetto bordo arrotondato -->
+            <Border Stroke="#00BFFF" StrokeThickness="2" Padding="0" Margin="0,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+                <Image Source="{Binding ImageSource}"
+               Aspect="AspectFill"
+               HeightRequest="300"
+               WidthRequest="300"
                HorizontalOptions="Center"
-               VerticalOptions="Center" />
-                        </Grid>
-                    </DataTemplate>
-                </CarouselView.ItemTemplate>
-            </CarouselView>
+               VerticalOptions="CenterAndExpand"/>
+            </Border>
 
-
-
-            <!-- Descrizione dell'hotel -->
-            <Label Text="Descrizione" FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
-            <Label Text="{Binding Description}" 
-                   FontSize="14" 
+            <!-- Descrizione dell'hotel con un bordo -->
+            <Border Stroke="#FF4500" StrokeThickness="2" BackgroundColor="#FFF8DC" Padding="10" Margin="0,20">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+                <StackLayout>
+                    <Label Text="Descrizione"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#8B0000"
+                   HorizontalOptions="Start"
+                   Margin="0,5"/>
+                    <Label Text="{Binding Description}"
+                   FontSize="16"
                    LineBreakMode="WordWrap"
-                   HorizontalOptions="Start" 
-                   TextColor="Black" />
+                   HorizontalOptions="Start"
+                   TextColor="#696969"
+                   Margin="0,5"/>
+                </StackLayout>
+            </Border>
+
+            <!-- Separazione tra le sezioni -->
+            <BoxView HeightRequest="2" BackgroundColor="#00BFFF" HorizontalOptions="FillAndExpand" Margin="0,10"/>
 
             <!-- Location dell'hotel -->
-            <Label Text="{Binding Location}" 
-                   FontSize="16"
-                   HorizontalOptions="Start" 
-                   TextColor="Black"/>
-            <!-- Services dell'hotel -->
-            <Label Text="Servizi offerti dall'hotel" FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
+            <Label Text="Location"
+           FontSize="20"
+           FontAttributes="Bold"
+           TextColor="#008B8B" 
+           HorizontalOptions="Start"
+           Margin="0,5"/>
 
-            <Label Text="{Binding Services}" 
+            <Label Text="{Binding Location}"
            FontSize="16"
-           HorizontalOptions="Start" 
-           TextColor="Black"/>
+           HorizontalOptions="Start"
+           TextColor="#696969"
+           Margin="0,5"/>
+
+            <!-- Separazione -->
+            <BoxView HeightRequest="2" BackgroundColor="#00BFFF" HorizontalOptions="FillAndExpand" Margin="0,10"/>
+
+            <!-- Servizi dell'hotel -->
+            <Label Text="Servizi Offerti"
+           FontSize="20"
+           FontAttributes="Bold"
+           TextColor="#8A2BE2"  
+           HorizontalOptions="Start"
+           Margin="0,5"/>
+
+            <Border Stroke="#FF6347" StrokeThickness="2" BackgroundColor="#E6E6FA" Padding="10" Margin="0,10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="20" />
+                </Border.StrokeShape>
+                <Label Text="{Binding Services}"
+               FontSize="16"
+               HorizontalOptions="Start"
+               TextColor="#696969"
+               LineBreakMode="WordWrap"
+               Margin="0,5"/>
+            </Border>
+
+            <!-- Separazione -->
+            <BoxView HeightRequest="2" BackgroundColor="#00BFFF" HorizontalOptions="FillAndExpand" Margin="0,10"/>
+
             <!-- Rating dell'hotel -->
-            <Label Text="Valutazione" FontSize="Medium" FontAttributes="Bold" TextColor="Black"/>
-            <Label Text="{Binding Rating}" 
-                   FontSize="16"
-                   HorizontalOptions="Start" 
-                   TextColor="Black"/>
-            <!-- Sezione Disponibilità -->
+            <Label Text="Valutazione"
+           FontSize="20"
+           FontAttributes="Bold"
+           TextColor="#2F4F4F"
+           HorizontalOptions="Start"
+           Margin="0,5"/>
+
+            <Label Text="{Binding Rating}"
+           FontSize="16"
+           HorizontalOptions="Start"
+           TextColor="#696969"
+           Margin="0,5"/>
+
+            <!-- Separazione finale -->
+            <BoxView HeightRequest="2" BackgroundColor="#00BFFF" HorizontalOptions="FillAndExpand" Margin="0,10"/>
+
+           
+
+        <!-- Sezione Disponibilità -->
             <Label Text="Stanze disponibili" FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
 
-            <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightGreen" Padding="20"
+            <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightGreen" Padding="20 "  WidthRequest="1200"
        HorizontalOptions="Center" VerticalOptions="Center">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="30" />
@@ -99,7 +152,7 @@
                     <CollectionView ItemsSource="{Binding Rooms}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightYellow" Padding="10"
+                                <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightYellow" Padding="10" WidthRequest="1200"
                             HorizontalOptions="Center" VerticalOptions="Center">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="30" />
@@ -136,8 +189,8 @@
 
             <!-- Recensioni degli ospiti -->
             <Label Text="Recensioni degli ospiti" FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
-            <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="DarkOrange" Padding="10" 
-              HorizontalOptions="Center" VerticalOptions="Center"
+            <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="DarkOrange" Padding="10"  
+              HorizontalOptions="Center" VerticalOptions="Center"  WidthRequest="1200"
               StrokeShape="RoundRectangle 30">
                 <!-- CollectionView per le recensioni -->
                 <CollectionView ItemsSource="{Binding Reviews}">

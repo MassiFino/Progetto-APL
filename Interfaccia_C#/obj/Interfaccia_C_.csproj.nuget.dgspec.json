@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Massi\\Progetto-APL\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj": {}
+    "D:\\Archivio\\Ultimo Progetto\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Massi\\Progetto-APL\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj": {
+    "D:\\Archivio\\Ultimo Progetto\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Massi\\Progetto-APL\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj",
+        "projectUniqueName": "D:\\Archivio\\Ultimo Progetto\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj",
         "projectName": "Interfaccia_C_",
-        "projectPath": "C:\\Users\\Massi\\Progetto-APL\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj",
-        "packagesPath": "C:\\Users\\Massi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Massi\\Progetto-APL\\Progetto-APL\\Interfaccia_C#\\obj\\",
+        "projectPath": "D:\\Archivio\\Ultimo Progetto\\Progetto-APL\\Interfaccia_C#\\Interfaccia_C_.csproj",
+        "packagesPath": "C:\\Users\\dario\\.nuget\\packages\\",
+        "outputPath": "D:\\Archivio\\Ultimo Progetto\\Progetto-APL\\Interfaccia_C#\\obj\\",
         "projectStyle": "PackageReference",
         "crossTargeting": true,
         "fallbackFolders": [
-          "C:\\Users\\Massi\\.nuget\\packages"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\Massi\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\dario\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],

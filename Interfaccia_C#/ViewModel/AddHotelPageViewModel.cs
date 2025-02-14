@@ -685,6 +685,9 @@ namespace Interfaccia_C_.ViewModel
                         Description = string.Empty;
                         ImageHotel = null; // Supponendo che ImageHotel sia un oggetto o un percorso dell'immagine
                         HotelImageNames = string.Empty;
+                        RoomType = string.Empty;
+                        RoomImageNames= string.Empty;
+
                     }
                     else
                     {
@@ -702,7 +705,7 @@ namespace Interfaccia_C_.ViewModel
                         MaxGuests = 0; // Imposta il valore predefinito per il numero di ospiti
                         RoomType = string.Empty;
                         RoomImageNames= string.Empty;
-
+                        RoomImagePath = string.Empty;       // Svuota il percorso dell'immagine
 
                         // Mostra un altro messaggio
                         await Application.Current.MainPage.DisplayAlert(
@@ -801,7 +804,7 @@ namespace Interfaccia_C_.ViewModel
                         AdditionalPricePerNight = 0;
                         AdditionalMaxGuests = 0;
                         AdditionalRoomType = string.Empty;
-                        RoomImagePath = string.Empty;
+                        AdditionalRoomImagePath = string.Empty;
                         AdditionalRoomImageNames = string.Empty;
 
                     }
@@ -812,7 +815,7 @@ namespace Interfaccia_C_.ViewModel
                         AdditionalPricePerNight = 0;
                         AdditionalMaxGuests = 0;
                         AdditionalRoomType = string.Empty;
-                        RoomImagePath = string.Empty;
+                        AdditionalRoomImagePath = string.Empty;
                         AdditionalRoomImageNames = string.Empty;
                         // Reset delle visibilità per la schermata dell'hotel
                         IsHotelSaved = false;

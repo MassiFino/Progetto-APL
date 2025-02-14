@@ -56,7 +56,7 @@ namespace Interfaccia_C_.ViewModel
                 if (_roomName != value)
                 {
                     _roomName = value;
-                    OnPropertyChanged(nameof(RoomName));
+                    OnPropertyChanged();
                 }
             }
         }
@@ -69,7 +69,7 @@ namespace Interfaccia_C_.ViewModel
                 if (_roomDescription != value)
                 {
                     _roomDescription = value;
-                    OnPropertyChanged(nameof(RoomDescription));
+                    OnPropertyChanged();
                 }
             }
         }
@@ -103,10 +103,38 @@ namespace Interfaccia_C_.ViewModel
                 if (_roomType != value)
                 {
                     _roomType = value;
-                    OnPropertyChanged(nameof(RoomType));
+
+                    // Logica per aggiornare MaxGuests in base alla selezione di RoomType
+                    switch (_roomType)
+                    {
+                        case "Singola":
+                            MaxGuests = 1;
+                            break;
+                        case "Doppia":
+                            MaxGuests = 2;
+                            break;
+                        case "Tripla":
+                            MaxGuests = 3;
+                            break;
+                        case "Quadrupla":
+                            MaxGuests = 4;
+                            break;
+                        case "Suite":
+                            MaxGuests = 5;
+                            break;
+                        case "Deluxe":
+                            MaxGuests = 6;
+                            break;
+                        default:
+                            MaxGuests = 0; // O un altro valore di default
+                            break;
+                    }
+
+                    OnPropertyChanged();
                 }
             }
         }
+
 
         public bool IsRoomImageUploaded
         {
@@ -142,14 +170,16 @@ namespace Interfaccia_C_.ViewModel
             var payload = new
             {
                 HotelName = Name,
-                RoomName = RoomName,
-                RoomDescription = RoomDescription,
-                PricePerNight = PricePerNight,
-                MaxGuests = MaxGuests,
-                RoomType = RoomType,
+                RoomName = this.RoomName,
+                RoomDescription = this.RoomDescription,
+                PricePerNight = this.PricePerNight,
+                MaxGuests = this.MaxGuests,
+                RoomType = this.RoomType,
                 RoomImagePath
 
             };
+            Debug.WriteLine($"Immagine Stanza: {RoomImagePath}");
+
             // Converte il payload in JSON per migliorare la leggibilità
             var json = JsonSerializer.Serialize(payload);
 
@@ -162,7 +192,8 @@ namespace Interfaccia_C_.ViewModel
             request.Content = new StringContent(json, Encoding.UTF8, "application/json");
             var response = await client.SendAsync(request);
             if (response.IsSuccessStatusCode)
-            {
+            {                await Application.Current.MainPage.DisplayAlert("Successo", "Stanza inserita con successo!", "OK");
+
                // Svuota i campi
                 RoomName = string.Empty;            // Svuota il nome della stanza
                 RoomDescription = string.Empty;     // Svuota la descrizione della stanza
@@ -171,6 +202,7 @@ namespace Interfaccia_C_.ViewModel
                 RoomType = string.Empty;            // Svuota la tipologia di stanza
                 RoomImagePath = string.Empty;       // Svuota il percorso dell'immagine
                 RoomImageNames= string.Empty;
+
             }
             else
             {

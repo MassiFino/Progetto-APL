@@ -139,9 +139,7 @@
             <Label Text="Hotel aggiunto con successo!" FontSize="18" TextColor="DarkRed" 
        HorizontalOptions="Center" IsVisible="{Binding IsHotelSaved}" />
 
-            <!-- Pulsante per aggiungere una seconda stanza -->
-            <Button Text="Aggiungi un'altra stanza" IsVisible="{Binding IsHotelSaved}" Command="{Binding ShowAddRoomCommand}" 
-                    BackgroundColor="LightBlue" TextColor="White" CornerRadius="20" HeightRequest="50"/>
+
 
             <!-- Sezione per aggiungere una nuova stanza -->
             <Border IsVisible="{Binding IsAddRoomVisible}" Stroke="LightGray" StrokeThickness="1" BackgroundColor="LightCoral" Padding="20"

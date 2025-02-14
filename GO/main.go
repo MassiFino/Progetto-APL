@@ -154,7 +154,7 @@ func getHotelsHostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Printf("email ricevuta: %+v\n", req.Username)
+	fmt.Printf("Username ricevuta: %+v\n", req.Username)
 
 	// Recupera gli hotel dal database usando la funzione getHotelsByHost
 	hotels, err := database.GetHotelsHost(db, req.Username)

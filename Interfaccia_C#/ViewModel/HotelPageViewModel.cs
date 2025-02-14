@@ -201,45 +201,26 @@ namespace Interfaccia_C_.ViewModel
 
             if (!string.IsNullOrEmpty(hotel.Images?.Trim()))
             {
-                // Stampa il valore di hotel.Images
+                // Divido la stringa in più immagini
+                var imageList = hotel.Images.Split(';');
+                // Prendo la prima
+                var firstImage = imageList[0].Trim();
 
-                // Dividi la stringa delle immagini in base alla virgola
-                var imageList = hotel.Images.Split(',').Select(img => img.Trim()).ToList();
+                Debug.WriteLine("Path immagine (prima del combine): " + firstImage);
 
-
-                // Recupera il percorso della cartella principale del progetto
+                // Costruisco path completo
                 string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName;
+                var imagePath = Path.Combine(projectDirectory, firstImage);
+                Debug.WriteLine("Path completo: " + imagePath);
 
-
-                // Crea l'ObservableCollection di ImageSource
-                ImageList = new ObservableCollection<ImageSource>(
-                    imageList.Select(img =>
-                    {
-                        // Costruisci il percorso completo per ogni immagine
-                        var imagePath = Path.Combine(projectDirectory, img);
-
-                        // Stampa il percorso completo di ciascuna immagine
-                        Debug.WriteLine("Percorso immagine: " + imagePath);
-
-                        // Usa il metodo GetImageSource per ottenere l'immagine
-                        var imageSource = GetImageSource(imagePath);
-
-                        return imageSource;
-                    }).Where(img => img != null)  // Rimuovi gli oggetti nulli dalla lista
-                );
-
-                // Stampa la lista finale delle immagini caricate
-                Debug.WriteLine("Numero di immagini caricate: " + ImageList.Count);
-            }
-            else
-            {
-                // Se la stringa delle immagini è vuota o nulla, stampa un messaggio
-                Debug.WriteLine("La proprietà 'Images' è vuota o nulla.");
+                // Converto in ImageSource
+                ImageSource = GetImageSource(imagePath);
+                Debug.WriteLine("Immaginissima: " + hotel.ImageSource);
             }
 
         }
         private async void CercaStanza()
-        {                 // Si deve inserire quello fatto nel load Room
+        {                
 
             try
             {
@@ -385,7 +366,7 @@ namespace Interfaccia_C_.ViewModel
                             {
 
                                 Debug.WriteLine($"Immagine: {room.Images}");
-                                var imageList = room.Images.Split(',');
+                                var imageList = room.Images.Split(';');
                                 var firstImage = imageList[0].Trim();
                                 string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName;
                                 var imagePath = System.IO.Path.Combine(projectDirectory, firstImage);

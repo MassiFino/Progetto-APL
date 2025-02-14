@@ -36,7 +36,7 @@ type UserResponse struct {
 }
 
 type HotelRequest struct {
-	Username string `json:"username"`
+	Username string `json:"Username"`
 }
 
 type HotelResponse struct {
@@ -47,9 +47,11 @@ type HotelResponse struct {
 	Rating      float64  `json:"Rating,omitempty"` // Valutazione dell'hotel (opzionale)
 	Images      string   `json:"Images"`           // URL delle immagini dell'hotel
 }
+
 type BookingRequest struct {
 	Username string `json:"username"`
 }
+
 type BookingResponse struct {
 	BookingID     int     `json:"bookingID"`
 	RoomID        int     `json:"roomID"`
@@ -142,7 +144,7 @@ type RoomRequest struct {
 	PricePerNight   float64 `json:"PricePerNight"`
 	MaxGuests       int     `json:"MaxGuests"`
 	RoomType        string  `json:"RoomType"`
-	RoomImagePath   string  `json:"RoomImage"`
+	RoomImagePath   string  `json:"RoomImagePath"`
 }
 
 type SearchRequest struct {

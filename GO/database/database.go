@@ -127,15 +127,17 @@ func GetHotelsHost(db *sql.DB, username string) ([]types.HotelResponse, error) {
 	for rows.Next() {
 		var hotel types.HotelResponse
 		var services string
-		var rating float64
+		var rating sql.NullFloat64
 
 		err := rows.Scan(&hotel.Name, &hotel.Location, &hotel.Description, &services, &rating, &hotel.Images)
 		if err != nil {
 			return nil, fmt.Errorf("errore durante la scansione delle righe: %v", err)
 		}
 
-		hotel.Rating = rating
-		// Pulizia dei servizi: rimuovo spazi aggiuntivi per ogni elemento
+		if !rating.Valid {
+			rating.Float64 = 0.0 // Se NULL, assegna 0.0 come valore di default
+		}
+		hotel.Rating = rating.Float64 // Pulizia dei servizi: rimuovo spazi aggiuntivi per ogni elemento
 		var serviceList []string
 		for _, s := range strings.Split(services, ",") {
 			serviceList = append(serviceList, strings.TrimSpace(s))
@@ -389,7 +391,7 @@ func AddRoomHotel(db *sql.DB, name, location, description string, services []str
 	servicesStr := strings.Join(services, ",")
 
 	// Inserimento dell'hotel
-	query := "INSERT INTO hotels (Name, Location, Description, Services, UserHost, Images) VALUES (?, ?, ?, ?, ?, ?)"
+	query := "INSERT INTO hotels (Name, Location, Description, Services, UserHost, Images, Rating) VALUES (?, ?, ?, ?, ?, ?, 0)"
 
 	_, err := db.Exec(query, name, location, description, servicesStr, userHost, hotelImage)
 

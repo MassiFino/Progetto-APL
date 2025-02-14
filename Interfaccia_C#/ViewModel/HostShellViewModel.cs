@@ -52,7 +52,6 @@ namespace Interfaccia_C_.ViewModel
             // Prima carica i dati dell'utente
             var viewModel = new ProfilHostPageViewModel();
             viewModel.LoadUserData();
-            viewModel.LoadHotelData();
             // Carica i dati prima di navigare
             Debug.WriteLine("Sono qui dentro");
             // Poi naviga alla pagina del profilo

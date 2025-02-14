@@ -106,29 +106,32 @@ namespace Interfaccia_C_.ViewModel
 
                 // Deserializzi in List<Hotel>
                 var mete = JsonSerializer.Deserialize<List<Hotel>>(jsonResponse);
-
-                MeteGettonate.Clear();
-                foreach (var meta in mete)
+                // Controlla se "offerte" è null
+                if (mete != null)
                 {
-                    if (!string.IsNullOrEmpty(meta.Images?.Trim()))
+                    MeteGettonate.Clear();
+                    foreach (var meta in mete)
                     {
-                        // Divido la stringa in più immagini
-                        var imageList = meta.Images.Split(',');
-                        // Prendo la prima
-                        var firstImage = imageList[0].Trim();
+                        if (!string.IsNullOrEmpty(meta.Images?.Trim()))
+                        {
+                            // Divido la stringa in più immagini
+                            var imageList = meta.Images.Split(';');
+                            // Prendo la prima
+                            var firstImage = imageList[0].Trim();
 
-                        Debug.WriteLine("Path immagine (prima del combine): " + firstImage);
+                            Debug.WriteLine("Path immagine (prima del combine): " + firstImage);
 
-                        // Costruisco path completo
-                        string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName;
-                        var imagePath = Path.Combine(projectDirectory, firstImage);
-                        Debug.WriteLine("Path completo: " + imagePath);
+                            // Costruisco path completo
+                            string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName;
+                            var imagePath = Path.Combine(projectDirectory, firstImage);
+                            Debug.WriteLine("Path completo: " + imagePath);
 
-                        // Converto in ImageSource
-                        meta.ImageSource = GetImageSource(imagePath);
-                        Debug.WriteLine("Immaginissima: " + meta.ImageSource);
+                            // Converto in ImageSource
+                            meta.ImageSource = GetImageSource(imagePath);
+                            Debug.WriteLine("Immaginissima: " + meta.ImageSource);
+                        }
+                        MeteGettonate.Add(meta);
                     }
-                    MeteGettonate.Add(meta);
                 }
             }
             catch (Exception ex)
@@ -158,12 +161,17 @@ namespace Interfaccia_C_.ViewModel
                 var offerte = JsonSerializer.Deserialize<List<Hotel>>(jsonResponse);
 
                 OfferteImperdibili.Clear();
+                // Controlla se "offerte" è null
+                if (offerte != null)
+                {
+                   
+              
                 foreach (var offerta in offerte)
                 {
                     if (!string.IsNullOrEmpty(offerta.Images?.Trim()))
                     {
                         // Divido la stringa in più immagini
-                        var imageList = offerta.Images.Split(',');
+                        var imageList = offerta.Images.Split(';');
                         // Prendo la prima
                         var firstImage = imageList[0].Trim();
 
@@ -179,6 +187,7 @@ namespace Interfaccia_C_.ViewModel
                         Debug.WriteLine("Immaginissima: " + offerta.ImageSource);
                     }
                     OfferteImperdibili.Add(offerta);
+                }
                 }
             }
             catch (Exception ex)
