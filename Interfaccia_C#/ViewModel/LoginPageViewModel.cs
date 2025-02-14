@@ -52,6 +52,7 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
+
         public ICommand LoginCommand { get; }
 
         public ICommand GoToRegisterCommand { get; }

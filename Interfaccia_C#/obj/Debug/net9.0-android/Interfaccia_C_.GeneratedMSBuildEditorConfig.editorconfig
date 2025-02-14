@@ -42,6 +42,12 @@ build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.AppShell.xa
 build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
 build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
 
+[D:/Archivio/Ultimo Progetto/Progetto-APL/Interfaccia_C\#/BookingPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.BookingPage.xaml
+build_metadata.AdditionalFiles.TargetPath = BookingPage.xaml
+build_metadata.AdditionalFiles.RelativePath = BookingPage.xaml
+
 [D:/Archivio/Ultimo Progetto/Progetto-APL/Interfaccia_C\#/HostShell.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Interfaccia_C_.HostShell.xaml

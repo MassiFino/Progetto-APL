@@ -206,7 +206,7 @@ namespace Interfaccia_C_.ViewModel
 
                 var url = "http://localhost:9000/getHotelsHost";
                 using var client = new HttpClient();
-                await Task.Delay(2000); // Ritardo di 2 secondi (2000 ms)
+                await Task.Delay(200); // Ritardo di 2 secondi (2000 ms)
 
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
                 requestMessage.Content = new StringContent("{}", Encoding.UTF8, "application/json");

@@ -13,6 +13,7 @@ using Interfaccia_C_.Model;
 using System.Collections.ObjectModel;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Diagnostics;
 
 
 namespace Interfaccia_C_.ViewModel
@@ -72,7 +73,7 @@ namespace Interfaccia_C_.ViewModel
                 }
             }
         }
-        // Comando per il bottone "Prenota stanza"
+        // Comando per il bottone "Cerca stanza"
         public ICommand CercaStanzaCommand { get; }
         public class Room : INotifyPropertyChanged
         {
@@ -86,6 +87,7 @@ namespace Interfaccia_C_.ViewModel
             public int MaxGuests { get; set; }
             public string RoomType { get; set; }
             public string Images { get; set; }
+
             public ImageSource ImageSource { get; set; }
 
 
@@ -172,7 +174,34 @@ namespace Interfaccia_C_.ViewModel
         public HotelPageViewModel(Hotel hotel)
         {
             //Se è possibile cercare di mettere meno poccibile nel costruttore e creiamo un'altra funzione che carica i dati
-            PrenotaStanzaCommand ??= new Command<Room>(async (Room) => await PrenotaStanza(Room));
+            PrenotaStanzaCommand = new Command<Room>(async (roomSelezionata) =>
+            {
+                // Naviga con Shell, passando l'oggetto hotel
+                var booking = new Booking
+                {
+                    roomID = roomSelezionata.RoomID,
+                    roomName = roomSelezionata.RoomName,
+                    roomImage= roomSelezionata.Images,
+                    checkInDate = CheckInDate,
+                    checkOutDate = CheckOutDate,
+                    totalAmount = roomSelezionata.PricePerNight * (CheckOutDate - CheckInDate).Days,
+                    status = "Confirmed", // Imposta lo stato come "Confirmed" o qualunque altro valore desideri
+                    hotelID = hotel.HotelID, // Passa l'ID dell'hotel
+                    hotelName = hotel.Name, // Nome dell'hotel
+                    hotelLocation = this.Location, // Posizione dell'hotel
+                                                   // Aggiungi eventualmente altre proprietà come l'immagine della stanza
+                };
+                // Naviga alla pagina di prenotazione e passa l'oggetto Booking come parametro
+                var navParams = new Dictionary<string, object>
+                {
+                    ["Booking"] = booking
+                };
+
+
+                await Shell.Current.GoToAsync("BookingPage", navParams);
+            });
+
+
 
             HotelID = hotel.HotelID;
             Name = hotel.Name;
@@ -278,66 +307,7 @@ namespace Interfaccia_C_.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Errore", ex.Message, "OK");
             }
         }
-        private async Task PrenotaStanza(Room room)
-        {
-            // Controllo se la sessione (token) è attiva
-            var token = await SecureStorage.GetAsync("jwt_token");
-
-            // Calcola il numero di notti
-            int nights = (int)(CheckOutDate.Date - CheckInDate.Date).TotalDays;
-            if (nights <= 0)
-            {
-                await Application.Current.MainPage.DisplayAlert("Errore", "Il numero di notti deve essere maggiore di zero.", "OK");
-                return;
-            }
-
-            // Calcola l'importo totale
-            double totalAmount = room.PricePerNight * nights;
-
-            // Recupera l'username dal token oppure da una proprietà del ViewModel (se lo hai già estratto in precedenza)
-            // Qui presumo di avere un metodo GetLoggedUsername() che lo estrae dal token
-            // Crea il payload per la prenotazione
-            var payload = new
-            {
-                RoomID = room.RoomID,
-                CheckInDate = CheckInDate.ToString("yyyy-MM-dd"),
-                CheckOutDate = CheckOutDate.ToString("yyyy-MM-dd"),
-                TotalAmount = totalAmount,
-                Status = "Confirmed"
-            };
-
-            var json = JsonSerializer.Serialize(payload);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            try
-            {
-                using var client = new HttpClient();
-
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-                var response = await client.PostAsync("http://localhost:9000/addBooking", content);
-                if (response.IsSuccessStatusCode)
-                {
-                    await Application.Current.MainPage.DisplayAlert("Prenotazione Effettuata",
-                        $"Hai prenotato la stanza: {room.RoomName}\n" +
-                        $"Check-in: {CheckInDate.ToShortDateString()}\n" +
-                        $"Check-out: {CheckOutDate.ToShortDateString()}\n" +
-                        $"Totale: {totalAmount:C}",
-                        "OK");
-
-                    room.CanBook = false;
-                }
-                else
-                {
-                    await Application.Current.MainPage.DisplayAlert("Errore", "Si è verificato un errore durante la prenotazione. Riprova.", "OK");
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Eccezione in PrenotaStanza: {ex.Message}");
-                await Application.Current.MainPage.DisplayAlert("Errore", ex.Message, "OK");
-            }
-        }
+       
 
 
         public async System.Threading.Tasks.Task LoadRoomsAsync()
@@ -412,7 +382,13 @@ namespace Interfaccia_C_.ViewModel
                             Reviews.Add(review);
                         }
                     }
+                    else
+                    {
+                        Message = "Non ho trovato nessuna recensione";
+
+                    }
                 }
+           
                 else
                 {
                     Debug.WriteLine($"Errore nel recupero delle recensioni: {response.StatusCode}");
@@ -423,7 +399,17 @@ namespace Interfaccia_C_.ViewModel
                 Debug.WriteLine($"Eccezione durante il caricamento delle recensioni: {ex.Message}");
             }
         }
+        private string message;
 
+        public string Message
+        {
+            get => message;
+            set
+            {
+                message = value;
+                OnPropertyChanged(nameof(Message));
+            }
+        }
         // INotifyPropertyChanged
         public event PropertyChangedEventHandler PropertyChanged;
 

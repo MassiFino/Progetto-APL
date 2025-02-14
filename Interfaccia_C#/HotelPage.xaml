@@ -4,7 +4,7 @@
              x:Class="Interfaccia_C_.HotelPage"
              x:Name="HotelPageViewRoot"
              Title="Dettagli Hotel"
-             BackgroundColor="AliceBlue"
+             BackgroundColor="LightYellow"
              Padding="0">
 
     <ScrollView>
@@ -117,7 +117,7 @@
         <!-- Sezione Disponibilità -->
             <Label Text="Stanze disponibili" FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
 
-            <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightGreen" Padding="20 "  WidthRequest="1200"
+            <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightGreen" Padding="20 "  WidthRequest="1500"
        HorizontalOptions="Center" VerticalOptions="Center">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="30" />
@@ -152,8 +152,8 @@
                     <CollectionView ItemsSource="{Binding Rooms}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightYellow" Padding="10" WidthRequest="1200"
-                            HorizontalOptions="Center" VerticalOptions="Center">
+                                <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightYellow" Padding="10" WidthRequest="1400"
+                            HorizontalOptions="Center" VerticalOptions="Center" >
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="30" />
                                     </Border.StrokeShape>
@@ -190,7 +190,7 @@
             <!-- Recensioni degli ospiti -->
             <Label Text="Recensioni degli ospiti" FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
             <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="DarkOrange" Padding="10"  
-              HorizontalOptions="Center" VerticalOptions="Center"  WidthRequest="1200"
+              HorizontalOptions="Center" VerticalOptions="Center"  WidthRequest="1500"
               StrokeShape="RoundRectangle 30">
                 <!-- CollectionView per le recensioni -->
                 <CollectionView ItemsSource="{Binding Reviews}">
@@ -199,8 +199,11 @@
                             <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightSalmon" Padding="10" 
                                 HorizontalOptions="Center" VerticalOptions="Center"
                                 StrokeShape="RoundRectangle 30">
+                                
                                 <StackLayout Padding="10">
-                                    <!-- Nome del recensore -->
+                                    <Label Text="{Binding Message}" FontSize="20" FontAttributes="Bold" TextColor="Red" HorizontalOptions="Center" 
+                                IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
+                                        <!-- Nome del recensore -->
                                     <Label Text="{Binding ReviewerName}" FontAttributes="Bold" FontSize="16"/>
 
                                     <!-- Sezione dettagli recensione, visibile solo se IsReviewSectionVisible è true -->

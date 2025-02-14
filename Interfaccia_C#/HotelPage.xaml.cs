@@ -18,6 +18,8 @@ public partial class HotelPage : ContentPage, IQueryAttributable
         }
     }
 
+ 
+
     protected override async void OnAppearing()
     {
         base.OnAppearing();
