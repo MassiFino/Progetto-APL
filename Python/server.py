@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 import requests
 from user_owner import SignIn, SignUp
-from utilis import connect_go
+from utilis import connect_go, assign_points_for_booking, apply_discount_by_points_euro
 from typing import Optional
 from jwt_utils import create_jwt_token, decode_jwt_token
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -89,6 +89,13 @@ class BookingRequest(BaseModel):
     CheckOutDate: str 
     TotalAmount: float
     Status: str
+    RoomType: str
+    Guests: int
+    Nights: int
+    PointsSpent : int
+
+class PreviewDiscountRequest(BaseModel):
+    TotalAmount: float
 
 
 @app.post("/login")
@@ -417,18 +424,68 @@ def add_booking(request: BookingRequest, credentials: HTTPAuthorizationCredentia
         username = payload.get("username")
         if not username:
             raise HTTPException(status_code=400, detail="Username non trovato nei claims")
+    
+        # Aggiungi lo username al payload da inoltrare al servizio Go
+        data = request.dict()
+        data["Username"] = username
+        # Inoltra la richiesta al servizio Go tramite connect_go
+        response = connect_go("addBooking", data)
+
+        if response.get("status") == "success":
+            # 2) Calcola i punti
+            #    Prendendo i dati dalla request
+            total_amount = request.TotalAmount
+            room_type = request.RoomType
+            guests = request.Guests
+            nights = request.Nights
+
+            points_to_add = assign_points_for_booking(total_amount, room_type, guests, nights)
+
+            update_payload = {"Username": username, "PointsToAdd": points_to_add}
+
+            points_spent = getattr(request, "PointsSpent", 0)
+
+            points_net = points_to_add - points_spent
+
+            if points_net != 0:
+                update_payload = {"Username": username, "PointsToAdd": points_net}
+                connect_go("updateUserPoints", update_payload)
+            
+            print(f"[addBooking] Assegnati {points_to_add} punti a {username}")
+
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token scaduto")
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Token non valido")
-    
-    # Aggiungi lo username al payload da inoltrare al servizio Go
-    data = request.dict()
-    data["Username"] = username
 
-    try:
-        # Inoltra la richiesta al servizio Go tramite connect_go
-        response = connect_go("addBooking", data)
-        return response
-    except Exception as e:
-        raise HTTPException(status_code=502, detail=str(e))
+
+@app.post("/previewDiscount")
+def preview_discount(
+    request: PreviewDiscountRequest,
+    credentials: HTTPAuthorizationCredentials = Depends(security)  # <--- Serve per ottenerlo
+):
+    # 1) Decodifica token
+    token = credentials.credentials
+    payload = decode_jwt_token(token)
+    username = payload.get("username")
+    if not username:
+        raise HTTPException(status_code=400, detail="Username non presente nel token")
+
+    # 2) Recupera i punti da Go
+    user_data = connect_go("getUserData", {"Username": username})
+    current_points = user_data.get("Points", 0)
+
+    # 3) Calcolo sconto
+    discounted_price, points_used = apply_discount_by_points_euro(
+        request.TotalAmount,
+        current_points
+    )
+
+    return {
+        "status": "ok",
+        "discounted_price": discounted_price,
+        "points_used": points_used
+    }
