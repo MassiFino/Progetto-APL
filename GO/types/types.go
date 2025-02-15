@@ -211,3 +211,10 @@ type UpdatePointsRequest struct {
 	Username    string `json:"Username"`
 	PointsToAdd int    `json:"PointsToAdd"`
 }
+
+type SetInterestRequest struct {
+	RoomID       int     `json:"RoomID"`
+	PriceInitial float64 `json:"PriceInitial"`
+	MonitorValue float64 `json:"MonitorValue"`
+	Username     string  `json:"Username"` // Inoltrato dal gateway
+}

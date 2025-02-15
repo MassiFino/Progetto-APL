@@ -694,3 +694,19 @@ func UpdateUserPoints(db *sql.DB, username string, pointsToAdd int) error {
 	}
 	return nil
 }
+
+func InsertInterest(db *sql.DB, username string, roomID int, priceInitial, monitorValue float64) (int, error) {
+	query := `
+		INSERT INTO Interessi (Username, RoomID, PriceInitial, MonitorValue, DateAdded)
+		VALUES (?, ?, ?, ?, NOW())
+	`
+	result, err := db.Exec(query, username, roomID, priceInitial, monitorValue)
+	if err != nil {
+		return 0, fmt.Errorf("errore durante l'inserimento dell'interesse: %w", err)
+	}
+	interestID, err := result.LastInsertId()
+	if err != nil {
+		return 0, fmt.Errorf("errore nel recupero dell'ID: %w", err)
+	}
+	return int(interestID), nil
+}

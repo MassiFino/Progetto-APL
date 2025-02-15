@@ -153,31 +153,40 @@
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightYellow" Padding="10" WidthRequest="1400"
-                            HorizontalOptions="Center" VerticalOptions="Center" >
+                        HorizontalOptions="Center" VerticalOptions="Center">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="30" />
                                     </Border.StrokeShape>
-
-                                    <HorizontalStackLayout Spacing="10">
-                                        <Frame HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent"
-                                   CornerRadius="20" Padding="0" HeightRequest="150" WidthRequest="150">
-                                            <Image Source="{Binding ImageSource}" Aspect="AspectFill" WidthRequest="150" HeightRequest="150"
-                                       VerticalOptions="CenterAndExpand" />
+                                    <!-- Layout a Grid con 3 colonne: 150 (immagine), * (dettagli), 50 (campanella) -->
+                                    <Grid ColumnDefinitions="150,*,50" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+                                        <!-- Colonna 0: Immagine della stanza -->
+                                        <Frame Grid.Column="0" HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent"
+                           CornerRadius="20" Padding="0" HeightRequest="150" WidthRequest="150">
+                                            <Image Source="{Binding ImageSource}" Aspect="AspectFill"/>
                                         </Frame>
-
-                                        <VerticalStackLayout>
-                                            <Label Text="{Binding RoomName}" FontAttributes="Bold" FontSize="16" TextColor="Black" />
-                                            <Label Text="{Binding RoomDescription}" MaxLines="3" FontSize="14" TextColor="Black" />
-                                            <Label Text="Prezzo per notte:" FontAttributes="Bold" FontSize="14" TextColor="Black" />
-                                            <Label Text="{Binding PricePerNight}" FontSize="12" TextColor="Black" />
+                                        <!-- Colonna 1: Dettagli della stanza -->
+                                        <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center" Padding="10,0">
+                                            <Label Text="{Binding RoomName}" FontAttributes="Bold" FontSize="16" TextColor="Black"/>
+                                            <Label Text="{Binding RoomDescription}" MaxLines="3" LineBreakMode="TailTruncation" FontSize="14" TextColor="Black"/>
+                                            <Label Text="Prezzo per notte:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
+                                            <Label Text="{Binding PricePerNight, StringFormat='€ {0:F2}'}" FontSize="12" TextColor="Black"/>
+                                            <!-- Pulsante per prenotare stanza -->
                                             <Button Text="Prenota stanza" WidthRequest="200" HeightRequest="30"
-                                                FontSize="14" Padding="5" HorizontalOptions="Start"
-                                                Command="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.PrenotaStanzaCommand}"
-                                                CommandParameter="{Binding .}"
-                                                IsVisible="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.IsSearchMode}"
-                                                IsEnabled="{Binding CanBook}"/>
+                              FontSize="14" Padding="5" HorizontalOptions="Start"
+                              Command="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.PrenotaStanzaCommand}"
+                              CommandParameter="{Binding .}"
+                              IsVisible="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.IsSearchMode}"
+                              IsEnabled="{Binding CanBook}"/>
                                         </VerticalStackLayout>
-                                    </HorizontalStackLayout>
+                                        <!-- Colonna 2: Pulsante per impostare interesse (campanella) -->
+                                        <ImageButton Grid.Column="2" 
+                                 Source="bell.png"
+                                 BackgroundColor="Transparent"
+                                 Command="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.SetInterestCommand}"
+                                 CommandParameter="{Binding}"
+                                 VerticalOptions="Center" HorizontalOptions="Center"
+                                 WidthRequest="40" HeightRequest="40"/>
+                                    </Grid>
                                 </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -216,6 +225,7 @@
                                         <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
                                         <Label Text="{Binding Rating}" FontSize="12" TextColor="Black"/>
                                     </StackLayout>
+                                    
                                 </StackLayout>
                             </Border>
                         </DataTemplate>

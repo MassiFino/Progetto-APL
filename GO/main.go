@@ -596,6 +596,35 @@ func updateUserPointsHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status": "success", "message": "Punti aggiornati correttamente"}`))
 }
 
+func SetInterestHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.SetInterestRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	// Inserisci l'interesse nel database
+	interestID, err := database.InsertInterest(db, req.Username, req.RoomID, req.PriceInitial, req.MonitorValue)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore durante l'inserimento dell'interesse: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Prepara la risposta
+	response := map[string]interface{}{
+		"status":     "ok",
+		"message":    "Interesse impostato con successo",
+		"InterestID": interestID,
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
 func main() {
 	db = initializeDatabase() // Inizializza la connessione al database
 	defer db.Close()          // Chiude la connessione al termine del server
@@ -621,6 +650,7 @@ func main() {
 	http.HandleFunc("/getAvailableRooms", getAvailableRoomsHandler)
 	http.HandleFunc("/addBooking", addBookingHandler)
 	http.HandleFunc("/updateUserPoints", updateUserPointsHandler)
+	http.HandleFunc("/setInterest", SetInterestHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)

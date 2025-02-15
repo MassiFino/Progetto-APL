@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 import requests
 from user_owner import SignIn, SignUp
-from utilis import connect_go, assign_points_for_booking, apply_discount_by_points_euro
+from utilis import connect_go, assign_points_for_booking, apply_discount_by_points_euro, assign_points_for_review
 from typing import Optional
 from jwt_utils import create_jwt_token, decode_jwt_token
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -97,6 +97,11 @@ class BookingRequest(BaseModel):
 class PreviewDiscountRequest(BaseModel):
     TotalAmount: float
 
+
+class SetInterestRequest(BaseModel):
+    RoomID: int
+    PriceInitial: float
+    MonitorValue: float
 
 @app.post("/login")
 def login(request: LoginRequest):
@@ -244,14 +249,31 @@ def get_user_data(credentials: HTTPAuthorizationCredentials = Depends(security))
 @app.post("/addReview")
 def add_review(request: addReviewRequest):
     try:
-
+        # Invia la recensione al servizio Go
         response = connect_go("addReview", request.dict())
+        
+        # Se l'inserimento della recensione ha avuto successo, calcola i punti
+        if response.get("status") == "success":
+            review_text = request.Comment  # Assicurati che il campo sia "Comment"
+            username = request.Username
 
+            # Calcola i punti per la recensione (funzione definita in Utilis)
+            points_review = assign_points_for_review(review_text)
+
+            # Aggiorna i punti dell'utente nel sistema
+            update_payload = {
+                "Username": username,
+                "PointsToAdd": points_review
+            }
+            update_response = connect_go("updateUserPoints", update_payload)
+
+            print(f"[addReview] Assegnati {points_review} punti a {username}")
+        
         print(response)
         return response
+
     except ConnectionError as e:
         raise HTTPException(status_code=502, detail=str(e))
-    
         
 @app.post("/getReviews")
 def get_review(request: getReviewsRequest):
@@ -489,3 +511,22 @@ def preview_discount(
         "discounted_price": discounted_price,
         "points_used": points_used
     }
+
+@app.post("/setInterest")
+def set_interest(request: SetInterestRequest, credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    payload = decode_jwt_token(token)
+    username = payload.get("username")
+    if not username:
+        raise HTTPException(status_code=400, detail="Username non trovato nei claims")
+    
+    # Inoltra la richiesta al servizio Go
+    # Aggiungi lo username al payload se necessario
+    data = request.dict()
+    data["Username"] = username
+
+    try:
+        response = connect_go("setInterest", data)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))

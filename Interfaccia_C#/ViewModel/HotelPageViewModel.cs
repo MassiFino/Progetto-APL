@@ -104,9 +104,24 @@ namespace Interfaccia_C_.ViewModel
                 }
             }
 
+            private bool _isInterestSet = false;
+            public bool IsInterestSet
+            {
+                get => _isInterestSet;
+                set
+                {
+                    if (_isInterestSet != value)
+                    {
+                        _isInterestSet = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
+
             public event PropertyChangedEventHandler PropertyChanged;
             protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         }
 
 
@@ -169,6 +184,8 @@ namespace Interfaccia_C_.ViewModel
 
         // Proprietà calcolata per mostrare il messaggio "Nessuna stanza disponibile..."
         public bool NoRoomsAvailable => IsSearchMode && Rooms.Count == 0;
+
+        public ICommand SetInterestCommand { get; }
 
         // Costruttore che accetta un oggetto Hotel
         public HotelPageViewModel(Hotel hotel)
@@ -248,6 +265,8 @@ namespace Interfaccia_C_.ViewModel
                 ImageSource = GetImageSource(imagePath);
                 Debug.WriteLine("Immaginissima: " + hotel.ImageSource);
             }
+
+            SetInterestCommand = new Command<Room>(async (selectedRoom) => await OnSetInterest(selectedRoom));
 
         }
         private async void CercaStanza()
@@ -455,6 +474,59 @@ namespace Interfaccia_C_.ViewModel
             {
                 IsSearchEnabled = true;
                 SearchErrorMessage = string.Empty;
+            }
+        }
+
+        private async Task OnSetInterest(Room selectedRoom)
+        {
+            var token = await SecureStorage.GetAsync("jwt_token");
+            if (string.IsNullOrEmpty(token))
+            {
+                await Shell.Current.GoToAsync("//LoginPage");
+                return;
+            }
+
+            // Chiedi all'utente di inserire il valore (es. prezzo minimo o massimo) che vuole monitorare
+            string input = await Application.Current.MainPage.DisplayPromptAsync(
+                "Monitoraggio Prezzo",
+                "Inserisci il valore (es. prezzo target) da monitorare:",
+                placeholder: "Es. 150"
+            );
+
+            // Verifica che l'input sia valido (puoi aggiungere ulteriori controlli)
+            if (string.IsNullOrWhiteSpace(input) || !double.TryParse(input, out double monitorValue))
+            {
+                await Application.Current.MainPage.DisplayAlert("Errore", "Valore non valido", "OK");
+                return;
+            }
+
+            // Prepara il payload includendo il valore monitorato
+            var payload = new
+            {
+                RoomID = selectedRoom.RoomID,
+                PriceInitial = selectedRoom.PricePerNight,
+                MonitorValue = monitorValue  // il valore inserito dall'utente
+            };
+
+            var json = JsonSerializer.Serialize(payload);
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync("http://localhost:9000/setInterest", content);
+            if (response.IsSuccessStatusCode)
+            {
+                await Application.Current.MainPage.DisplayAlert("Interesse salvato",
+                    $"Monitorerai le variazioni rispetto a {monitorValue}. Riceverai notifiche se il prezzo o la disponibilità variano.",
+                    "OK");
+
+                // Aggiorna lo stato della camera per indicare che l'interesse è impostato
+                selectedRoom.IsInterestSet = true;
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                await Application.Current.MainPage.DisplayAlert("Errore", error, "OK");
             }
         }
 
