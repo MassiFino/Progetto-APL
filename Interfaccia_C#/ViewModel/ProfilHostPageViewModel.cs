@@ -49,7 +49,7 @@ namespace Interfaccia_C_.ViewModel
                     ["hotel"] = hotelSelezionato
                 };
 
-                await Shell.Current.GoToAsync("HotelPage", navParams);
+                await Shell.Current.GoToAsync("HotelHostPage", navParams);
             });
 
             // Imposta il comando per il pulsante "Visualizza"
