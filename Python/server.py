@@ -103,6 +103,14 @@ class SetInterestRequest(BaseModel):
     PriceInitial: float
     MonitorValue: float
 
+class DeleteRoomRequest(BaseModel):
+    RoomID: int
+
+
+class UpdateHotelDescriptionRequest(BaseModel):
+    HotelID: int
+    NewDescription: str
+    
 @app.post("/login")
 def login(request: LoginRequest):
     payload = {"Username": request.Username, "Password": request.Password}
@@ -411,6 +419,8 @@ def get_rooms(request: GetRoomsReviewsRequest):
     try:
         # Inoltra la richiesta al backend Go
         response = connect_go("getRooms", request.dict())
+        print(response)
+
         return response
     except Exception as e:
         raise HTTPException(status_code=502, detail=str(e))
@@ -419,6 +429,8 @@ def get_rooms(request: GetRoomsReviewsRequest):
 def get_hotel_reviews(request: GetRoomsReviewsRequest):
     try:
         response = connect_go("getHotelReviews", request.dict())
+
+        print(response)
         return response
     except Exception as e:
         raise HTTPException(status_code=502, detail=str(e))
@@ -530,3 +542,42 @@ def set_interest(request: SetInterestRequest, credentials: HTTPAuthorizationCred
         return response
     except Exception as e:
         raise HTTPException(status_code=502, detail=str(e))
+
+
+@app.post("/deleteRoom")
+def delete_room(request: DeleteRoomRequest, credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    if not token:
+        raise HTTPException(status_code=401, detail="Token mancante")
+    
+    payload = decode_jwt_token(token)
+    username = payload.get("username")
+
+    data = request.dict()
+    data["Username"] = username
+
+    response = connect_go("deleteRoom", data)
+    if response.get("status") == "success":
+        return response
+    else:
+        raise HTTPException(status_code=400, detail=response.get("message", "Errore sconosciuto"))
+
+
+@app.post("/updateHotelDescription")
+def update_hotel_description(request: UpdateHotelDescriptionRequest, credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    if not token:
+        raise HTTPException(status_code=401, detail="Token mancante")
+    
+    payload = decode_jwt_token(token)
+    username = payload.get("username")
+
+    data = request.dict()
+    data["Username"] = username
+
+
+    response = connect_go("updateHotelDescription", data)
+    if response.get("status") == "success":
+        return response
+    else:
+        raise HTTPException(status_code=400, detail=response.get("message", "Errore sconosciuto"))

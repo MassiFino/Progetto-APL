@@ -41,6 +41,7 @@ type HotelRequest struct {
 }
 
 type HotelResponse struct {
+	HotelID     int      `json:"HotelID"`
 	Name        string   `json:"Name"`             // Nome dell'hotel
 	Location    string   `json:"Location"`         // Posizione dell'hotel
 	Description string   `json:"Description"`      // Descrizione dettagliata dell'hotel
@@ -217,4 +218,15 @@ type SetInterestRequest struct {
 	PriceInitial float64 `json:"PriceInitial"`
 	MonitorValue float64 `json:"MonitorValue"`
 	Username     string  `json:"Username"` // Inoltrato dal gateway
+}
+
+type DeleteRoomRequest struct {
+	RoomID   int    `json:"RoomID"`
+	Username string `json:"Username"`
+}
+
+type UpdateHotelDescriptionRequest struct {
+	HotelID        int    `json:"HotelID"`
+	NewDescription string `json:"NewDescription"`
+	Username       string `json:"Username"`
 }

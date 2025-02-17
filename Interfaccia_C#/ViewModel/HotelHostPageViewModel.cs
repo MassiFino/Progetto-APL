@@ -24,7 +24,7 @@ namespace Interfaccia_C_.ViewModel
         public int HotelID { get; }
         public string Name { get; }
         public string Location { get; }
-        public string Description { get; }
+        public string Description { get; set; }
         public double Rating { get; }
         public string Services { get; set; }
         public string Images { get; set; }  // Stringa che contiene il path (o i path)
@@ -59,19 +59,6 @@ namespace Interfaccia_C_.ViewModel
             public ImageSource ImageSource { get; set; }
 
 
-            public bool CanBook
-            {
-                get => _canBook;
-                set
-                {
-                    if (_canBook != value)
-                    {
-                        _canBook = value;
-                        OnPropertyChanged();
-                    }
-                }
-            }
-
             private bool _isInterestSet = false;
             public bool IsInterestSet
             {
@@ -105,6 +92,16 @@ namespace Interfaccia_C_.ViewModel
         public ObservableCollection<Room> Rooms { get; set; } = new ObservableCollection<Room>();
         public ObservableCollection<Review> Reviews { get; set; } = new ObservableCollection<Review>();
 
+        // Comando per eliminare una stanza
+        public ICommand DeleteRoomCommand { get; }
+
+        // Comando per modificare la descrizione dell'hotel
+        public ICommand EditHotelDescriptionCommand { get; }
+
+        // Comando per aggiungere una stanza naviga alla pagina AddRoomPage
+        public ICommand AddRoomCommand { get; }
+
+
         // Costruttore che accetta un oggetto Hotel
         public HotelHostPageViewModel(Hotel hotel)
         {
@@ -114,6 +111,8 @@ namespace Interfaccia_C_.ViewModel
             Description = hotel.Description;
             Rating = hotel.Rating;
             Services = string.Join(", ", hotel.Services);
+
+            Debug.WriteLine("Hotel id: " + HotelID);
 
             if (!string.IsNullOrEmpty(hotel.Images?.Trim()))
             {
@@ -134,6 +133,10 @@ namespace Interfaccia_C_.ViewModel
                 Debug.WriteLine("Immaginissima: " + hotel.ImageSource);
             }
 
+            DeleteRoomCommand = new Command<Room>(async (room) => await OnDeleteRoom(room));
+            EditHotelDescriptionCommand = new Command(async () => await OnEditHotelDescription());
+            AddRoomCommand = new Command(async () => await OnAddRoom());
+
         }
 
 
@@ -145,8 +148,14 @@ namespace Interfaccia_C_.ViewModel
                 using var client = new HttpClient();
 
                 var json = JsonSerializer.Serialize(new { HotelID = HotelID });
+
+                Debug.WriteLine($"Hotel ID: {HotelID}");
+
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync("http://localhost:9000/getRooms", content);
+
+                var responseStr = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine("Response JSON: " + responseStr);
 
 
                 if (response.IsSuccessStatusCode)
@@ -197,6 +206,9 @@ namespace Interfaccia_C_.ViewModel
                 var content = new StringContent(payload, Encoding.UTF8, "application/json");
 
                 var response = await client.PostAsync("http://localhost:9000/getHotelReviews", content);
+
+                var responseStr = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine("Response JSON: " + responseStr);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -258,6 +270,85 @@ namespace Interfaccia_C_.ViewModel
             {
                 return null;
             }
+        }
+
+
+        private async Task OnDeleteRoom(Room room)
+        {
+            var token = await SecureStorage.GetAsync("jwt_token");
+            if (string.IsNullOrEmpty(token))
+            {
+                await Shell.Current.GoToAsync("//LoginPage");
+                return;
+            }
+
+            var payload = new { RoomID = room.RoomID};
+            var json = JsonSerializer.Serialize(payload);
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("http://localhost:9000/deleteRoom", content);
+            if (response.IsSuccessStatusCode)
+            {
+                await Application.Current.MainPage.DisplayAlert("Successo", "Stanza eliminata con successo", "OK");
+                Rooms.Remove(room);
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                await Application.Current.MainPage.DisplayAlert("Errore", error, "OK");
+            }
+        }
+
+        private async Task OnEditHotelDescription()
+        {
+            string newDescription = await Application.Current.MainPage.DisplayPromptAsync("Modifica Descrizione", "Inserisci la nuova descrizione dell'hotel:");
+            if (string.IsNullOrWhiteSpace(newDescription))
+            {
+                await Application.Current.MainPage.DisplayAlert("Errore", "Descrizione non valida", "OK");
+                return;
+            }
+            var token = await SecureStorage.GetAsync("jwt_token");
+            if (string.IsNullOrEmpty(token))
+            {
+                await Shell.Current.GoToAsync("//LoginPage");
+                return;
+            }
+            var payload = new { HotelID = HotelID, NewDescription = newDescription};
+            var json = JsonSerializer.Serialize(payload);
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            var response = await client.PostAsync("http://localhost:9000/updateHotelDescription", content);
+            if (response.IsSuccessStatusCode)
+            {
+                await Application.Current.MainPage.DisplayAlert("Successo", "Descrizione aggiornata", "OK");
+                Description = newDescription;
+                OnPropertyChanged(nameof(Description));
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                await Application.Current.MainPage.DisplayAlert("Errore", error, "OK");
+            }
+        }
+
+        private async Task OnAddRoom()
+        {
+            var navParams = new Dictionary<string, object>
+            {
+                ["hotel"] = new Hotel
+                {
+                    HotelID = this.HotelID,
+                    Name = this.Name,
+                    Location = this.Location,
+                    Description = this.Description,
+                    Rating = this.Rating,
+                    Services = this.Services.Split(",").ToList(),
+                    Images = this.Images
+                }
+            };
+            await Shell.Current.GoToAsync("AddRoomPage", navParams);
         }
 
     }

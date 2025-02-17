@@ -118,7 +118,7 @@ func GetUser(db *sql.DB, username string) (*types.UserResponse, error) {
 func GetHotelsHost(db *sql.DB, username string) ([]types.HotelResponse, error) {
 	fmt.Printf("Cerco hotel per l'utente: %s\n", username)
 
-	query := "SELECT Name, Location, Description, Services, Rating, Images FROM hotels WHERE UserHost = ?"
+	query := "SELECT HotelID,Name, Location, Description, Services, Rating, Images FROM hotels WHERE UserHost = ?"
 	rows, err := db.Query(query, username)
 	if err != nil {
 		return nil, fmt.Errorf("errore durante l'esecuzione della query: %v", err)
@@ -132,7 +132,7 @@ func GetHotelsHost(db *sql.DB, username string) ([]types.HotelResponse, error) {
 		var services string
 		var rating sql.NullFloat64
 
-		err := rows.Scan(&hotel.Name, &hotel.Location, &hotel.Description, &services, &rating, &hotel.Images)
+		err := rows.Scan(&hotel.HotelID, &hotel.Name, &hotel.Location, &hotel.Description, &services, &rating, &hotel.Images)
 		if err != nil {
 			return nil, fmt.Errorf("errore durante la scansione delle righe: %v", err)
 		}
@@ -140,7 +140,7 @@ func GetHotelsHost(db *sql.DB, username string) ([]types.HotelResponse, error) {
 		if !rating.Valid {
 			rating.Float64 = 0.0 // Se NULL, assegna 0.0 come valore di default
 		}
-		hotel.Rating = rating.Float64 // Pulizia dei servizi: rimuovo spazi aggiuntivi per ogni elemento
+		hotel.Rating = rating.Float64
 		var serviceList []string
 		for _, s := range strings.Split(services, ",") {
 			serviceList = append(serviceList, strings.TrimSpace(s))
@@ -709,4 +709,37 @@ func InsertInterest(db *sql.DB, username string, roomID int, priceInitial, monit
 		return 0, fmt.Errorf("errore nel recupero dell'ID: %w", err)
 	}
 	return int(interestID), nil
+}
+
+func DeleteRoom(db *sql.DB, roomID int, username string) error {
+	// La query elimina la stanza solo se esiste un hotel associato a quella stanza
+	// il cui host (UserHost) corrisponde al parametro 'username'
+	query := `
+		DELETE r 
+		FROM rooms r
+		JOIN hotels h ON r.HotelID = h.HotelID
+		WHERE r.RoomID = ? AND h.UserHost = ?`
+
+	_, err := db.Exec(query, roomID, username)
+	if err != nil {
+		return fmt.Errorf("errore durante l'eliminazione della stanza: %w", err)
+	}
+	return nil
+}
+
+func UpdateHotelDescription(db *sql.DB, hotelID int, newDescription, username string) error {
+
+	query := "UPDATE hotels SET Description = ? WHERE HotelID = ? AND UserHost = ?"
+	res, err := db.Exec(query, newDescription, hotelID, username)
+	if err != nil {
+		return fmt.Errorf("errore durante l'aggiornamento della descrizione: %w", err)
+	}
+	rowsAffected, err := res.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("errore nel recupero delle righe aggiornate: %w", err)
+	}
+	if rowsAffected == 0 {
+		return fmt.Errorf("nessun hotel aggiornato: controlla se il parametro Username è corretto")
+	}
+	return nil
 }

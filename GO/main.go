@@ -625,6 +625,52 @@ func SetInterestHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+func deleteRoomHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.DeleteRoomRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	// Chiama la funzione per eliminare la stanza
+	err := database.DeleteRoom(db, req.RoomID, req.Username)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore durante l'eliminazione della stanza: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status": "success", "message": "Stanza eliminata con successo"}`))
+}
+
+func updateHotelDescriptionHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.UpdateHotelDescriptionRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	// Aggiorna la descrizione dell'hotel (verificando che il proprietario sia corretto)
+	err := database.UpdateHotelDescription(db, req.HotelID, req.NewDescription, req.Username)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore durante l'aggiornamento della descrizione: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(`{"status": "success", "message": "Descrizione aggiornata con successo"}`))
+}
+
 func main() {
 	db = initializeDatabase() // Inizializza la connessione al database
 	defer db.Close()          // Chiude la connessione al termine del server
@@ -651,6 +697,8 @@ func main() {
 	http.HandleFunc("/addBooking", addBookingHandler)
 	http.HandleFunc("/updateUserPoints", updateUserPointsHandler)
 	http.HandleFunc("/setInterest", SetInterestHandler)
+	http.HandleFunc("/deleteRoom", deleteRoomHandler)
+	http.HandleFunc("/updateHotelDescription", updateHotelDescriptionHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)
