@@ -3,7 +3,7 @@ from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 import requests
 from user_owner import SignIn, SignUp
-from utilis import connect_go, assign_points_for_booking, apply_discount_by_points_euro, assign_points_for_review
+from utilis import connect_go, assign_points_for_booking, apply_discount_by_points_euro, assign_points_for_review, create_cost_chart
 from typing import Optional
 from jwt_utils import create_jwt_token, decode_jwt_token
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -110,6 +110,11 @@ class DeleteRoomRequest(BaseModel):
 class UpdateHotelDescriptionRequest(BaseModel):
     HotelID: int
     NewDescription: str
+
+class CostChartResponse(BaseModel):
+    status: str
+    chart: str
+    summary: dict
     
 @app.post("/login")
 def login(request: LoginRequest):
@@ -581,3 +586,37 @@ def update_hotel_description(request: UpdateHotelDescriptionRequest, credentials
         return response
     else:
         raise HTTPException(status_code=400, detail=response.get("message", "Errore sconosciuto"))
+
+@app.post("/getCostChart")
+def get_cost_chart(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    try:
+        payload_token = decode_jwt_token(token)
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token scaduto")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Token non valido")
+    
+    username = payload_token.get("username")
+    if not username:
+        raise HTTPException(status_code=400, detail="Username non presente nel token")
+    
+    try:
+        cost_data = connect_go("getCostData", {"Username": username})
+
+        print("Dati di costo ricevuti da Go:", cost_data)
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
+    
+    # Crea il grafico con la funzione definita in utilis.py
+    try:
+        chart_base64 = create_cost_chart(cost_data)
+
+        total_cost = sum(item["cost"] for item in cost_data)
+        summary = {"total": total_cost, "count": len(cost_data)}
+
+        print("Grafico generato (base64):", chart_base64[:50] + "...")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail="Errore nella creazione del grafico: " + str(e))
+    
+    return CostChartResponse(status="ok", chart=chart_base64, summary=summary)

@@ -230,3 +230,8 @@ type UpdateHotelDescriptionRequest struct {
 	NewDescription string `json:"NewDescription"`
 	Username       string `json:"Username"`
 }
+
+type CostData struct {
+	Month string  `json:"month"`
+	Cost  float64 `json:"cost"`
+}

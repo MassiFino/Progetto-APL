@@ -2,7 +2,9 @@ from email_validator import validate_email, EmailNotValidError
 import re
 import requests
 import json
-
+import io
+import base64
+import matplotlib.pyplot as plt
 
 def verifica_email(email):
     try:
@@ -172,3 +174,23 @@ def apply_discount_by_points_euro(total_amount: float, user_points: int) -> tupl
     points_used = int(actual_discount / 0.10)
     
     return discounted_price, points_used
+
+
+def create_cost_chart(cost_data):
+    """
+    cost_data: una lista di dizionari con le chiavi "month" e "cost"
+    Esempio: [{"month": "Marzo", "cost": 120.50}, {"month": "Aprile", "cost": 95.0}]
+    """
+    months = [item["month"] for item in cost_data]
+    costs = [item["cost"] for item in cost_data]
+    
+    plt.figure(figsize=(6,6))
+    plt.pie(costs, labels=months, autopct='%1.1f%%')
+    plt.title("Distribuzione dei Costi")
+    
+    buf = io.BytesIO()
+    plt.savefig(buf, format="png")
+    plt.close()
+    buf.seek(0)
+    chart_base64 = base64.b64encode(buf.getvalue()).decode("utf-8")
+    return chart_base64

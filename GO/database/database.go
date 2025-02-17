@@ -743,3 +743,30 @@ func UpdateHotelDescription(db *sql.DB, hotelID int, newDescription, username st
 	}
 	return nil
 }
+
+func GetCostData(db *sql.DB, username string) ([]types.CostData, error) {
+	query := `
+        SELECT DATE_FORMAT(CheckInDate, '%M') AS Month, SUM(TotalAmount) AS Cost
+        FROM bookings
+        WHERE Username = ?
+        GROUP BY Month
+    `
+	rows, err := db.Query(query, username)
+	if err != nil {
+		return nil, fmt.Errorf("errore durante l'esecuzione della query GetCostData: %w", err)
+	}
+	defer rows.Close()
+
+	var costs []types.CostData
+	for rows.Next() {
+		var cd types.CostData
+		if err := rows.Scan(&cd.Month, &cd.Cost); err != nil {
+			return nil, fmt.Errorf("errore durante la scansione dei dati: %w", err)
+		}
+		costs = append(costs, cd)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("errore iterando le righe: %w", err)
+	}
+	return costs, nil
+}

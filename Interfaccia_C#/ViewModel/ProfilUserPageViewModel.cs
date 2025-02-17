@@ -13,6 +13,7 @@ using Interfaccia_C_.Model; // Importa il modello Hotel
 using System.Net.Http.Headers; // Per AuthenticationHeaderValue
 using Microsoft.Maui.Storage;   // Per SecureStorage
 using System.Text;
+using System.Windows.Input;
 
 
 
@@ -27,6 +28,11 @@ namespace Interfaccia_C_.ViewModel
             OwnedBookings = new ObservableCollection<Booking>();  // Inizializza la lista degli hotel
             LoadUserData(); // Carica i dati dell'utente all'avvio
             LoadBookingData();
+
+            // Inizializza il comando per aggiornare il grafico dei costi
+            RefreshCostChartCommand = new Command(async () => await LoadCostChartAsync());
+            // È possibile chiamare LoadCostChartAsync() anche all'avvio
+            _ = LoadCostChartAsync();
 
         }
 
@@ -102,7 +108,37 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-      
+        private ImageSource _costChart;
+        public ImageSource CostChart
+        {
+            get => _costChart;
+            set
+            {
+                if (_costChart != value)
+                {
+                    _costChart = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _costDataSummary;
+        public string CostDataSummary
+        {
+            get => _costDataSummary;
+            set
+            {
+                if (_costDataSummary != value)
+                {
+                    _costDataSummary = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public ICommand RefreshCostChartCommand { get; }
+
+
 
         // Gestione delle modifiche alle proprietà
         private void SetProperty<T>(ref T field, T value, [CallerMemberName] string propertyName = null)
@@ -595,7 +631,49 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-
+        public async Task LoadCostChartAsync()
+        {
+            try
+            {
+                using var client = new HttpClient();
+                var content = new StringContent("{}", Encoding.UTF8, "application/json");
+                string token = await SecureStorage.GetAsync("jwt_token");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var response = await client.PostAsync("http://localhost:9000/getCostChart", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    Debug.WriteLine("Response JSON: " + jsonResponse);
+                    using var doc = JsonDocument.Parse(jsonResponse);
+                    // Leggi il grafico
+                    string base64 = doc.RootElement.GetProperty("chart").GetString();
+                    if (!string.IsNullOrEmpty(base64))
+                    {
+                        byte[] imageBytes = Convert.FromBase64String(base64);
+                        CostChart = ImageSource.FromStream(() => new MemoryStream(imageBytes));
+                    }
+                    else
+                    {
+                        await Application.Current.MainPage.DisplayAlert("Attenzione", "Non sono disponibili dati di costo.", "OK");
+                    }
+                    // (Opzionale) Leggi la sintesi dei dati e aggiorna una proprietà CostDataSummary, se presente
+                    if (doc.RootElement.TryGetProperty("summary", out JsonElement summaryElem))
+                    {
+                        string summaryText = $"Totale: {summaryElem.GetProperty("total").GetDouble()} € - Elementi: {summaryElem.GetProperty("count").GetInt32()}";
+                        // Ad esempio, se hai una proprietà CostDataSummary nel ViewModel:
+                        CostDataSummary = summaryText;
+                    }
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Errore", "Impossibile caricare il grafico dei costi", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Errore", ex.Message, "OK");
+            }
+        }
 
 
     }

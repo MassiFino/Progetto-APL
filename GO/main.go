@@ -671,6 +671,32 @@ func updateHotelDescriptionHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status": "success", "message": "Descrizione aggiornata con successo"}`))
 }
 
+func getCostDataHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.UserRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	// Recupera i dati di costo dal database usando il package database
+	costs, err := database.GetCostData(db, req.Username)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore nel recupero dei dati di costo: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Imposta l'header e restituisce i dati in formato JSON
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(costs); err != nil {
+		http.Error(w, "Errore nella codifica della risposta JSON", http.StatusInternalServerError)
+	}
+}
+
 func main() {
 	db = initializeDatabase() // Inizializza la connessione al database
 	defer db.Close()          // Chiude la connessione al termine del server
@@ -699,6 +725,7 @@ func main() {
 	http.HandleFunc("/setInterest", SetInterestHandler)
 	http.HandleFunc("/deleteRoom", deleteRoomHandler)
 	http.HandleFunc("/updateHotelDescription", updateHotelDescriptionHandler)
+	http.HandleFunc("/getCostData", getCostDataHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)
