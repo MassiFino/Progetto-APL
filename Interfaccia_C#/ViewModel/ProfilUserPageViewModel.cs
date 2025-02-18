@@ -22,16 +22,25 @@ namespace Interfaccia_C_.ViewModel
     public class ProfilUserPageViewModel : INotifyPropertyChanged
     {
         public ObservableCollection<Booking> OwnedBookings { get; set; }
+        public ObservableCollection<Interest> InterestedRooms { get; set; } = new ObservableCollection<Interest>();
+
+        public class Interest
+        {
+            public int InterestID { get; set; }
+            public int RoomID { get; set; }
+            public string RoomName { get; set; }
+            public string HotelName { get; set; }
+            public double MonitorValue { get; set; }
+        }
+
+
         // Costruttore del ViewModel
         public ProfilUserPageViewModel()
         {
             OwnedBookings = new ObservableCollection<Booking>();  // Inizializza la lista degli hotel
-            LoadUserData(); // Carica i dati dell'utente all'avvio
-            LoadBookingData();
 
             // Inizializza il comando per aggiornare il grafico dei costi
             RefreshCostChartCommand = new Command(async () => await LoadCostChartAsync());
-            // È possibile chiamare LoadCostChartAsync() anche all'avvio
             _ = LoadCostChartAsync();
 
         }
@@ -181,6 +190,9 @@ namespace Interfaccia_C_.ViewModel
         private Command<Booking> eliminaRecensioneCommand;
         public Command<Booking> EliminaRecensioneCommand =>
             eliminaRecensioneCommand ??= new Command<Booking>(async (booking) => await OnEliminaRecensione(booking));
+
+        public ICommand DeleteInterestCommand => new Command<Interest>(async (interest) => await DeleteInterestAsync(interest));
+
 
         // Metodo per ottenere l'immagine del profilo
         public ImageSource GetImageSource(string imagePath)
@@ -368,6 +380,12 @@ namespace Interfaccia_C_.ViewModel
         private async Task OnLasciaRecensione(Booking booking)
         {
             if (booking == null) return;
+
+            if (DateTime.Now < booking.checkOutDate)
+            {
+                await Application.Current.MainPage.DisplayAlert("Attenzione", "Non puoi lasciare una recensione prima del check-out.", "OK");
+                return;
+            }
 
             if (!string.IsNullOrWhiteSpace(booking.review))
             {
@@ -659,8 +677,18 @@ namespace Interfaccia_C_.ViewModel
                     // (Opzionale) Leggi la sintesi dei dati e aggiorna una proprietà CostDataSummary, se presente
                     if (doc.RootElement.TryGetProperty("summary", out JsonElement summaryElem))
                     {
-                        string summaryText = $"Totale: {summaryElem.GetProperty("total").GetDouble()} € - Elementi: {summaryElem.GetProperty("count").GetInt32()}";
-                        // Ad esempio, se hai una proprietà CostDataSummary nel ViewModel:
+                        double total = summaryElem.GetProperty("total").GetDouble();
+                        string monthlyText = "";
+                        if (summaryElem.TryGetProperty("monthly", out JsonElement monthlyElem))
+                        {
+                            foreach (var monthItem in monthlyElem.EnumerateArray())
+                            {
+                                string month = monthItem.GetProperty("month").GetString();
+                                double cost = monthItem.GetProperty("cost").GetDouble();
+                                monthlyText += $"{month}: {cost} €\n";
+                            }
+                        }
+                        string summaryText = $"Totale: {total} €\n{monthlyText}";
                         CostDataSummary = summaryText;
                     }
                 }
@@ -674,6 +702,74 @@ namespace Interfaccia_C_.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Errore", ex.Message, "OK");
             }
         }
+
+
+        public async Task LoadInterestsAsync()
+        {
+            try
+            {
+                var token = await SecureStorage.GetAsync("jwt_token");
+                if (string.IsNullOrEmpty(token))
+                {
+                    await Shell.Current.GoToAsync("//LoginPage");
+                    return;
+                }
+                using var client = new HttpClient();
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var content = new StringContent("{}", Encoding.UTF8, "application/json");
+
+                // Supponiamo che l'endpoint sia /getInterests
+                var response = await client.PostAsync("http://localhost:9000/getInterests", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    var interests = JsonSerializer.Deserialize<List<Interest>>(json);
+                    InterestedRooms.Clear();
+                    if (interests != null)
+                    {
+                        foreach (var interest in interests)
+                            InterestedRooms.Add(interest);
+                    }
+                }
+                else
+                {
+                    await Application.Current.MainPage.DisplayAlert("Errore", "Impossibile caricare gli interessi", "OK");
+                }
+            }
+            catch (Exception ex)
+            {
+                await Application.Current.MainPage.DisplayAlert("Errore", ex.Message, "OK");
+            }
+        }
+
+        private async Task DeleteInterestAsync(Interest interest)
+        {
+            var token = await SecureStorage.GetAsync("jwt_token");
+            if (string.IsNullOrEmpty(token))
+            {
+                await Shell.Current.GoToAsync("//LoginPage");
+                return;
+            }
+
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var payload = new { InterestID = interest.InterestID };
+            var json = JsonSerializer.Serialize(payload);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync("http://localhost:9000/deleteInterest", content);
+            if (response.IsSuccessStatusCode)
+            {
+                InterestedRooms.Remove(interest);
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                await Application.Current.MainPage.DisplayAlert("Errore", error, "OK");
+            }
+        }
+
 
 
     }

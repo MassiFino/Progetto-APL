@@ -255,3 +255,28 @@ type CostData struct {
 	Month string  `json:"month"`
 	Cost  float64 `json:"cost"`
 }
+
+type GetInterestsRequest struct {
+	Username string `json:"Username"`
+}
+
+// InterestResponse definisce la struttura dei dati di un interesse da restituire al client
+type InterestResponse struct {
+	InterestID   int     `json:"InterestID"`
+	Username     string  `json:"Username"`
+	RoomID       int     `json:"RoomID"`
+	RoomName     string  `json:"RoomName"`
+	HotelName    string  `json:"HotelName"`
+	MonitorValue float64 `json:"MonitorValue"`
+}
+
+type DeleteInterestRequest struct {
+	InterestID int    `json:"InterestID"`
+	Username   string `json:"Username"` // Questo campo potrà essere impostato dal middleware o dal handler se necessario
+}
+
+type UpdateRoomPriceRequest struct {
+	RoomID   int     `json:"RoomID"`
+	NewPrice float64 `json:"NewPrice"`
+	Username string  `json:"Username"` // Verrà passato dal client (da Python)
+}

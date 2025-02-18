@@ -51,7 +51,20 @@ namespace Interfaccia_C_.ViewModel
             public int RoomID { get; set; }
             public string RoomName { get; set; }
             public string RoomDescription { get; set; }
-            public double PricePerNight { get; set; }
+
+            private double _pricePerNight;
+            public double PricePerNight
+            {
+                get => _pricePerNight;
+                set
+                {
+                    if (_pricePerNight != value)
+                    {
+                        _pricePerNight = value;
+                        OnPropertyChanged();
+                    }
+                }
+            }
             public int MaxGuests { get; set; }
             public string RoomType { get; set; }
             public string Images { get; set; }
@@ -100,6 +113,9 @@ namespace Interfaccia_C_.ViewModel
 
         // Comando per aggiungere una stanza naviga alla pagina AddRoomPage
         public ICommand AddRoomCommand { get; }
+
+        public ICommand UpdateRoomPriceCommand => new Command<Room>(async (room) => await OnUpdateRoomPrice(room));
+
 
 
         // Costruttore che accetta un oggetto Hotel
@@ -349,6 +365,50 @@ namespace Interfaccia_C_.ViewModel
                 }
             };
             await Shell.Current.GoToAsync("AddRoomPage", navParams);
+        }
+
+        private async Task OnUpdateRoomPrice(Room room)
+        {
+            // Chiede all'utente il nuovo prezzo
+            string input = await Application.Current.MainPage.DisplayPromptAsync(
+                "Modifica Prezzo",
+                $"Inserisci il nuovo prezzo per la stanza \"{room.RoomName}\":",
+                placeholder: "Es. 120"
+            );
+
+            if (string.IsNullOrWhiteSpace(input) || !double.TryParse(input, out double newPrice))
+            {
+                await Application.Current.MainPage.DisplayAlert("Errore", "Valore non valido", "OK");
+                return;
+            }
+
+            // Verifica la presenza del token
+            var token = await SecureStorage.GetAsync("jwt_token");
+            if (string.IsNullOrEmpty(token))
+            {
+                await Shell.Current.GoToAsync("//LoginPage");
+                return;
+            }
+
+            // Prepara il payload con RoomID, NewPrice e Username (che verrà aggiunto nel backend)
+            var payload = new { RoomID = room.RoomID, NewPrice = newPrice };
+            var json = JsonSerializer.Serialize(payload);
+            using var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync("http://localhost:9000/updateRoomPrice", content);
+            if (response.IsSuccessStatusCode)
+            {
+                await Application.Current.MainPage.DisplayAlert("Successo", "Prezzo aggiornato con successo", "OK");
+                room.PricePerNight = newPrice;
+                // Se la classe Room implementa INotifyPropertyChanged, il binding verrà aggiornato.
+            }
+            else
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                await Application.Current.MainPage.DisplayAlert("Errore", error, "OK");
+            }
         }
 
     }

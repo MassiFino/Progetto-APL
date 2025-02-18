@@ -127,13 +127,13 @@
                     <CollectionView ItemsSource="{Binding Rooms}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightYellow" Padding="10" WidthRequest="1400"
-                                        HorizontalOptions="Center" VerticalOptions="Center">
-                                    <!-- Layout a Grid con 3 colonne: 150 (immagine), * (dettagli), 50 (pulsante elimina) -->
-                                    <Grid ColumnDefinitions="150,*,50" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+                                <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightYellow" Padding="10" 
+              HorizontalOptions="Center" VerticalOptions="Center">
+                                    <!-- Grid a 4 colonne: 150 (immagine), * (dettagli), 50 (elimina), 50 (modifica prezzo) -->
+                                    <Grid ColumnDefinitions="150,*,50,50" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
                                         <!-- Colonna 0: Immagine stanza -->
                                         <Frame Grid.Column="0" HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent"
-                                               CornerRadius="20" Padding="0" HeightRequest="150" WidthRequest="150">
+                 CornerRadius="20" Padding="0" HeightRequest="150" WidthRequest="150">
                                             <Image Source="{Binding ImageSource}" Aspect="AspectFill"/>
                                         </Frame>
                                         <!-- Colonna 1: Dettagli stanza -->
@@ -143,14 +143,20 @@
                                             <Label Text="Prezzo per notte:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
                                             <Label Text="{Binding PricePerNight, StringFormat='€ {0:F2}'}" FontSize="12" TextColor="Black"/>
                                         </VerticalStackLayout>
-                                        <!-- Colonna 2: Pulsante elimina stanza -->
+                                        <!-- Colonna 2: Pulsante per eliminare la stanza -->
                                         <ImageButton Grid.Column="2" 
-                                                     Source="trash.png"
-                                                     BackgroundColor="Transparent"
-                                                     Command="{Binding Source={x:Reference HotelHostPageViewRoot}, Path=BindingContext.DeleteRoomCommand}"
-                                                     CommandParameter="{Binding}"
-                                                     VerticalOptions="Center" HorizontalOptions="Center"
-                                                     WidthRequest="40" HeightRequest="40"/>
+                       Source="trash.png"
+                       BackgroundColor="Transparent"
+                       Command="{Binding Source={x:Reference HotelHostPageViewRoot}, Path=BindingContext.DeleteRoomCommand}"
+                       CommandParameter="{Binding}"
+                       VerticalOptions="Center" HorizontalOptions="Center"
+                       WidthRequest="40" HeightRequest="40"/>
+                                        <!-- Colonna 3: Pulsante per modificare il prezzo -->
+                                        <Button Grid.Column="3" Text="Modifica Prezzo"
+                  Command="{Binding Source={x:Reference HotelHostPageViewRoot}, Path=BindingContext.UpdateRoomPriceCommand}"
+                  CommandParameter="{Binding}"
+                  BackgroundColor="Blue" TextColor="White"
+                  CornerRadius="10" VerticalOptions="Center" WidthRequest="50" HeightRequest="40"/>
                                     </Grid>
                                 </Border>
                             </DataTemplate>

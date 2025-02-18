@@ -493,7 +493,6 @@ namespace Interfaccia_C_.ViewModel
                 placeholder: "Es. 150"
             );
 
-            // Verifica che l'input sia valido (puoi aggiungere ulteriori controlli)
             if (string.IsNullOrWhiteSpace(input) || !double.TryParse(input, out double monitorValue))
             {
                 await Application.Current.MainPage.DisplayAlert("Errore", "Valore non valido", "OK");

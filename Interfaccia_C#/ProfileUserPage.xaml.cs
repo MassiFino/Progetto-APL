@@ -17,6 +17,7 @@ public partial class ProfileUserPage : ContentPage
         base.OnAppearing();
         await _viewModel.LoadUserData();
         await _viewModel.LoadBookingData();
+        await _viewModel.LoadInterestsAsync();
     }
     // Carica i dati dell'utente all'avvio
 

@@ -119,6 +119,14 @@ class AveragePriceRequest(BaseModel):
     RoomType: str
     Location: str
 
+class DeleteInterestRequest(BaseModel):
+    InterestID: int
+
+
+class UpdateRoomPriceRequest(BaseModel):
+    RoomID: int
+    NewPrice: float
+
 @app.post("/login")
 def login(request: LoginRequest):
     payload = {"Username": request.Username, "Password": request.Password}
@@ -619,7 +627,7 @@ def get_cost_chart(credentials: HTTPAuthorizationCredentials = Depends(security)
         chart_base64 = create_cost_chart(cost_data)
 
         total_cost = sum(item["cost"] for item in cost_data)
-        summary = {"total": total_cost, "count": len(cost_data)}
+        summary = {"total": total_cost, "monthly": cost_data}
 
         print("Grafico generato (base64):", chart_base64[:50] + "...")
     except Exception as e:
@@ -640,6 +648,65 @@ def get_average_price(request: AveragePriceRequest,credentials: HTTPAuthorizatio
     
     try:
         response = connect_go("getAveragePrice", data)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+@app.post("/getInterests")
+def get_interests(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    payload = decode_jwt_token(token)
+    username = payload.get("username")
+    if not username:
+        raise HTTPException(status_code=400, detail="Username non trovato nei claims")
+    
+    # Prepara il payload per Go (lo username è sufficiente)
+    data = {"Username": username}
+
+    print("data: " + str(data))
+    try:
+        response = connect_go("getInterests", data)
+        print(f"Risposta ricevuta da Go (getInterests): {response}")
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+@app.post("/deleteInterest")
+def delete_interest(request: DeleteInterestRequest, credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    payload = decode_jwt_token(token)
+    username = payload.get("username")
+    if not username:
+        raise HTTPException(status_code=400, detail="Username non trovato nei claims")
+    
+    # Prepara il payload: aggiungi anche lo username se necessario
+    data = request.dict()
+    data["Username"] = username
+    print(f"delete interesse data: {data}")
+    
+    try:
+        # Utilizza la funzione connect_go per inoltrare la richiesta al servizio Go
+        response = connect_go("deleteInterest", data)
+        print(f"Risposta ricevuta da Go (deleteInterest): {response}")
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+@app.post("/updateRoomPrice")
+def update_room_price(request: UpdateRoomPriceRequest, credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
+    payload = decode_jwt_token(token)
+    username = payload.get("username")
+    if not username:
+        raise HTTPException(status_code=400, detail="Username non presente nei claims")
+    
+    # Prepara il payload per il servizio Go: aggiunge lo username
+    data = request.dict()
+    data["Username"] = username
+    print(f"Richiesta update prezzo: {data}")
+    
+    try:
+        response = connect_go("updateRoomPrice", data)
         return response
     except Exception as e:
         raise HTTPException(status_code=502, detail=str(e))

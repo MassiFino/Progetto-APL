@@ -9,6 +9,7 @@
     <!-- Avvolgo tutto il contenuto in uno ScrollView -->
     <ScrollView>
         <VerticalStackLayout Margin="10" Spacing="15">
+
             <!-- Sezione statica: Profilo utente -->
             <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="AntiqueWhite" Padding="20"
               HorizontalOptions="Center" VerticalOptions="Center"
@@ -44,60 +45,35 @@
                      VerticalOptions="Center" Margin="10"/>
                             <Label Text="{Binding PuntiFedelta, StringFormat='{0} punti'}" FontSize="14" TextColor="Black" 
                      VerticalOptions="Center" Margin="10" />
-                            <Label Text="Prenotazioni Totali:" FontAttributes="Bold" FontSize="16" TextColor="Black" 
-                     VerticalOptions="Center" Margin="10" />
-                            <Label Text="{Binding TotPren, StringFormat='{0} prenotazioni'}" FontSize="14" TextColor="Black" 
-                     VerticalOptions="Center" Margin="10" />
                         </HorizontalStackLayout>
                     </StackLayout>
                 </Grid>
             </Border>
 
             <!-- Sezione Storico dei Costi / Grafico -->
-            <Label Text="Storico dei Costi" 
-             FontSize="20" 
-             FontAttributes="Bold" 
-             TextColor="Black" 
+            <Label Text="Storico dei Costi" FontSize="20" FontAttributes="Bold" TextColor="Black" 
+             HorizontalOptions="Center" Margin="10"/>
+            <Label Text="{Binding CostDataSummary}" FontSize="16" TextColor="Black" HorizontalOptions="Center" Margin="5"/>
+            <Image Source="{Binding CostChart}" HeightRequest="400" WidthRequest="400" HorizontalOptions="Center"/>
+            <Button Text="Aggiorna Grafico Costi" Command="{Binding RefreshCostChartCommand}" 
+              HorizontalOptions="Center" Margin="10"/>
+            <Label Text="{Binding Message}" FontSize="18" FontAttributes="Bold" TextColor="Black" 
              HorizontalOptions="Center" 
-             Margin="10"/>
-            <!-- Label per mostrare la sintesi dei dati di costo -->
-            <Label Text="{Binding CostDataSummary}" 
-             FontSize="16" 
-             TextColor="Black" 
-             HorizontalOptions="Center" 
-             Margin="5"/>
-            <!-- Grafico in dimensioni maggiori -->
-            <Image Source="{Binding CostChart}" 
-             HeightRequest="400" 
-             WidthRequest="400" 
-             HorizontalOptions="Center"/>
-            <Button Text="Aggiorna Grafico Costi" 
-              Command="{Binding RefreshCostChartCommand}" 
-              HorizontalOptions="Center" 
-              Margin="10"/>
-            <!-- Messaggio in caso di nessuna prenotazione -->
-            <Label Text="{Binding Message}"
-             FontSize="18"
-             FontAttributes="Bold"
-             TextColor="Black"
-             HorizontalOptions="Center"
-             IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
+             IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}"/>
 
-            <!-- ScrollView per la lista delle prenotazioni -->
+            <!-- Sezione Prenotazioni (scrollabile) -->
             <ScrollView HeightRequest="500">
-                <!-- Lista delle prenotazioni -->
                 <CollectionView ItemsSource="{Binding OwnedBookings}">
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightGreen" Padding="20"
-                      HorizontalOptions="Center" VerticalOptions="Center"
-                      StrokeShape="RoundRectangle 30">
+                      HorizontalOptions="Center" VerticalOptions="Center" StrokeShape="RoundRectangle 30">
                                 <HorizontalStackLayout Spacing="20">
                                     <!-- Immagine della stanza -->
                                     <Frame HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent"
                          CornerRadius="20" Padding="0" HeightRequest="150" WidthRequest="150">
                                         <Image Source="{Binding ImageSource}" Aspect="AspectFill" WidthRequest="180" HeightRequest="180" 
-                           VerticalOptions="CenterAndExpand" />
+                           VerticalOptions="CenterAndExpand"/>
                                     </Frame>
                                     <!-- Informazioni sulla prenotazione -->
                                     <StackLayout VerticalOptions="CenterAndExpand" Spacing="10" HorizontalOptions="FillAndExpand">
@@ -113,13 +89,12 @@
                                             <Label Text="{Binding totalAmount, StringFormat='€ {0:F2}'}" FontSize="14" TextColor="Black"/>
                                             <Label Text="{Binding status}" FontSize="14" TextColor="Gray"/>
                                         </HorizontalStackLayout>
-                                        <!-- Sezione recensione con Grid per separare messaggio e dettagli -->
+                                        <!-- Sezione Recensione -->
                                         <Grid>
                                             <Grid.RowDefinitions>
                                                 <RowDefinition Height="Auto"/>
                                                 <RowDefinition Height="Auto"/>
                                             </Grid.RowDefinitions>
-                                            <!-- RIGA 1: Messaggio e pulsante "Elimina Recensione" -->
                                             <Grid Grid.Row="0">
                                                 <Grid.ColumnDefinitions>
                                                     <ColumnDefinition Width="*"/>
@@ -130,10 +105,8 @@
                                                 <Button Grid.Column="1" Text="Elimina Recensione" BackgroundColor="Red" 
                                 TextColor="White" CornerRadius="25" VerticalOptions="Center" Margin="5,0,0,0"
                                 Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.EliminaRecensioneCommand}"
-                                CommandParameter="{Binding .}" 
-                                IsVisible="{Binding IsDeleteReviewVisible}" />
+                                CommandParameter="{Binding .}" IsVisible="{Binding IsDeleteReviewVisible}" />
                                             </Grid>
-                                            <!-- RIGA 2: Dettagli della recensione -->
                                             <StackLayout Grid.Row="1" IsVisible="{Binding IsReviewSectionVisible}" Spacing="5" Padding="5">
                                                 <Label Text="Data Recensione:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
                                                 <Label Text="{Binding createdAt}" FontSize="12" TextColor="Black"/>
@@ -143,28 +116,22 @@
                                                 <Label Text="{Binding voto}" FontSize="12" TextColor="Black"/>
                                             </StackLayout>
                                         </Grid>
-                                        <!-- Pulsante per eliminare la prenotazione -->
                                         <Button Text="Elimina prenotazione"
-                                            Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.EliminaPrenotazioneCommand}"
-                                            CommandParameter="{Binding .}"
-                                            BackgroundColor="#007BFF"
-                                            TextColor="Black"
-                                            CornerRadius="25"
-                                            HeightRequest="40"
-                                            WidthRequest="200" />           
-                                        <!-- Pulsante "Lascia Recensione" -->
+                            Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.EliminaPrenotazioneCommand}"
+                            CommandParameter="{Binding .}"
+                            BackgroundColor="#007BFF" TextColor="Black"
+                            CornerRadius="25" HeightRequest="40" WidthRequest="200" />
                                         <Button Text="Lascia Recensione"
-                                            Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.LasciaRecensioneCommand}"
-                                            CommandParameter="{Binding .}" />   
-                                        <!-- Sezione per inserire la recensione, visibile se IsReviewVisible == true -->
+                            Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.LasciaRecensioneCommand}"
+                            CommandParameter="{Binding .}" />
                                         <StackLayout IsVisible="{Binding IsReviewVisible}" HeightRequest="180">
                                             <Label Text="Dai un voto (1-5):" TextColor="Black"/>
                                             <Slider Minimum="1" Maximum="5" Value="{Binding Rating}"/>
                                             <Editor Text="{Binding Comment}" TextColor="Black"/>
                                             <Label Text="{Binding IsReviewVisible}" FontSize="10" TextColor="Black"/>
                                             <Button Text="Invia Recensione"
-                                                  Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.InviaRecensioneCommand}"
-                                                  CommandParameter="{Binding .}" /> 
+                              Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.InviaRecensioneCommand}"
+                              CommandParameter="{Binding .}" />
                                         </StackLayout>
                                     </StackLayout>
                                 </HorizontalStackLayout>
@@ -173,6 +140,32 @@
                     </CollectionView.ItemTemplate>
                 </CollectionView>
             </ScrollView>
+
+            <!-- Sezione Stanze di Interesse -->
+            <Label Text="Stanze di Interesse" FontSize="20" FontAttributes="Bold" TextColor="Black"
+             HorizontalOptions="Center" Margin="10"/>
+            <CollectionView ItemsSource="{Binding InterestedRooms}" 
+                      EmptyView="Non sono presenti stanze di interesse">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BorderColor="DarkOrange" CornerRadius="10" Padding="10" Margin="5">
+                            <StackLayout Orientation="Horizontal" Spacing="10">
+                                <StackLayout VerticalOptions="Center">
+                                    <Label Text="{Binding RoomName}" FontSize="18" FontAttributes="Bold" TextColor="Black"/>
+                                    <Label Text="{Binding HotelName}" FontSize="16" TextColor="Gray"/>
+                                    <Label Text="{Binding MonitorValue, StringFormat='Monitorato a: {0:C}'}" FontSize="16" TextColor="DarkGreen"/>
+                                </StackLayout>
+                                <Button Text="Elimina interesse"
+                        Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.DeleteInterestCommand}"
+                        CommandParameter="{Binding}"
+                        BackgroundColor="Red" TextColor="White"
+                        CornerRadius="10" VerticalOptions="Center"/>
+                            </StackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

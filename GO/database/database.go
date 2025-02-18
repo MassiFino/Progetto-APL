@@ -697,7 +697,7 @@ func UpdateUserPoints(db *sql.DB, username string, pointsToAdd int) error {
 
 func InsertInterest(db *sql.DB, username string, roomID int, monitorValue float64) (int, error) {
 	query := `
-        INSERT INTO interests (Username, RoomID, MonitorValue, DateAdded)
+        INSERT INTO interests (Username, RoomID, MonitorValue, DataAdded)
         VALUES (?, ?, ?, NOW())
     `
 	result, err := db.Exec(query, username, roomID, monitorValue)
@@ -893,4 +893,56 @@ func GetAveragePriceForRoomTypeAndLocation(db *sql.DB, roomType, location string
 		return 0, nil
 	}
 	return avgPrice.Float64, nil
+}
+
+func GetInterests(db *sql.DB, username string) ([]types.InterestResponse, error) {
+	query := `
+        SELECT i.InterestID, i.Username, i.RoomID, r.Name AS RoomName, h.Name AS HotelName, i.MonitorValue
+        FROM interests i
+        JOIN rooms r ON i.RoomID = r.RoomID
+        JOIN hotels h ON r.HotelID = h.HotelID
+        WHERE i.Username = ?
+    `
+	rows, err := db.Query(query, username)
+	if err != nil {
+		return nil, fmt.Errorf("errore durante il recupero degli interessi: %w", err)
+	}
+	defer rows.Close()
+
+	var interests []types.InterestResponse
+	for rows.Next() {
+		var ir types.InterestResponse
+		if err := rows.Scan(&ir.InterestID, &ir.Username, &ir.RoomID, &ir.RoomName, &ir.HotelName, &ir.MonitorValue); err != nil {
+			return nil, fmt.Errorf("errore durante la scansione degli interessi: %w", err)
+		}
+		interests = append(interests, ir)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("errore durante l'iterazione degli interessi: %w", err)
+	}
+	return interests, nil
+}
+
+func DeleteInterest(db *sql.DB, interestID int, username string) error {
+	query := "DELETE FROM interests WHERE InterestID = ? AND Username = ?"
+	_, err := db.Exec(query, interestID, username)
+	if err != nil {
+		return fmt.Errorf("errore durante l'eliminazione dell'interesse: %w", err)
+	}
+	return nil
+}
+
+func UpdateRoomPrice(db *sql.DB, roomID int, newPrice float64, username string) error {
+	// Aggiorna il prezzo solo se la stanza appartiene a un hotel gestito dall'utente (username = UserHost)
+	query := `
+        UPDATE rooms r
+        JOIN hotels h ON r.HotelID = h.HotelID
+        SET r.PricePerNight = ?
+        WHERE r.RoomID = ? AND h.UserHost = ?
+    `
+	_, err := db.Exec(query, newPrice, roomID, username)
+	if err != nil {
+		return fmt.Errorf("errore durante l'aggiornamento del prezzo: %w", err)
+	}
+	return nil
 }

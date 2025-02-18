@@ -196,11 +196,14 @@ namespace Interfaccia_C_.ViewModel
                         return;
                     }
 
-                    // Altrimenti mostri la preview con sconto > 0
+                    double discountPercentage = ((this.TotalAmount - discountedPrice) / this.TotalAmount) * 100;
+
+                    // Mostra la preview con prezzo originale, scontato, punti usati e percentuale risparmiata
                     await Application.Current.MainPage.DisplayAlert(
                         "Anteprima Sconto",
-                        $"Prezzo originale: {this.TotalAmount}\n" +
-                        $"Prezzo scontato: {discountedPrice}\n" +
+                        $"Prezzo originale: {this.TotalAmount:C}\n" +
+                        $"Prezzo scontato: {discountedPrice:C}\n" +
+                        $"Risparmio: {discountPercentage:F2}%\n" +
                         $"Punti usati: {pointsUsed}",
                         "OK"
                     );

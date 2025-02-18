@@ -638,7 +638,6 @@ func SetInterestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf("Richiesta ricevuta per gli interessi: %+v\n", req)
 
-	// Inserisci l'interesse nel database (senza PriceInitial)
 	interestID, err := database.InsertInterest(db, req.Username, req.RoomID, req.MonitorValue)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Errore durante l'inserimento dell'interesse: %v", err), http.StatusInternalServerError)
@@ -750,6 +749,84 @@ func getAveragePriceHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+func GetInterestsHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.GetInterestsRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+	fmt.Printf("Richiesta di interessi per l'utente: %s\n", req.Username)
+
+	interests, err := database.GetInterests(db, req.Username)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore durante il recupero degli interessi: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(interests)
+}
+
+func DeleteInterestHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.DeleteInterestRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+	fmt.Printf("Richiesta di cancellazione interesse ricevuta: %+v\n", req)
+
+	// Chiamata alla funzione che elimina l'interesse dal database
+	if err := database.DeleteInterest(db, req.InterestID, req.Username); err != nil {
+		http.Error(w, fmt.Sprintf("Errore durante l'eliminazione dell'interesse: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Prepara la risposta JSON
+	response := map[string]interface{}{
+		"status":  "ok",
+		"message": "Interesse eliminato con successo",
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
+func UpdateRoomPriceHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.UpdateRoomPriceRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+	fmt.Printf("Richiesta di aggiornamento prezzo ricevuta: %+v\n", req)
+
+	// Chiamata alla funzione che aggiorna il prezzo nel database
+	if err := database.UpdateRoomPrice(db, req.RoomID, req.NewPrice, req.Username); err != nil {
+		http.Error(w, fmt.Sprintf("Errore durante l'aggiornamento del prezzo: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	response := map[string]interface{}{
+		"status":  "ok",
+		"message": "Prezzo aggiornato con successo",
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(response)
+}
+
 func main() {
 	db = initializeDatabase()            // Inizializza la connessione al database
 	defer db.Close()                     // Chiude la connessione al termine del server
@@ -781,6 +858,9 @@ func main() {
 	http.HandleFunc("/updateHotelDescription", updateHotelDescriptionHandler)
 	http.HandleFunc("/getCostData", getCostDataHandler)
 	http.HandleFunc("/getAveragePrice", getAveragePriceHandler)
+	http.HandleFunc("/getInterests", GetInterestsHandler)
+	http.HandleFunc("/deleteInterest", DeleteInterestHandler)
+	http.HandleFunc("/updateRoomPrice", UpdateRoomPriceHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)
