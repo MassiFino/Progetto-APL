@@ -477,7 +477,7 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-        private async Task OnSetInterest(Room selectedRoom)
+          private async Task OnSetInterest(Room selectedRoom)
         {
             var token = await SecureStorage.GetAsync("jwt_token");
             if (string.IsNullOrEmpty(token))
@@ -504,9 +504,9 @@ namespace Interfaccia_C_.ViewModel
             var payload = new
             {
                 RoomID = selectedRoom.RoomID,
-                PriceInitial = selectedRoom.PricePerNight,
                 MonitorValue = monitorValue  // il valore inserito dall'utente
             };
+            Debug.WriteLine("Paylod interessi: " + payload);
 
             var json = JsonSerializer.Serialize(payload);
             using var client = new HttpClient();
@@ -529,6 +529,8 @@ namespace Interfaccia_C_.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Errore", error, "OK");
             }
         }
+
+
 
     }
 }

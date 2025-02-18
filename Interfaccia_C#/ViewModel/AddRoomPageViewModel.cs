@@ -15,7 +15,7 @@ using Interfaccia_C_.Model;
 
 namespace Interfaccia_C_.ViewModel
 {
-    public class AddRoomPageViewModel
+    public class AddRoomPageViewModel : INotifyPropertyChanged
     {
         public string Name { get; }
         public string Location { get; }

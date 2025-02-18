@@ -2,11 +2,14 @@ package utils
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"progetto-go/database"
 	"progetto-go/types"
 	"sort"
 	"time"
+
+	"gopkg.in/gomail.v2"
 )
 
 // MetaConPunteggio include i dati della meta e il punteggio calcolato.
@@ -80,3 +83,81 @@ func StartPeriodicRatingUpdate(db *sql.DB, interval time.Duration) {
 		}
 	}()
 }
+
+// ----------------------------------Funzioni di notifica----------------------------
+
+var emailDialer *gomail.Dialer
+
+func InitializeEmail() {
+	emailDialer = gomail.NewDialer("smtp.gmail.com", 587, "universita012@gmail.com", "hksk dmnn vgxq wewm")
+}
+
+func SendEmail(to, subject, body string) error {
+	m := gomail.NewMessage()
+	m.SetHeader("From", "universita012@gmail.com")
+	m.SetHeader("To", to)
+	m.SetHeader("Subject", subject)
+	m.SetBody("text/html", body)
+
+	return emailDialer.DialAndSend(m)
+}
+
+func notifyInterests(db *sql.DB) {
+	interests, err := database.GetInterestsToNotify(db)
+	if err != nil {
+		log.Printf("Errore durante il recupero degli interessi: %v", err)
+		return
+	}
+
+	for _, interest := range interests {
+		userEmail, err := database.GetUserEmailByUsername(db, interest.Username)
+		if err != nil {
+			log.Printf("Errore durante il recupero dell'email per l'utente %s: %v", interest.Username, err)
+			continue
+		}
+
+		subject := "Notifica: Prezzo stanza in ribasso"
+		body := fmt.Sprintf("Ciao %s, il prezzo della stanza %s dell'hotel %s è sceso al di sotto di %.2f. Approfitta dell'offerta!",
+			interest.Username, interest.RoomName, interest.HotelName, interest.MonitorValue)
+		if err := SendEmail(userEmail, subject, body); err != nil {
+			log.Printf("Errore durante l'invio dell'email a %s: %v", userEmail, err)
+			continue
+		}
+	}
+}
+
+func notifyUpcomingCheckIn(db *sql.DB) {
+	upcomingBookings, err := database.GetUpcomingCheckInBookings(db)
+	if err != nil {
+		log.Printf("Errore durante il recupero delle prenotazioni in arrivo: %v", err)
+		return
+	}
+
+	for _, booking := range upcomingBookings {
+		subject := "Promemoria: Check-in in arrivo"
+		body := fmt.Sprintf("Ciao %s, il tuo check-in per la stanza %s è previsto per il %s.", booking.Username, booking.RoomName, booking.CheckInDate)
+
+		// Usa direttamente l'email che hai già ottenuto
+		if err := SendEmail(booking.Email, subject, body); err != nil {
+			log.Printf("Errore durante l'invio dell'email: %v", err)
+		}
+	}
+}
+
+func StartNotificationScheduler(db *sql.DB) {
+	checkInTicker := time.NewTicker(24 * time.Hour)   // Notifica Check-in ogni 24 ore
+	interestsTicker := time.NewTicker(12 * time.Hour) // Notifica interessi ogni 24 ore
+
+	go func() {
+		for {
+			select {
+			case <-checkInTicker.C:
+				notifyUpcomingCheckIn(db)
+			case <-interestsTicker.C:
+				notifyInterests(db)
+			}
+		}
+	}()
+}
+
+//----------------------------------Funzioni di notifica----------------------------

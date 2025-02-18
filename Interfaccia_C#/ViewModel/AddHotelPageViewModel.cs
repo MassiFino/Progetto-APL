@@ -823,6 +823,8 @@ namespace Interfaccia_C_.ViewModel
                         IsErrorVisible = false;
                         IsAddHotelVisible = true;
                         IsAddRoomVisible = false;
+                        await Shell.Current.GoToAsync("//ProfileHostPage");
+
                     }
                 }
                 else

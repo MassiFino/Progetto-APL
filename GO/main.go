@@ -10,9 +10,13 @@ import (
 	"progetto-go/types"
 	"progetto-go/utils"
 	"time"
+
+	"gopkg.in/gomail.v2"
 )
 
 var db *sql.DB // Variabile globale per la connessione al database
+
+var emailDialer *gomail.Dialer
 
 func initializeDatabase() *sql.DB {
 	db, err := database.ConnectDB("root", "1234", "db", "3306", "bookroom_db")
@@ -20,6 +24,9 @@ func initializeDatabase() *sql.DB {
 		log.Fatalf("Errore durante la connessione al database: %v", err)
 	}
 	return db
+}
+func initializeEmail() {
+	emailDialer = gomail.NewDialer("smtp.gmail.com", 587, "universita012@gmail.com", "hksk dmnn vgxq wewm")
 }
 
 func LogInHandler(w http.ResponseWriter, r *http.Request) {
@@ -564,10 +571,31 @@ func addBookingHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Chiama la funzione per inserire la prenotazione nel database
+	// Inserisce la prenotazione nel database
 	if err := database.AddBooking(db, req.Username, req.RoomID, req.CheckInDate, req.CheckOutDate, req.TotalAmount, req.Status); err != nil {
 		http.Error(w, fmt.Sprintf("Errore durante l'inserimento della prenotazione: %v", err), http.StatusInternalServerError)
 		return
+	}
+
+	// Recupera l'email dell'host
+	hostEmail, err := database.GetHostEmailByRoomID(db, req.RoomID)
+	if err != nil {
+		http.Error(w, "Errore nel recupero dell'email dell'host", http.StatusInternalServerError)
+		return
+	}
+
+	// Recupera i dettagli della stanza (nome della stanza e dell'hotel)
+	roomName, hotelName, err := database.GetRoomDetails(db, req.RoomID)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore nel recupero dei dettagli della stanza: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	// Invia email di notifica all'host con i dettagli della prenotazione
+	subject := "Nuova prenotazione ricevuta"
+	body := fmt.Sprintf("Hai ricevuto una nuova prenotazione da %s per la stanza '%s' dell'hotel '%s'.", req.Username, roomName, hotelName)
+	if err := utils.SendEmail(hostEmail, subject, body); err != nil {
+		log.Printf("Errore durante l'invio dell'email: %v", err)
 	}
 
 	w.Header().Set("Content-Type", "application/json")
@@ -601,15 +629,17 @@ func SetInterestHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
 		return
 	}
+	fmt.Printf("inseisco interessi")
 
 	var req types.SetInterestRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
 		return
 	}
+	fmt.Printf("Richiesta ricevuta per gli interessi: %+v\n", req)
 
-	// Inserisci l'interesse nel database
-	interestID, err := database.InsertInterest(db, req.Username, req.RoomID, req.PriceInitial, req.MonitorValue)
+	// Inserisci l'interesse nel database (senza PriceInitial)
+	interestID, err := database.InsertInterest(db, req.Username, req.RoomID, req.MonitorValue)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Errore durante l'inserimento dell'interesse: %v", err), http.StatusInternalServerError)
 		return
@@ -698,9 +728,10 @@ func getCostDataHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	db = initializeDatabase() // Inizializza la connessione al database
-	defer db.Close()          // Chiude la connessione al termine del server
-
+	db = initializeDatabase()            // Inizializza la connessione al database
+	defer db.Close()                     // Chiude la connessione al termine del server
+	utils.InitializeEmail()              // Inizializza il sistema di email
+	utils.StartNotificationScheduler(db) // Avvia il sistema di notifiche
 	utils.StartPeriodicRatingUpdate(db, 10*time.Minute)
 
 	http.HandleFunc("/login", LogInHandler)

@@ -183,7 +183,7 @@
                                  Source="bell.png"
                                  BackgroundColor="Transparent"
                                  Command="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.SetInterestCommand}"
-                                 CommandParameter="{Binding}"
+                                 CommandParameter="{Binding .}"
                                  VerticalOptions="Center" HorizontalOptions="Center"
                                  WidthRequest="40" HeightRequest="40"/>
                                     </Grid>

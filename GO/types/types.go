@@ -214,12 +214,32 @@ type UpdatePointsRequest struct {
 }
 
 type SetInterestRequest struct {
+	Username     string  `json:"Username"`
 	RoomID       int     `json:"RoomID"`
-	PriceInitial float64 `json:"PriceInitial"`
 	MonitorValue float64 `json:"MonitorValue"`
-	Username     string  `json:"Username"` // Inoltrato dal gateway
 }
 
+type SetInterestResponse struct {
+	InterestID   int     `json:"InterestID"`
+	Username     string  `json:"Username"`
+	RoomName     string  `json:"RoomName"`  // Nome della stanza
+	HotelName    string  `json:"HotelName"` // Nome dell'hotel
+	MonitorValue float64 `json:"MonitorValue"`
+}
+
+type UpcomingBooking struct {
+	BookingID   int
+	Username    string
+	RoomName    string
+	RoomID      int
+	CheckInDate string
+	Email       string
+}
+
+type AveragePriceRequest struct {
+	RoomType string `json:"RoomType"`
+	Location string `json:"Location"`
+}
 type DeleteRoomRequest struct {
 	RoomID   int    `json:"RoomID"`
 	Username string `json:"Username"`

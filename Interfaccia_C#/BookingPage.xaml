@@ -26,10 +26,10 @@
 
             <!-- Separazione tra le sezioni -->
             <Label Text="Immagine della stanza "  FontSize="20"
-  FontAttributes="Bold"
-  HorizontalOptions="Start"
-  TextColor="DarkMagenta" 
-  Margin="0,5"/>
+                FontAttributes="Bold"
+                HorizontalOptions="Start"
+                TextColor="DarkMagenta" 
+                Margin="0,5"/>
 
             <!-- Sezione Room Image -->
             <Border Stroke="#00BFFF" StrokeThickness="2" Padding="0" Margin="0,10">

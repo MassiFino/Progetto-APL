@@ -100,9 +100,8 @@ class PreviewDiscountRequest(BaseModel):
 
 class SetInterestRequest(BaseModel):
     RoomID: int
-    PriceInitial: float
     MonitorValue: float
-
+    
 class DeleteRoomRequest(BaseModel):
     RoomID: int
 
@@ -541,13 +540,16 @@ def set_interest(request: SetInterestRequest, credentials: HTTPAuthorizationCred
     # Aggiungi lo username al payload se necessario
     data = request.dict()
     data["Username"] = username
+    print(f"interessi data: {data}")
 
     try:
         response = connect_go("setInterest", data)
+        print(f"Risposta ricevuta da Go: {response}")
+
         return response
     except Exception as e:
         raise HTTPException(status_code=502, detail=str(e))
-
+    
 
 @app.post("/deleteRoom")
 def delete_room(request: DeleteRoomRequest, credentials: HTTPAuthorizationCredentials = Depends(security)):

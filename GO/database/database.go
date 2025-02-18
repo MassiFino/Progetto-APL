@@ -695,12 +695,12 @@ func UpdateUserPoints(db *sql.DB, username string, pointsToAdd int) error {
 	return nil
 }
 
-func InsertInterest(db *sql.DB, username string, roomID int, priceInitial, monitorValue float64) (int, error) {
+func InsertInterest(db *sql.DB, username string, roomID int, monitorValue float64) (int, error) {
 	query := `
-		INSERT INTO Interessi (Username, RoomID, PriceInitial, MonitorValue, DateAdded)
-		VALUES (?, ?, ?, ?, NOW())
-	`
-	result, err := db.Exec(query, username, roomID, priceInitial, monitorValue)
+        INSERT INTO interests (Username, RoomID, MonitorValue, DateAdded)
+        VALUES (?, ?, ?, NOW())
+    `
+	result, err := db.Exec(query, username, roomID, monitorValue)
 	if err != nil {
 		return 0, fmt.Errorf("errore durante l'inserimento dell'interesse: %w", err)
 	}
@@ -710,7 +710,6 @@ func InsertInterest(db *sql.DB, username string, roomID int, priceInitial, monit
 	}
 	return int(interestID), nil
 }
-
 func DeleteRoom(db *sql.DB, roomID int, username string) error {
 	// La query elimina la stanza solo se esiste un hotel associato a quella stanza
 	// il cui host (UserHost) corrisponde al parametro 'username'
@@ -769,4 +768,110 @@ func GetCostData(db *sql.DB, username string) ([]types.CostData, error) {
 		return nil, fmt.Errorf("errore iterando le righe: %w", err)
 	}
 	return costs, nil
+}
+
+// ----Notifiche
+func GetInterestsToNotify(db *sql.DB) ([]types.SetInterestResponse, error) {
+	query := `
+        SELECT i.InterestID, i.Username, r.Name as RoomName, h.Name as HotelName, i.MonitorValue
+        FROM interests i
+        JOIN rooms r ON i.RoomID = r.RoomID
+        JOIN hotels h ON r.HotelID = h.HotelID
+        WHERE r.PricePerNight < i.MonitorValue
+    `
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("errore durante il recupero degli interessi: %w", err)
+	}
+	defer rows.Close()
+
+	var responses []types.SetInterestResponse
+	for rows.Next() {
+		var resp types.SetInterestResponse
+		if err := rows.Scan(&resp.InterestID, &resp.Username, &resp.RoomName, &resp.HotelName, &resp.MonitorValue); err != nil {
+			return nil, fmt.Errorf("errore durante la scansione degli interessi: %w", err)
+		}
+		responses = append(responses, resp)
+		fmt.Printf("Recuperato interesse: ID=%d, Username=%s, RoomName=%s, HotelName=%s, MonitorValue=%.2f\n", resp.InterestID, resp.Username, resp.RoomName, resp.HotelName, resp.MonitorValue)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("errore durante l'iterazione degli interessi: %w", err)
+	}
+
+	fmt.Printf("Totale interessi recuperati: %d\n", len(responses))
+	return responses, nil
+}
+
+func GetUserEmailByUsername(db *sql.DB, username string) (string, error) {
+	var email string
+	query := "SELECT email FROM users WHERE username = ?"
+	err := db.QueryRow(query, username).Scan(&email)
+	if err != nil {
+		return "", fmt.Errorf("errore durante il recupero dell'email per l'utente %s: %v", username, err)
+	}
+	return email, nil
+}
+func GetUpcomingCheckInBookings(db *sql.DB) ([]types.UpcomingBooking, error) {
+	query := `
+        SELECT b.BookingID, b.Username, b.RoomID, r.Name, b.CheckInDate, u.Email
+        FROM bookings b
+        JOIN users u ON b.Username = u.Username
+        JOIN rooms r ON b.RoomID = r.RoomID
+        WHERE b.CheckInDate BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 7 DAY)
+    `
+	rows, err := db.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("errore durante il recupero delle prenotazioni in arrivo: %w", err)
+	}
+	defer rows.Close()
+
+	var bookings []types.UpcomingBooking
+	for rows.Next() {
+		var booking types.UpcomingBooking
+		if err := rows.Scan(&booking.BookingID, &booking.Username, &booking.RoomID, &booking.RoomName, &booking.CheckInDate, &booking.Email); err != nil {
+			return nil, fmt.Errorf("errore durante la scansione delle righe: %w", err)
+		}
+		bookings = append(bookings, booking)
+
+		// Simuliamo l'invio della notifica di check-in
+		fmt.Printf("Notifica: Prenotazione #%d per l'utente %s (stanza %s) il %s\n",
+			booking.BookingID, booking.Username, booking.RoomName, booking.CheckInDate)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("errore durante l'iterazione delle righe: %w", err)
+	}
+
+	return bookings, nil
+}
+func GetRoomDetails(db *sql.DB, roomID int) (string, string, error) {
+	query := `
+        SELECT r.Name AS RoomName, h.Name AS HotelName
+        FROM rooms r
+        JOIN hotels h ON r.HotelID = h.HotelID
+        WHERE r.RoomID = ?
+    `
+	var roomName, hotelName string
+	err := db.QueryRow(query, roomID).Scan(&roomName, &hotelName)
+	if err != nil {
+		return "", "", fmt.Errorf("errore nel recupero dei dettagli per RoomID %d: %w", roomID, err)
+	}
+	return roomName, hotelName, nil
+}
+
+func GetHostEmailByRoomID(db *sql.DB, roomID int) (string, error) {
+	var email string
+	query := `
+        SELECT u.Email
+        FROM users u
+        JOIN hotels h ON u.Username = h.UserHost
+        JOIN rooms r ON h.HotelID = r.HotelID
+        WHERE r.RoomID = ?
+    `
+	err := db.QueryRow(query, roomID).Scan(&email)
+	if err != nil {
+		return "", fmt.Errorf("errore durante il recupero dell'email dell'host: %w", err)
+	}
+	return email, nil
 }

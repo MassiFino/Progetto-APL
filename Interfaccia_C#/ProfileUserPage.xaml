@@ -145,17 +145,17 @@
                                         </Grid>
                                         <!-- Pulsante per eliminare la prenotazione -->
                                         <Button Text="Elimina prenotazione"
-                            Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.EliminaPrenotazioneCommand}"
-                            CommandParameter="{Binding .}"
-                            BackgroundColor="#007BFF"
-                            TextColor="Black"
-                            CornerRadius="25"
-                            HeightRequest="40"
-                            WidthRequest="150" />
+                                            Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.EliminaPrenotazioneCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#007BFF"
+                                            TextColor="Black"
+                                            CornerRadius="25"
+                                            HeightRequest="40"
+                                            WidthRequest="200" />           
                                         <!-- Pulsante "Lascia Recensione" -->
                                         <Button Text="Lascia Recensione"
-                            Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.LasciaRecensioneCommand}"
-                            CommandParameter="{Binding .}" />
+                                            Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.LasciaRecensioneCommand}"
+                                            CommandParameter="{Binding .}" />   
                                         <!-- Sezione per inserire la recensione, visibile se IsReviewVisible == true -->
                                         <StackLayout IsVisible="{Binding IsReviewVisible}" HeightRequest="180">
                                             <Label Text="Dai un voto (1-5):" TextColor="Black"/>
@@ -163,8 +163,8 @@
                                             <Editor Text="{Binding Comment}" TextColor="Black"/>
                                             <Label Text="{Binding IsReviewVisible}" FontSize="10" TextColor="Black"/>
                                             <Button Text="Invia Recensione"
-                              Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.InviaRecensioneCommand}"
-                              CommandParameter="{Binding .}" />
+                                                  Command="{Binding Source={x:Reference ProfilePageViewRoot}, Path=BindingContext.InviaRecensioneCommand}"
+                                                  CommandParameter="{Binding .}" /> 
                                         </StackLayout>
                                     </StackLayout>
                                 </HorizontalStackLayout>

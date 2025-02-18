@@ -18,7 +18,7 @@ using System.Diagnostics;
 
 namespace Interfaccia_C_.ViewModel
 {
-    public class BookingPageViewModel : ContentView
+    public class BookingPageViewModel : INotifyPropertyChanged
 {
         public int HotelID { get; set; }
         public string HotelName { get; set; }
@@ -107,7 +107,7 @@ namespace Interfaccia_C_.ViewModel
 
             if (!string.IsNullOrEmpty(booking.roomImage?.Trim()))
             {
-                // Divido la stringa in più immagini
+                // Divido la stringa in piï¿½ immagini
                 var imageList = booking.roomImage.Split(';');
                 // Prendo la prima
                 var firstImage = imageList[0].Trim();
@@ -224,7 +224,7 @@ namespace Interfaccia_C_.ViewModel
 
         private async Task PrenotaStanza(Booking booking)
         {
-            // Controllo se la sessione (token) è attiva
+            // Controllo se la sessione (token) ï¿½ attiva
             var token = await SecureStorage.GetAsync("jwt_token");
 
             // Calcola il numero di notti
@@ -238,7 +238,7 @@ namespace Interfaccia_C_.ViewModel
             // Calcola l'importo totale lo faccio nella pagina dell'hotel quando mando i dati
             // double totalAmount = room.PricePerNight * nights;
 
-            // Recupera l'username dal token oppure da una proprietà del ViewModel (se lo hai già estratto in precedenza)
+            // Recupera l'username dal token oppure da una proprietï¿½ del ViewModel (se lo hai giï¿½ estratto in precedenza)
             // Qui presumo di avere un metodo GetLoggedUsername() che lo estrae dal token
             // Crea il payload per la prenotazione
 
@@ -280,7 +280,7 @@ namespace Interfaccia_C_.ViewModel
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Errore", "Si è verificato un errore durante la prenotazione. Riprova.", "OK");
+                    await Application.Current.MainPage.DisplayAlert("Errore", "Si ï¿½ verificato un errore durante la prenotazione. Riprova.", "OK");
                 }
             }
             catch (Exception ex)
