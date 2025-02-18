@@ -489,6 +489,8 @@ namespace Interfaccia_C_.ViewModel
             AddRoomCommand = new Command(async () => await OnAddSecondRoom());
             UploadAdditionalRoomImageCommand = new Command(async () => await OnUploadAdditionalRoomImage());
         }
+
+        
         private async Task OnUploadHotelImage()
         {
             try
@@ -601,7 +603,39 @@ namespace Interfaccia_C_.ViewModel
             }
         }
         public string ImageHotel;
+private async Task<double> GetAveragePrice(string RoomType, string Location)
+{   // Controlla se RoomType o Location sono nulli o vuoti
+    if (string.IsNullOrWhiteSpace(RoomType) || string.IsNullOrWhiteSpace(Location))
+    {
+        return 0;
+    }
+    var token = await SecureStorage.GetAsync("jwt_token");
+    
+    using var client = new HttpClient();
+    var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/getAveragePrice");
+    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
+    var payload = new { RoomType, Location };
+    var json = JsonSerializer.Serialize(payload);
+    request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+
+    var response = await client.SendAsync(request);
+
+    if (!response.IsSuccessStatusCode)
+    {
+        var errorContent = await response.Content.ReadAsStringAsync();
+        Debug.WriteLine($"Errore nella richiesta: {response.StatusCode}, {errorContent}");
+        return 0; // Se la richiesta fallisce, restituisce 0
+    }
+
+    var responseBody = await response.Content.ReadAsStringAsync();
+    var responseJson = JsonDocument.Parse(responseBody);
+    if (responseJson.RootElement.TryGetProperty("avgPrice", out var avgPriceElement) && avgPriceElement.TryGetDouble(out double avgPrice))
+    {
+        return avgPrice;
+    }
+    return 0;
+}
         private async Task OnAddHotelAndRoom()
         {// Controllo dei campi obbligatori
             if (string.IsNullOrWhiteSpace(HotelName) || string.IsNullOrWhiteSpace(Location) || string.IsNullOrWhiteSpace(RoomName) ||
@@ -617,6 +651,35 @@ namespace Interfaccia_C_.ViewModel
                 OnPropertyChanged(nameof(IsErrorVisible));
                 return;
             }
+
+    // 🔍 Controllo del prezzo medio prima dell'inserimento
+                double avgPrice = await GetAveragePrice(RoomType, Location);
+
+                if (avgPrice == 0)
+                {
+                    await Application.Current.MainPage.DisplayAlert(
+                        "Informazione",
+                        $"Non è stato trovato alcun valore medio corrispondente per le stanze di tipo {RoomType} in {Location}. Procedi pure con l'inserimento.",
+                        "OK");
+                }
+                else if (avgPrice > 0 && PricePerNight != avgPrice)
+                {
+                    string suggestion = PricePerNight > avgPrice ? "abbassare" : "alzare";
+                    string message = $"📊 Il prezzo inserito **{PricePerNight:C}** è diverso dal **prezzo medio** per le stanze di tipo **{RoomType}** in **{Location}**.\n\n" +
+                                    $"💰 **Prezzo medio attuale**: {avgPrice:C}\n" +
+                                    $"🔍 Ti suggeriamo di **{suggestion} il prezzo per essere più competitivo**.\n\nVuoi modificarlo?";
+
+                    bool adjustPrice = await Application.Current.MainPage.DisplayAlert(
+                        "Suggerimento Prezzo",
+                        message,
+                        "Sì, lo cambio",
+                        "No, mantieni");
+
+                    if (adjustPrice)
+                    {
+                        return; // L'utente deve reinserire il prezzo
+                    }
+                }
 
             var activeServices = GetActiveServices();
 
@@ -681,7 +744,6 @@ namespace Interfaccia_C_.ViewModel
                         IsAddHotelVisible = false;
                         IsAddRoomVisible = true;
                         // Svuota tutti i campi
-                        Location = string.Empty;
                         Description = string.Empty;
                         ImageHotel = null; // Supponendo che ImageHotel sia un oggetto o un percorso dell'immagine
                         HotelImageNames = string.Empty;
@@ -693,7 +755,6 @@ namespace Interfaccia_C_.ViewModel
                     {
                         // Svuota tutti i campi
                         HotelName = string.Empty;
-
                         Location = string.Empty;
                         Description = string.Empty;
                         ImageHotel = null; // Supponendo che ImageHotel sia un oggetto o un percorso dell'immagine
@@ -744,102 +805,129 @@ namespace Interfaccia_C_.ViewModel
         private async Task OnAddSecondRoom()
         {
             if (string.IsNullOrWhiteSpace(AdditionalRoomName) ||
-                string.IsNullOrWhiteSpace(AdditionalRoomDescription) ||
-                AdditionalPricePerNight <= 0 ||
-                AdditionalMaxGuests <= 0     || string.IsNullOrWhiteSpace(AdditionalRoomType))  // Verifica che RoomType non sia null o vuoto
-
+            string.IsNullOrWhiteSpace(AdditionalRoomDescription) ||
+            AdditionalPricePerNight <= 0 ||
+            AdditionalMaxGuests <= 0 ||
+            string.IsNullOrWhiteSpace(AdditionalRoomType))
             {
-                IsErrorVisible = true;
-                IsSuccessVisible = false;
-                return;
+            IsErrorVisible = true;
+            IsSuccessVisible = false;
+            return;
             }
+            // 🔍 Controllo del prezzo medio prima dell'inserimento
+            double avgPrice = await GetAveragePrice(AdditionalRoomType, Location);
+
+            if (avgPrice == 0)
+            {
+            await Application.Current.MainPage.DisplayAlert(
+                "Informazione",
+                $"Non è stato trovato alcun valore medio corrispondente per le stanze di tipo {AdditionalRoomType} in {Location}. Procedi pure con l'inserimento.",
+                "OK");
+            }
+            else if (avgPrice > 0 && AdditionalPricePerNight != avgPrice)
+            {
+            string suggestion = AdditionalPricePerNight > avgPrice ? "abbassare" : "alzare";
+            string message = $"📊 Il prezzo inserito **{AdditionalPricePerNight:C}** è diverso dal **prezzo medio** per le stanze di tipo **{AdditionalRoomType}** in **{Location}**.\n\n" +
+                    $"💰 **Prezzo medio attuale**: {avgPrice:C}\n" +
+                    $"🔍 Ti suggeriamo di **{suggestion} il prezzo per essere più competitivo**.\n\nVuoi modificarlo?";
+
+            bool adjustPrice = await Application.Current.MainPage.DisplayAlert(
+                "Suggerimento Prezzo",
+                message,
+                "Sì, lo cambio",
+                "No, mantieni");
+
+            if (adjustPrice)
+            {
+                return; // L'utente deve reinserire il prezzo
+            }
+            }
+            Debug.WriteLine($"Location: {this.Location}");
+
             Debug.WriteLine($"HotelName: {this.HotelName}");
             Debug.WriteLine($"RoomName: {this.AdditionalRoomName}");
             Debug.WriteLine($"RoomDescription: {this.AdditionalRoomDescription}");
             Debug.WriteLine($"PricePerNight: {this.AdditionalPricePerNight}");
             Debug.WriteLine($"MaxGuests: {this.AdditionalMaxGuests}");
             Debug.WriteLine($"RoomType: {this.AdditionalRoomType}");
-            Debug.WriteLine($"RoomImagePath: {this.RoomImagePath}");
-
+            Debug.WriteLine($"RoomImagePath: {this.AdditionalRoomImagePath}");
 
             var payload = new
             {
-                HotelName = this.HotelName,
-                RoomName = this.AdditionalRoomName,
-                RoomDescription = this.AdditionalRoomDescription,
-                PricePerNight = this.AdditionalPricePerNight,
-                MaxGuests = this.AdditionalMaxGuests,
-                RoomType = this.AdditionalRoomType,
-                RoomImagePath = this.RoomImagePath
+            HotelName = this.HotelName,
+            RoomName = this.AdditionalRoomName,
+            RoomDescription = this.AdditionalRoomDescription,
+            PricePerNight = this.AdditionalPricePerNight,
+            MaxGuests = this.AdditionalMaxGuests,
+            RoomType = this.AdditionalRoomType,
+            RoomImagePath = this.AdditionalRoomImagePath
             };
 
             try
             {
-                Debug.WriteLine("Sono qui dentro");
+            Debug.WriteLine("Sono qui dentro");
 
-                using var client = new HttpClient();
-                var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/addRoom");
-                var json = JsonSerializer.Serialize(payload);
-                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            using var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/addRoom");
+            var json = JsonSerializer.Serialize(payload);
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
-                var response = await client.SendAsync(request);
+            var response = await client.SendAsync(request);
 
-                if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
+            {
+                IsSuccessVisible = true;
+                IsErrorVisible = false;
+
+                string previewMessage = "Stanza e hotel aggiunto con successo";
+                bool confirm = await Application.Current.MainPage.DisplayAlert(
+                "Conferma Selezione",
+                previewMessage + "\n\nVuoi inserire un'altra stanza?",
+                "Sì",
+                "No");
+
+                if (confirm)
                 {
-                    IsSuccessVisible = true;
-                    IsErrorVisible = false;
-
-                    string previewMessage = "Stanza e hotel aggiunto con successo";
-                    bool confirm = await Application.Current.MainPage.DisplayAlert(
-                        "Conferma Selezione",
-                        previewMessage + "\n\nVuoi inserire un'altra stanza?",
-                        "Sì",
-                        "No");
-
-                    if (confirm)
-                    {
-                        // Svuotamento dei campi
-                        AdditionalRoomName = string.Empty;
-                        AdditionalRoomDescription = string.Empty;
-                        AdditionalPricePerNight = 0;
-                        AdditionalMaxGuests = 0;
-                        AdditionalRoomType = string.Empty;
-                        AdditionalRoomImagePath = string.Empty;
-                        AdditionalRoomImageNames = string.Empty;
-
-                    }
-                    else
-                    {
-                        AdditionalRoomName = string.Empty;
-                        AdditionalRoomDescription = string.Empty;
-                        AdditionalPricePerNight = 0;
-                        AdditionalMaxGuests = 0;
-                        AdditionalRoomType = string.Empty;
-                        AdditionalRoomImagePath = string.Empty;
-                        AdditionalRoomImageNames = string.Empty;
-                        // Reset delle visibilità per la schermata dell'hotel
-                        IsHotelSaved = false;
-                        IsSuccessVisible = false;
-                        IsErrorVisible = false;
-                        IsAddHotelVisible = true;
-                        IsAddRoomVisible = false;
-                        await Shell.Current.GoToAsync("//ProfileHostPage");
-
-                    }
+                // Svuotamento dei campi
+                AdditionalRoomName = string.Empty;
+                AdditionalRoomDescription = string.Empty;
+                AdditionalPricePerNight = 0;
+                AdditionalMaxGuests = 0;
+                AdditionalRoomType = string.Empty;
+                AdditionalRoomImagePath = string.Empty;
+                AdditionalRoomImageNames = string.Empty;
                 }
                 else
                 {
-                    IsSuccessVisible = false;
-                    IsErrorVisible = true;
+                Location = string.Empty;
+                AdditionalRoomName = string.Empty;
+                AdditionalRoomDescription = string.Empty;
+                AdditionalPricePerNight = 0;
+                AdditionalMaxGuests = 0;
+                AdditionalRoomType = string.Empty;
+                AdditionalRoomImagePath = string.Empty;
+                AdditionalRoomImageNames = string.Empty;
+                // Reset delle visibilità per la schermata dell'hotel
+                IsHotelSaved = false;
+                IsSuccessVisible = false;
+                IsErrorVisible = false;
+                IsAddHotelVisible = true;
+                IsAddRoomVisible = false;
                 }
-
-                OnPropertyChanged(nameof(IsSuccessVisible));
-                OnPropertyChanged(nameof(IsErrorVisible));
             }
-            catch (Exception)
+            else
             {
                 IsSuccessVisible = false;
                 IsErrorVisible = true;
+            }
+
+            OnPropertyChanged(nameof(IsSuccessVisible));
+            OnPropertyChanged(nameof(IsErrorVisible));
+            }
+            catch (Exception)
+            {
+            IsSuccessVisible = false;
+            IsErrorVisible = true;
             }
         }
 

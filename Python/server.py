@@ -114,7 +114,11 @@ class CostChartResponse(BaseModel):
     status: str
     chart: str
     summary: dict
-    
+
+class AveragePriceRequest(BaseModel):
+    RoomType: str
+    Location: str
+
 @app.post("/login")
 def login(request: LoginRequest):
     payload = {"Username": request.Username, "Password": request.Password}
@@ -622,3 +626,20 @@ def get_cost_chart(credentials: HTTPAuthorizationCredentials = Depends(security)
         raise HTTPException(status_code=500, detail="Errore nella creazione del grafico: " + str(e))
     
     return CostChartResponse(status="ok", chart=chart_base64, summary=summary)
+
+@app.post("/getAveragePrice")
+def get_average_price(request: AveragePriceRequest,credentials: HTTPAuthorizationCredentials = Depends(security)):
+    # Estrai il token e decodifica il payload
+    token = credentials.credentials
+    payload = decode_jwt_token(token)
+    username = payload.get("username")
+    if not username:
+        raise HTTPException(status_code=400, detail="Username non trovato nei claims")
+    
+    data = request.dict()  
+    
+    try:
+        response = connect_go("getAveragePrice", data)
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))

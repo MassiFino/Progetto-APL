@@ -727,6 +727,29 @@ func getCostDataHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func getAveragePriceHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.AveragePriceRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	avgPrice, err := database.GetAveragePriceForRoomTypeAndLocation(db, req.RoomType, req.Location)
+	if err != nil {
+		http.Error(w, "Errore nel recupero del prezzo medio", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	response := map[string]float64{"avgPrice": avgPrice}
+	json.NewEncoder(w).Encode(response)
+}
+
 func main() {
 	db = initializeDatabase()            // Inizializza la connessione al database
 	defer db.Close()                     // Chiude la connessione al termine del server
@@ -757,6 +780,7 @@ func main() {
 	http.HandleFunc("/deleteRoom", deleteRoomHandler)
 	http.HandleFunc("/updateHotelDescription", updateHotelDescriptionHandler)
 	http.HandleFunc("/getCostData", getCostDataHandler)
+	http.HandleFunc("/getAveragePrice", getAveragePriceHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)

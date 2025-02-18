@@ -7,91 +7,77 @@
     x:Class="Interfaccia_C_.MainPage"
     x:DataType="vm:MainPageViewModel"
     x:Name="PageRoot"
-    Title="Hotel Offers"
-    BackgroundColor="White"
+    Title="🏨 Hotel Offers 🏨"
+    BackgroundColor="#f4f4f4"
     Padding="0">
 
-    <!-- Se l'intera pagina deve scorrere, avvolgila in uno ScrollView -->
     <ScrollView>
-        <VerticalStackLayout Margin="10" Spacing="15">
+        <VerticalStackLayout Margin="10" Spacing="20">
 
-            <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="DarkBlue"
-        Padding="20" HorizontalOptions="Center" VerticalOptions="Center"
-        StrokeShape="RoundRectangle 20">
+            <!-- Intestazione con sfondo accattivante -->
+            <Frame BackgroundColor="#003366" CornerRadius="20" Padding="20" HasShadow="True">
                 <VerticalStackLayout Spacing="10">
-                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
-                        <!-- Slogan con effetto stilizzato -->
-                        <Label Text="🏨 Trova l'hotel perfetto per il tuo viaggio! 🌍"
-                           FontSize="22"
-                           FontAttributes="Bold"
+                    <Label Text="🏨 Trova l'hotel perfetto per il tuo viaggio! 🌍"
+                           FontSize="24" FontAttributes="Bold"
                            HorizontalOptions="Center"
-                           TextColor="White"
-                           BackgroundColor="DarkBlue"
-                           Padding="15"
-                           VerticalTextAlignment="Center"
-                           HorizontalTextAlignment="Center"/>
-                        <Button Text="Cerca" 
-                     WidthRequest="100" 
-                     HeightRequest="40"
-                     Command="{Binding GoToSearchCommand}" />
-
-                    </HorizontalStackLayout>
-
+                           TextColor="White" />
+                    <Button Text="🔍 Cerca Offerte" 
+                            WidthRequest="150" HeightRequest="45"
+                            BackgroundColor="#FFD700"
+                            TextColor="Black"
+                            FontAttributes="Bold"
+                            CornerRadius="10"
+                            Command="{Binding GoToSearchCommand}" />
                 </VerticalStackLayout>
-            </Border>
+            </Frame>
+
+            <!-- Separator Line -->
+            <BoxView HeightRequest="2" BackgroundColor="#cccccc" />
 
             <!-- Sezione Offerte Imperdibili -->
-            <Label Text="Offerte imperdibili hotel in corso" FontSize="20" FontAttributes="Bold" Margin="0,10,0,5" TextColor="Black"/>
-            <CollectionView ItemsSource="{Binding OfferteImperdibili}">
+            <Label Text="🔥 Offerte Imperdibili 🔥" FontSize="22" FontAttributes="Bold" TextColor="#d32f2f" />
+            <CollectionView ItemsSource="{Binding OfferteImperdibili}" HeightRequest="400">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Horizontal" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <!-- Imposto il tipo corretto per il binding -->
                     <DataTemplate x:DataType="model:Hotel">
-                        <Border Stroke="LightYellow" StrokeThickness="1" Padding="20" Margin="5" BackgroundColor="YellowGreen" WidthRequest="250" HeightRequest="350" StrokeShape="RoundRectangle 20">
-
+                        <Frame BackgroundColor="#ffcc80" CornerRadius="15" Padding="15" HasShadow="True" WidthRequest="250">
                             <VerticalStackLayout>
-                                <!-- Assicurati che il valore di Immagine sia corretto, es. "hotel2.png" -->
-                                <Image Source="{Binding ImageSource}" HeightRequest="150" Aspect="AspectFill" />
-                                <Label Text="{Binding Name}" FontAttributes="Bold" Margin="0,5,0,0" TextColor="LightYellow"  />
-                                <!-- Usa PrezzoMinimo per il prezzo -->
-                                <Label Text="{Binding Prezzo}" TextColor="LightYellow" />
-                                <Button Text="Guarda l'offerta"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=GuardaOffertaCommand}"
-                                CommandParameter="{Binding .}" 
-                                Margin="0,10,0,0" />
+                                <Image Source="{Binding ImageSource}" HeightRequest="250" Aspect="AspectFill"  />
+                                <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="#b71c1c" FontSize="18" />
+                                <Label Text="{Binding Prezzo}" TextColor="#b71c1c" FontSize="16" />
+                                <Button Text="Scopri Offerta" BackgroundColor="#e53935" TextColor="White" FontAttributes="Bold" CornerRadius="8"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=GuardaOffertaCommand}"
+                                        CommandParameter="{Binding .}" />
                             </VerticalStackLayout>
-                        </Border>
+                        </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
 
-            <!-- Sezione Mete più gettonate -->
-            <Label Text="Mete più gettonate" FontSize="20" FontAttributes="Bold" Margin="0,10,0,5" TextColor="Black"/>
-            <CollectionView ItemsSource="{Binding MeteGettonate}">
+            <!-- Separator Line -->
+            <BoxView HeightRequest="2" BackgroundColor="#cccccc" />
+
+            <!-- Sezione Mete più Gettonate -->
+            <Label Text="🌍 Mete più Gettonate 🌍" FontSize="22" FontAttributes="Bold" TextColor="#00796b" />
+            <CollectionView ItemsSource="{Binding MeteGettonate}" HeightRequest="400">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical" Span="2" />
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:Hotel">
-                        <Border Stroke="LightGoldenrodYellow" StrokeThickness="1" Padding="10" Margin="5" BackgroundColor="GreenYellow" WidthRequest="180" HeightRequest="250" StrokeShape="RoundRectangle 20">
-                            <Border.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.GuardaOffertaCommand}"
-                                    CommandParameter="{Binding .}" />
-                            </Border.GestureRecognizers>
+                        <Frame BackgroundColor="#80cbc4" CornerRadius="15" Padding="10" HasShadow="True" WidthRequest="180">
                             <VerticalStackLayout>
-                                <Image Source="{Binding ImageSource}" HeightRequest="120" Aspect="AspectFill" />
-                                <Label Text="{Binding Name}" FontAttributes="Bold" Margin="0,5,0,0"  TextColor="Green" />
-                                <Label Text="{Binding NumeroHotel}"  TextColor="Green"/>
-                                <Label Text="{Binding Prezzo}" TextColor="Green" />
+                                <Image Source="{Binding ImageSource}" HeightRequest="120" Aspect="AspectFill"  />
+                                <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="#004d40" FontSize="18" />
+                                <Label Text="{Binding NumeroHotel}" TextColor="#004d40" FontSize="16" />
+                                <Label Text="{Binding Prezzo}" TextColor="#004d40" FontSize="16" />
                             </VerticalStackLayout>
-                        </Border>
+                        </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

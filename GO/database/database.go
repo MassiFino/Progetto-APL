@@ -875,3 +875,22 @@ func GetHostEmailByRoomID(db *sql.DB, roomID int) (string, error) {
 	}
 	return email, nil
 }
+
+func GetAveragePriceForRoomTypeAndLocation(db *sql.DB, roomType, location string) (float64, error) {
+	query := `
+        SELECT AVG(r.PricePerNight)
+        FROM rooms r
+        JOIN hotels h ON r.HotelID = h.HotelID
+        WHERE r.TipologiaStanza = ? AND h.Location = ?`
+
+	var avgPrice sql.NullFloat64
+
+	err := db.QueryRow(query, roomType, location).Scan(&avgPrice)
+	if err != nil {
+		return 0, err
+	}
+	if !avgPrice.Valid {
+		return 0, nil
+	}
+	return avgPrice.Float64, nil
+}
