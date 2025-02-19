@@ -125,11 +125,54 @@ namespace Interfaccia_C_.ViewModel
         }
 
 
-        public class Review
+        public class Review : INotifyPropertyChanged
         {
-            public string ReviewerName { get; set; }
-            public string Comment { get; set; }
-            public double Rating { get; set; }
+            private string _reviewerName;
+            public string ReviewerName
+            {
+                get => _reviewerName;
+                set { _reviewerName = value; OnPropertyChanged(); }
+            }
+
+            private string _username;
+            public string Username
+            {
+                get => _username;
+                set { _username = value; OnPropertyChanged(); }
+            }
+
+            private string _comment;
+            public string Comment
+            {
+                get => _comment;
+                set { _comment = value; OnPropertyChanged(); }
+            }
+
+            private double _rating;
+            public double Rating
+            {
+                get => _rating;
+                set { _rating = value; OnPropertyChanged(); }
+            }
+
+            private string _createdAt;
+            public string CreatedAt
+            {
+                get => _createdAt;
+                set { _createdAt = value; OnPropertyChanged(); }
+            }
+
+            // Imposta true di default per mostrare i dettagli della recensione
+            private bool _isReviewSectionVisible = true;
+            public bool IsReviewSectionVisible
+            {
+                get => _isReviewSectionVisible;
+                set { _isReviewSectionVisible = value; OnPropertyChanged(); }
+            }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
 

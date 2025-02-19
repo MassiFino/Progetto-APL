@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
-using System.Threading.Tasks;  // Per simulare chiamate asincrone
-using System.Diagnostics;     // Per il debug
+using System.Threading.Tasks;
+using System.Diagnostics;
 using System.Text.Json;
 using System.Text;
 using System.Collections.ObjectModel;
-using Interfaccia_C_.Model;  // Per usare la classe Hotel
-
+using Interfaccia_C_.Model;
 
 namespace Interfaccia_C_.ViewModel
 {
@@ -29,9 +29,7 @@ namespace Interfaccia_C_.ViewModel
         private bool _isAirConditioningEnabled;
         private string message;
 
-
         public event PropertyChangedEventHandler PropertyChanged;
-
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -52,19 +50,20 @@ namespace Interfaccia_C_.ViewModel
         public string SearchCity
         {
             get => _searchCity;
-            set
-            {
-                _searchCity = value;
-                OnPropertyChanged();
-            }
+            set { _searchCity = value; OnPropertyChanged(); }
         }
+
         public DateTime CheckInDate
         {
             get => _checkInDate;
             set
             {
-                _checkInDate = value;
-                OnPropertyChanged();
+                if (_checkInDate != value)
+                {
+                    _checkInDate = value;
+                    OnPropertyChanged();
+                    ValidateDates();
+                }
             }
         }
 
@@ -73,167 +72,65 @@ namespace Interfaccia_C_.ViewModel
             get => _checkOutDate;
             set
             {
-                _checkOutDate = value;
-                OnPropertyChanged();
+                if (_checkOutDate != value)
+                {
+                    _checkOutDate = value;
+                    OnPropertyChanged();
+                    ValidateDates();
+                }
             }
         }
 
-        public bool IsWiFiEnabled
-        {
-            get => _isWiFiEnabled;
-            set
-            {
-                _isWiFiEnabled = value;
-                OnPropertyChanged();
-            }
-        }
+        // Altre proprietà (switch, Picker, ecc.)...
+        public bool IsWiFiEnabled { get => _isWiFiEnabled; set { _isWiFiEnabled = value; OnPropertyChanged(); } }
+        public bool IsParkingEnabled { get => _isParkingEnabled; set { _isParkingEnabled = value; OnPropertyChanged(); } }
+        public bool IsBreakfastEnabled { get => _isBreakfastEnabled; set { _isBreakfastEnabled = value; OnPropertyChanged(); } }
+        public bool IsPoolEnabled { get => _isPoolEnabled; set { _isPoolEnabled = value; OnPropertyChanged(); } }
+        public bool IsGymEnabled { get => _isGymEnabled; set { _isGymEnabled = value; OnPropertyChanged(); } }
+        public bool IsSpaEnabled { get => _isSpaEnabled; set { _isSpaEnabled = value; OnPropertyChanged(); } }
+        public bool IsRoomServiceEnabled { get => _isRoomServiceEnabled; set { _isRoomServiceEnabled = value; OnPropertyChanged(); } }
+        public bool IsPetsAllowed { get => _isPetsAllowed; set { _isPetsAllowed = value; OnPropertyChanged(); } }
+        public bool IsRestaurantEnabled { get => _isRestaurantEnabled; set { _isRestaurantEnabled = value; OnPropertyChanged(); } }
+        public bool IsAirConditioningEnabled { get => _isAirConditioningEnabled; set { _isAirConditioningEnabled = value; OnPropertyChanged(); } }
 
-        public bool IsParkingEnabled
-        {
-            get => _isParkingEnabled;
-            set
-            {
-                _isParkingEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsBreakfastEnabled
-        {
-            get => _isBreakfastEnabled;
-            set
-            {
-                _isBreakfastEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsPoolEnabled
-        {
-            get => _isPoolEnabled;
-            set
-            {
-                _isPoolEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsGymEnabled
-        {
-            get => _isGymEnabled;
-            set
-            {
-                _isGymEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsSpaEnabled
-        {
-            get => _isSpaEnabled;
-            set
-            {
-                _isSpaEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsRoomServiceEnabled
-        {
-            get => _isRoomServiceEnabled;
-            set
-            {
-                _isRoomServiceEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsPetsAllowed
-        {
-            get => _isPetsAllowed;
-            set
-            {
-                _isPetsAllowed = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsRestaurantEnabled
-        {
-            get => _isRestaurantEnabled;
-            set
-            {
-                _isRestaurantEnabled = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public bool IsAirConditioningEnabled
-        {
-            get => _isAirConditioningEnabled;
-            set
-            {
-                _isAirConditioningEnabled = value;
-                OnPropertyChanged();
-            }
-        }
         private string _selectedGuest;
-
-        // Proprietà per il valore selezionato
         public string SelectedGuest
         {
             get => _selectedGuest;
-            set
-            {
-                _selectedGuest = value;
-                OnPropertyChanged();
-            }
+            set { _selectedGuest = value; OnPropertyChanged(); }
         }
 
-        private string _selectedOrderBy = "Order by"; // Valore di default
+        private string _selectedOrderBy = "Order by";
         public string SelectedOrderBy
         {
             get => _selectedOrderBy;
-            set
-            {
-                _selectedOrderBy = value;
-                OnPropertyChanged();
-            }
+            set { _selectedOrderBy = value; OnPropertyChanged(); }
         }
+
         public string Message
         {
             get => message;
-            set
-            {
-                message = value;
-                OnPropertyChanged(nameof(Message));
-            }
+            set { message = value; OnPropertyChanged(nameof(Message)); }
         }
 
-        // Comando per eseguire la ricerca
         public ICommand SearchCommand { get; }
-
         public ICommand ViewHotelCommand { get; set; }
 
         public SearchPageViewModel()
         {
             ResearchHotels = new ObservableCollection<Hotel>();
-
             SearchCommand = new Command(async () => await ExecuteSearch());
-
             ViewHotelCommand = new Command<Hotel>(async (hotelSelezionato) =>
             {
-                // Naviga con Shell, passando l'oggetto hotel
                 var navParams = new Dictionary<string, object>
                 {
                     ["hotel"] = hotelSelezionato
                 };
-
                 await Shell.Current.GoToAsync("HotelPage", navParams);
             });
         }
 
-
+        // Metodo per ottenere i servizi attivi in base agli switch
         private List<string> GetActiveServices()
         {
             List<string> activeServices = new List<string>();
@@ -247,53 +144,32 @@ namespace Interfaccia_C_.ViewModel
             if (IsPetsAllowed) activeServices.Add("Pets Allowed");
             if (IsRestaurantEnabled) activeServices.Add("Restaurant");
             if (IsAirConditioningEnabled) activeServices.Add("Air Conditioning");
-
             return activeServices;
         }
-        // Metodo che simula una ricerca
+
+        // Metodo per eseguire la ricerca (chiamata all'API, ecc.)
         private async Task ExecuteSearch()
         {
-
-            // Simuliamo un piccolo ritardo per vedere che il comando funziona
-            var activeServices = GetActiveServices();
-            if (string.IsNullOrWhiteSpace(SearchCity) ||
-                CheckInDate == null ||
-                CheckOutDate == null)
-                
-            { 
-                await Application.Current.MainPage.DisplayAlert(
-                    "Attenzione",
-                    "Attenzione, non ha inserito tutti i campi richiesti.",
-                    "OK"
-                );
-                return; // Interrompe l'esecuzione se i dati non sono validi
+            // Verifica che siano state inserite le informazioni di base
+            if (string.IsNullOrWhiteSpace(SearchCity))
+            {
+                await Application.Current.MainPage.DisplayAlert("Attenzione", "Inserisci la città", "OK");
+                return;
             }
-            // Stampa i parametri di ricerca nella console (puoi sostituirlo con la tua logica)
-            Debug.WriteLine($"🔍 Ricerca avviata con i seguenti parametri:");
-            Debug.WriteLine($"🔍 Ricerca avviata per la città: {SearchCity}");
-            Debug.WriteLine($"Numero di ospiti: {SelectedGuest}");
-            Debug.WriteLine($"Check-in: {CheckInDate:dd/MM/yyyy}");
-            Debug.WriteLine($"Check-out: {CheckOutDate:dd/MM/yyyy}");
-            Debug.WriteLine($"Wi-Fi: {IsWiFiEnabled}");
-            Debug.WriteLine($"Parcheggio: {IsParkingEnabled}");
-            Debug.WriteLine($"Colazione: {IsBreakfastEnabled}");
-            Debug.WriteLine($"Piscina: {IsPoolEnabled}");
-            Debug.WriteLine($"Palestra: {IsGymEnabled}");
-            Debug.WriteLine($"Spa: {IsSpaEnabled}");
-            Debug.WriteLine($"Servizio in Camera: {IsRoomServiceEnabled}");
-            Debug.WriteLine($"Animali Ammessi: {IsPetsAllowed}");
-            Debug.WriteLine($"Ristorante: {IsRestaurantEnabled}");
-            Debug.WriteLine($"Aria Condizionata: {IsAirConditioningEnabled}");
+            if (!string.IsNullOrEmpty(Message))
+            {
+                await Application.Current.MainPage.DisplayAlert("Errore", Message, "OK");
+                return;
+            }
 
-            // Qui potresti fare una chiamata a un'API per ottenere i risultati
-
-
+            var activeServices = GetActiveServices();
+            Debug.WriteLine($"Ricerca per: {SearchCity}, check-in: {CheckInDate:dd/MM/yyyy}, check-out: {CheckOutDate:dd/MM/yyyy}");
             var searchParameters = new Dictionary<string, object>
             {
-                { "City", this.SearchCity },
-                { "CheckInDate", this.CheckInDate },
-                { "CheckOutDate", this.CheckOutDate },
-                { "Guests", this.SelectedGuest },
+                { "City", SearchCity },
+                { "CheckInDate", CheckInDate },
+                { "CheckOutDate", CheckOutDate },
+                { "Guests", SelectedGuest },
                 { "Services", activeServices }
             };
 
@@ -302,63 +178,32 @@ namespace Interfaccia_C_.ViewModel
                 searchParameters.Add("OrderBy", SelectedOrderBy);
             }
 
-            // Serializza i parametri in JSON
             var json = JsonSerializer.Serialize(searchParameters);
-
             try
             {
                 using (var client = new HttpClient())
                 {
                     var content = new StringContent(json, Encoding.UTF8, "application/json");
-                    // Sostituisci con l'URL del tuo endpoint Python
                     var response = await client.PostAsync("http://localhost:9000/searchHotels", content);
-
                     if (response.IsSuccessStatusCode)
                     {
-                        // Leggi e gestisci i risultati della ricerca (ad esempio, deserializza il JSON di risposta)
                         var resultJson = await response.Content.ReadAsStringAsync();
-
                         var hotels = JsonSerializer.Deserialize<List<Hotel>>(resultJson);
-
-                        Debug.WriteLine("Risultati ricerca: " + resultJson);
-                        // Qui potresti aggiornare una proprietà come OwnedHotels nel ViewModel
+                        ResearchHotels.Clear();
                         if (hotels != null)
                         {
-                            // Pulisce la collezione esistente
-                            ResearchHotels.Clear();
                             foreach (var hotel in hotels)
                             {
-                                // Se la lista dei servizi è null, la inizializzi
-                                if (hotel.Services == null)
-                                    hotel.Services = new List<string>();
-
-                                // Debug per vedere i servizi
-                                foreach (var service in hotel.Services)
-                                {
-                                    Debug.WriteLine($"Servizio dell'hotel: {service}");
-                                }
-                                hotel.ServiziStringa = string.Join(", ", hotel.Services);
-                                Debug.WriteLine($"Servizi tutti : {hotel.ServiziStringa}");
-
-                                // Gestione delle immagini:
-                                // Se il campo Images non è vuoto, esegui lo split per ottenere (ad esempio) la prima immagine
+                                hotel.ServiziStringa = hotel.Services != null ? string.Join(", ", hotel.Services) : "";
+                                // Gestione delle immagini (come nel tuo codice precedente)
                                 if (!string.IsNullOrEmpty(hotel.Images?.Trim()))
                                 {
-                                    var imageList = hotel.Images.Split(',');
+                                    var imageList = hotel.Images.Split(';');
                                     var firstImage = imageList[0].Trim();
-
-                                    // Costruisci il percorso completo usando il project directory
                                     string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName;
-                                    var imagePath = Path.Combine(projectDirectory, firstImage);
-
+                                    var imagePath = System.IO.Path.Combine(projectDirectory, firstImage);
                                     hotel.ImageSource = GetImageSource(imagePath);
                                 }
-                               
-
-                                // I servizi dovrebbero essere già una lista (se il backend li restituisce come array).
-                                // Se invece sono una stringa, potresti fare:
-                                // hotel.Services = hotel.ServicesString.Split(',').Select(s => s.Trim()).ToList();
-
                                 ResearchHotels.Add(hotel);
                             }
                         }
@@ -381,7 +226,7 @@ namespace Interfaccia_C_.ViewModel
 
         public ImageSource GetImageSource(string imagePath)
         {
-            if (File.Exists(imagePath))
+            if (System.IO.File.Exists(imagePath))
             {
                 Debug.WriteLine("Immagine trovata: " + imagePath);
                 return ImageSource.FromFile(imagePath);
@@ -393,6 +238,21 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-
+        // Metodo per validare le date
+        private void ValidateDates()
+        {
+            if (CheckInDate < DateTime.Today)
+            {
+                Message = "La data di check-in non può essere nel passato.";
+            }
+            else if (CheckOutDate <= CheckInDate)
+            {
+                Message = "La data di check-out deve essere successiva a quella di check-in.";
+            }
+            else
+            {
+                Message = string.Empty;
+            }
+        }
     }
 }

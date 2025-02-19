@@ -58,26 +58,65 @@
 
             <!-- Separator Line -->
             <BoxView HeightRequest="2" BackgroundColor="#cccccc" />
+            <Label Text="🌍 Mete più Gettonate 🌍" 
+       FontSize="22" 
+       FontAttributes="Bold" 
+       TextColor="#00796b" 
+       HorizontalOptions="Center"/>
 
-            <!-- Sezione Mete più Gettonate -->
-            <Label Text="🌍 Mete più Gettonate 🌍" FontSize="22" FontAttributes="Bold" TextColor="#00796b" />
-            <CollectionView ItemsSource="{Binding MeteGettonate}" HeightRequest="400">
+            <CollectionView ItemsSource="{Binding MeteGettonate}" 
+                HeightRequest="400" 
+                Margin="10">
                 <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" Span="2" />
+                    <GridItemsLayout Orientation="Vertical" Span="2" 
+                         HorizontalItemSpacing="10" 
+                         VerticalItemSpacing="10"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:Hotel">
-                        <Frame BackgroundColor="#80cbc4" CornerRadius="15" Padding="10" HasShadow="True" WidthRequest="180">
-                            <VerticalStackLayout>
-                                <Image Source="{Binding ImageSource}" HeightRequest="120" Aspect="AspectFill"  />
-                                <Label Text="{Binding Name}" FontAttributes="Bold" TextColor="#004d40" FontSize="18" />
-                                <Label Text="{Binding NumeroHotel}" TextColor="#004d40" FontSize="16" />
-                                <Label Text="{Binding Prezzo}" TextColor="#004d40" FontSize="16" />
-                            </VerticalStackLayout>
+                        <Frame BackgroundColor="#80cbc4" 
+                            CornerRadius="15" 
+                            Padding="10" 
+                            HasShadow="True" 
+                            WidthRequest="200"
+                            HeightRequest="300">
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer 
+                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=GuardaOffertaCommand}"
+                        CommandParameter="{Binding .}" />
+                            </Frame.GestureRecognizers>
+                            <Grid RowDefinitions="Auto, Auto, Auto, Auto" ColumnDefinitions="*">
+                                <!-- RIGA 0: Immagine -->
+                                <Image Source="{Binding ImageSource}" 
+                                    HeightRequest="200" 
+                                    Aspect="AspectFit"/>
+                                <!-- RIGA 1: Nome dell'hotel -->
+                                <Label Grid.Row="1" Text="{Binding Name}" 
+                           FontAttributes="Bold" 
+                           FontSize="18" 
+                           TextColor="#004d40" 
+                           HorizontalTextAlignment="Center"
+                           LineBreakMode="TailTruncation"/>
+                                <!-- RIGA 2: Numero hotel -->
+                                <Label Grid.Row="2" 
+                           Text="{Binding NumeroHotel, StringFormat='Numero hotel: {0}'}" 
+                           FontSize="16" 
+                           TextColor="#004d40" 
+                           HorizontalTextAlignment="Center"
+                           LineBreakMode="WordWrap"/>
+                                <!-- RIGA 3: Prezzo -->
+                                <Label Grid.Row="3" 
+                           Text="{Binding Prezzo, StringFormat='Prezzo: {0:C}'}" 
+                           FontSize="16" 
+                           TextColor="#004d40" 
+                           HorizontalTextAlignment="Center"
+                           LineBreakMode="WordWrap"/>
+                            </Grid>
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

@@ -68,10 +68,6 @@ namespace Interfaccia_C_.ViewModel
                 await Shell.Current.GoToAsync("AddRoomPage", navParams);
             });
 
-
-            // Carica dati utente e dati hotel
-            LoadUserData();
-            LoadHotelData();
         }
 
         // ----------------

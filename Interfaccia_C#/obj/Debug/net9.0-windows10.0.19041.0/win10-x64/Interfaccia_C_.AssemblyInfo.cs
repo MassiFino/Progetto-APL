@@ -17,7 +17,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Interfaccia_C_")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+f1a83318d767b5b8edb144bca822d29cfd58a5a3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0+40d948f094551ed130eecfff54cc69d3f6e0e88d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Interfaccia_C_")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Interfaccia_C_")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

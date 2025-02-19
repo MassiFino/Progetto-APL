@@ -159,15 +159,14 @@ type SearchRequest struct {
 }
 
 type SearchResponse struct {
-	Name        string   `json:"Name"`             // Nome dell'hotel
-	Location    string   `json:"Location"`         // Posizione dell'hotel
-	Description string   `json:"Description"`      // Descrizione dell'hotel
-	Services    []string `json:"Services"`         // Lista dei servizi
-	Rating      float64  `json:"Rating,omitempty"` // Valutazione dell'hotel
-	Images      string   `json:"Images"`           // Stringa contenente i percorsi delle immagini (separati da virgola)
-	Price       float64  `json:"Prezzo"`           // Prezzo minimo delle stanze (campo aggiuntivo)
-	// Puoi avere anche altre proprietà, ad esempio per la visualizzazione:
-	// ImageSource ImageSource `json:"-"`  (non serializzato)
+	HotelID     int      `json:"HotelID"`
+	Name        string   `json:"Name"`
+	Location    string   `json:"Location"`
+	Description string   `json:"Description"`
+	Services    []string `json:"Services"`
+	Rating      float64  `json:"Rating,omitempty"`
+	Images      string   `json:"Images"`
+	Price       float64  `json:"Prezzo"`
 }
 
 type Room struct {
@@ -180,13 +179,13 @@ type Room struct {
 	Images          string  `json:"Images"`
 }
 
-// Modello per le recensioni
 type Review struct {
-	RoomID   int     `json:"RoomID"`
-	RoomName string  `json:"RoomName"`
-	Username string  `json:"Username"`
-	Comment  string  `json:"Comment"`
-	Rating   float64 `json:"Rating"`
+	RoomID    int     `json:"RoomID"`
+	RoomName  string  `json:"RoomName"`
+	Username  string  `json:"Username"`
+	Comment   string  `json:"Comment"`
+	Rating    float64 `json:"Rating"`
+	CreatedAt string  `json:"CreatedAt"` // Nuovo campo per la data di creazione
 }
 
 type GetRoomsReviewsRequest struct {

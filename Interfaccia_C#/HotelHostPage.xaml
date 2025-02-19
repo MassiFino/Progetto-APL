@@ -130,13 +130,13 @@
                                 <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightYellow" Padding="10" 
               HorizontalOptions="Center" VerticalOptions="Center">
                                     <!-- Grid a 4 colonne: 150 (immagine), * (dettagli), 50 (elimina), 50 (modifica prezzo) -->
-                                    <Grid ColumnDefinitions="150,*,50,50" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
-                                        <!-- Colonna 0: Immagine stanza -->
+                                    <Grid ColumnDefinitions="150,*,Auto,Auto" VerticalOptions="Center" HorizontalOptions="FillAndExpand">
+                                        <!-- Colonna 0: Immagine della stanza (larghezza fissa 150) -->
                                         <Frame Grid.Column="0" HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent"
-                 CornerRadius="20" Padding="0" HeightRequest="150" WidthRequest="150">
+           CornerRadius="20" Padding="0" HeightRequest="150" WidthRequest="150">
                                             <Image Source="{Binding ImageSource}" Aspect="AspectFill"/>
                                         </Frame>
-                                        <!-- Colonna 1: Dettagli stanza -->
+                                        <!-- Colonna 1: Dettagli della stanza -->
                                         <VerticalStackLayout Grid.Column="1" Spacing="5" VerticalOptions="Center" Padding="10,0">
                                             <Label Text="{Binding RoomName}" FontAttributes="Bold" FontSize="16" TextColor="Black"/>
                                             <Label Text="{Binding RoomDescription}" MaxLines="3" LineBreakMode="TailTruncation" FontSize="14" TextColor="Black"/>
@@ -145,19 +145,21 @@
                                         </VerticalStackLayout>
                                         <!-- Colonna 2: Pulsante per eliminare la stanza -->
                                         <ImageButton Grid.Column="2" 
-                       Source="trash.png"
-                       BackgroundColor="Transparent"
-                       Command="{Binding Source={x:Reference HotelHostPageViewRoot}, Path=BindingContext.DeleteRoomCommand}"
-                       CommandParameter="{Binding}"
-                       VerticalOptions="Center" HorizontalOptions="Center"
-                       WidthRequest="40" HeightRequest="40"/>
+                                             Source="trash.png"
+                                             BackgroundColor="Transparent"
+                                             Command="{Binding Source={x:Reference HotelHostPageViewRoot}, Path=BindingContext.DeleteRoomCommand}"
+                                             CommandParameter="{Binding}"
+                                             VerticalOptions="Center" HorizontalOptions="Center"
+                                             HeightRequest="40"/>
                                         <!-- Colonna 3: Pulsante per modificare il prezzo -->
                                         <Button Grid.Column="3" Text="Modifica Prezzo"
-                  Command="{Binding Source={x:Reference HotelHostPageViewRoot}, Path=BindingContext.UpdateRoomPriceCommand}"
-                  CommandParameter="{Binding}"
-                  BackgroundColor="Blue" TextColor="White"
-                  CornerRadius="10" VerticalOptions="Center" WidthRequest="50" HeightRequest="40"/>
+                                        Command="{Binding Source={x:Reference HotelHostPageViewRoot}, Path=BindingContext.UpdateRoomPriceCommand}"
+                                        CommandParameter="{Binding}"
+                                        BackgroundColor="Blue" TextColor="White"
+                                        CornerRadius="10" VerticalOptions="Center" 
+                                        HeightRequest="40" />
                                     </Grid>
+
                                 </Border>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -173,26 +175,59 @@
 
             <!-- Recensioni degli ospiti -->
             <Label Text="Recensioni degli ospiti" FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+
             <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="DarkOrange" Padding="10"  
-                    HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="1500"
-                    StrokeShape="RoundRectangle 30">
+HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="1500"
+StrokeShape="RoundRectangle 30">
                 <CollectionView ItemsSource="{Binding Reviews}">
+                    <!-- EmptyView per mostrare un messaggio quando la lista è vuota -->
+                    <CollectionView.EmptyView>
+                        <Label Text="Nessuna recensione presente" 
+           FontSize="18" 
+           TextColor="Gray" 
+           HorizontalOptions="Center" 
+           VerticalOptions="Center"/>
+                    </CollectionView.EmptyView>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightSalmon" Padding="10" 
-                                    HorizontalOptions="Center" VerticalOptions="Center"
-                                    StrokeShape="RoundRectangle 30">
+                HorizontalOptions="Center" VerticalOptions="Center"
+                StrokeShape="RoundRectangle 30">
                                 <StackLayout Padding="10">
-                                    <Label Text="{Binding Message}" FontSize="20" FontAttributes="Bold" TextColor="Red" HorizontalOptions="Center" 
-                                           IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}"/>
-                                    <Label Text="{Binding ReviewerName}" FontAttributes="Bold" FontSize="16"/>
+                                    <!-- Nome del recensore -->
+                                    <Label Text="{Binding ReviewerName}" 
+                       FontAttributes="Bold" 
+                       FontSize="16"/>
+                                    <!-- Sezione dettagli recensione -->
                                     <StackLayout IsVisible="{Binding IsReviewSectionVisible}" Spacing="5" Padding="5">
-                                        <Label Text="Data Recensione:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding CreatedAt}" FontSize="12" TextColor="Black"/>
-                                        <Label Text="Commento:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding Comment}" FontSize="12" TextColor="Black"/>
-                                        <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding Rating}" FontSize="12" TextColor="Black"/>
+                                        <Label Text="Data Recensione:" 
+                           FontAttributes="Bold" 
+                           FontSize="14" 
+                           TextColor="Black"/>
+                                        <Label Text="{Binding CreatedAt}" 
+                           FontSize="12" 
+                           TextColor="Black"/>
+                                        <Label Text="Inserita da:" 
+                           FontAttributes="Bold" 
+                           FontSize="14" 
+                           TextColor="Black"/>
+                                        <Label Text="{Binding Username}" 
+                           FontSize="12" 
+                           TextColor="Black"/>
+                                        <Label Text="Commento:" 
+                           FontAttributes="Bold" 
+                           FontSize="14" 
+                           TextColor="Black"/>
+                                        <Label Text="{Binding Comment}" 
+                           FontSize="12" 
+                           TextColor="Black"/>
+                                        <Label Text="Voto:" 
+                           FontAttributes="Bold" 
+                           FontSize="14" 
+                           TextColor="Black"/>
+                                        <Label Text="{Binding Rating}" 
+                           FontSize="12" 
+                           TextColor="Black"/>
                                     </StackLayout>
                                 </StackLayout>
                             </Border>

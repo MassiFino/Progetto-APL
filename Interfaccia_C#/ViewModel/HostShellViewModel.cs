@@ -49,12 +49,6 @@ namespace Interfaccia_C_.ViewModel
         //da verificare se servirà
         private async void ExecuteProfileUserNavigation()
         {
-            // Prima carica i dati dell'utente
-            var viewModel = new ProfilHostPageViewModel();
-            viewModel.LoadUserData();
-            // Carica i dati prima di navigare
-            Debug.WriteLine("Sono qui dentro");
-            // Poi naviga alla pagina del profilo
             await Shell.Current.GoToAsync("ProfileHostPage");
         }
     }

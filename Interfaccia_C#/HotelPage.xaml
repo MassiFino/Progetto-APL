@@ -198,34 +198,60 @@
 
             <!-- Recensioni degli ospiti -->
             <Label Text="Recensioni degli ospiti" FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+
             <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="DarkOrange" Padding="10"  
-              HorizontalOptions="Center" VerticalOptions="Center"  WidthRequest="1500"
-              StrokeShape="RoundRectangle 30">
-                <!-- CollectionView per le recensioni -->
+        HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="1500"
+        StrokeShape="RoundRectangle 30">
                 <CollectionView ItemsSource="{Binding Reviews}">
+                    <!-- EmptyView per mostrare un messaggio quando la lista è vuota -->
+                    <CollectionView.EmptyView>
+                        <Label Text="Nessuna recensione presente" 
+                   FontSize="18" 
+                   TextColor="Gray" 
+                   HorizontalOptions="Center" 
+                   VerticalOptions="Center"/>
+                    </CollectionView.EmptyView>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Border Stroke="DarkOrange" StrokeThickness="1" BackgroundColor="LightSalmon" Padding="10" 
-                                HorizontalOptions="Center" VerticalOptions="Center"
-                                StrokeShape="RoundRectangle 30">
-                                
+                        HorizontalOptions="Center" VerticalOptions="Center"
+                        StrokeShape="RoundRectangle 30">
                                 <StackLayout Padding="10">
-                                    <Label Text="{Binding Message}" FontSize="20" FontAttributes="Bold" TextColor="Red" HorizontalOptions="Center" 
-                                IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
-                                        <!-- Nome del recensore -->
-                                    <Label Text="{Binding ReviewerName}" FontAttributes="Bold" FontSize="16"/>
-
-                                    <!-- Sezione dettagli recensione, visibile solo se IsReviewSectionVisible è true -->
+                                    <!-- Nome del recensore -->
+                                    <Label Text="{Binding ReviewerName}" 
+                               FontAttributes="Bold" 
+                               FontSize="16"/>
+                                    <!-- Sezione dettagli recensione -->
                                     <StackLayout IsVisible="{Binding IsReviewSectionVisible}" Spacing="5" Padding="5">
-                                        <Label Text="Data Recensione:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding CreatedAt}" FontSize="12" TextColor="Black"/>
-                                        <Label Text="Commento:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <!-- Usa il binding a Comment se è il campo corretto -->
-                                        <Label Text="{Binding Comment}" FontSize="12" TextColor="Black"/>
-                                        <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding Rating}" FontSize="12" TextColor="Black"/>
+                                        <Label Text="Data Recensione:" 
+                                   FontAttributes="Bold" 
+                                   FontSize="14" 
+                                   TextColor="Black"/>
+                                        <Label Text="{Binding CreatedAt}" 
+                                   FontSize="12" 
+                                   TextColor="Black"/>
+                                        <Label Text="Inserita da:" 
+                                   FontAttributes="Bold" 
+                                   FontSize="14" 
+                                   TextColor="Black"/>
+                                        <Label Text="{Binding Username}" 
+                                   FontSize="12" 
+                                   TextColor="Black"/>
+                                        <Label Text="Commento:" 
+                                   FontAttributes="Bold" 
+                                   FontSize="14" 
+                                   TextColor="Black"/>
+                                        <Label Text="{Binding Comment}" 
+                                   FontSize="12" 
+                                   TextColor="Black"/>
+                                        <Label Text="Voto:" 
+                                   FontAttributes="Bold" 
+                                   FontSize="14" 
+                                   TextColor="Black"/>
+                                        <Label Text="{Binding Rating}" 
+                                   FontSize="12" 
+                                   TextColor="Black"/>
                                     </StackLayout>
-                                    
                                 </StackLayout>
                             </Border>
                         </DataTemplate>

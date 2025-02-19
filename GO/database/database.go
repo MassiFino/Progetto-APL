@@ -446,13 +446,6 @@ func AddRoom(db *sql.DB, hotelName, roomName, roomDescription string, pricePerNi
 }
 
 func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, services []string) ([]types.SearchResponse, error) {
-	// Costruzione della query SQL di base.
-	// La query:
-	// - seleziona gli hotel e le relative informazioni
-	// - unisce la tabella hotels con rooms (almeno una stanza deve rispettare i criteri)
-	// - filtra per location (usando LIKE)
-	// - verifica che la stanza abbia capacità >= guest e sia marcata come disponibile
-	// - controlla che non esistano booking che si sovrappongano all'intervallo [checkIn, checkOut]
 	query := `
         SELECT DISTINCT 
             h.HotelID, 
@@ -520,6 +513,7 @@ func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, ser
 		}
 
 		hotel := types.SearchResponse{
+			HotelID:     hotelID,
 			Name:        name,
 			Location:    loc,
 			Description: desc,
@@ -581,17 +575,17 @@ func GetRooms(db *sql.DB, hotelID int) ([]types.Room, error) {
 
 func GetHotelReviews(db *sql.DB, hotelID int) ([]types.Review, error) {
 	query := `
-	SELECT 
-		r.RoomID, 
-		r.Name AS RoomName, 
-		rv.Username, 
-		rv.review, 
-		rv.rating
-	FROM rooms r
-	LEFT JOIN reviews rv ON r.RoomID = rv.roomID
-	WHERE r.HotelID = ?
-	`
-
+        SELECT 
+            r.RoomID, 
+            r.Name AS RoomName, 
+            rv.Username, 
+            rv.review, 
+            rv.rating,
+            rv.CreatedAt
+        FROM rooms r
+        LEFT JOIN reviews rv ON r.RoomID = rv.roomID
+        WHERE r.HotelID = ?
+    `
 	rows, err := db.Query(query, hotelID)
 	if err != nil {
 		return nil, fmt.Errorf("errore durante l'esecuzione della query GetHotelReviews: %v", err)
@@ -605,11 +599,12 @@ func GetHotelReviews(db *sql.DB, hotelID int) ([]types.Review, error) {
 		var username sql.NullString
 		var comment sql.NullString
 		var rating sql.NullFloat64
+		var createdAt sql.NullString
 
-		if err := rows.Scan(&rev.RoomID, &rev.RoomName, &username, &comment, &rating); err != nil {
+		if err := rows.Scan(&rev.RoomID, &rev.RoomName, &username, &comment, &rating, &createdAt); err != nil {
 			return nil, fmt.Errorf("errore durante la scansione in GetHotelReviews: %v", err)
 		}
-		// Assegna i valori convertendo i valori NULL:
+		// Converti i valori null in stringhe vuote o valori di default
 		rev.Username = ""
 		if username.Valid {
 			rev.Username = username.String
@@ -623,14 +618,19 @@ func GetHotelReviews(db *sql.DB, hotelID int) ([]types.Review, error) {
 		} else {
 			rev.Rating = 0
 		}
-		// Aggiungi la recensione solo se almeno uno dei campi è valorizzato
-		if username.Valid || comment.Valid || rating.Valid {
+		rev.CreatedAt = ""
+		if createdAt.Valid {
+			rev.CreatedAt = createdAt.String
+		}
+
+		// Aggiungi il record solo se contiene dati utili
+		if strings.TrimSpace(rev.Comment) != "" || rev.Rating != 0 {
 			reviews = append(reviews, rev)
 		}
 	}
 
 	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("errore durancte l'iterazione delle righe in GetHotelReviews: %v", err)
+		return nil, fmt.Errorf("errore durante l'iterazione delle righe in GetHotelReviews: %v", err)
 	}
 
 	return reviews, nil
