@@ -446,6 +446,7 @@ func AddRoom(db *sql.DB, hotelName, roomName, roomDescription string, pricePerNi
 }
 
 func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, services []string) ([]types.SearchResponse, error) {
+	// Inizia la query senza la clausola GROUP BY
 	query := `
         SELECT DISTINCT 
             h.HotelID, 
@@ -455,7 +456,7 @@ func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, ser
             h.Services, 
             h.Rating, 
             h.Images,
-			MIN(r.PricePerNight) AS minPrice
+            MIN(r.PricePerNight) AS minPrice
         FROM hotels h
         JOIN rooms r ON h.HotelID = r.HotelID
         WHERE h.Location LIKE ?
@@ -466,35 +467,37 @@ func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, ser
               WHERE b.RoomID = r.RoomID
                 AND (b.CheckInDate < ? AND b.CheckOutDate > ?)
           )
-		GROUP BY h.HotelID, h.Name, h.Location, h.Description, h.Services, h.Rating, h.Images
     `
 
-	// Prepara i parametri:
-	// - Per la location usiamo il pattern LIKE (ad es. "%Milano%")
-	// - Per la disponibilità delle date, usiamo checkOut e checkIn (nell'ordine corretto per la condizione)
+	// Prepara i parametri di base
 	params := []interface{}{
 		"%" + location + "%",
 		guest,
-		checkOut, // Se un booking inizia prima della data di check-out...
-		checkIn,  // ... e finisce dopo la data di check-in, allora si sovrappone.
+		checkOut,
+		checkIn,
 	}
 
-	// Aggiungiamo dinamicamente le condizioni per i servizi richiesti.
-	// Poiché in hotels il campo Services è una stringa (ad esempio: "Free Wi-Fi,Free Parking,Gym,Spa,Restaurant"),
-	// per ogni servizio richiesto aggiungiamo una condizione che verifichi che la stringa contenga quel servizio.
+	// Aggiungi per ciascun servizio la condizione nella clausola WHERE
 	for _, service := range services {
 		query += " AND h.Services LIKE ?"
 		params = append(params, "%"+service+"%")
 	}
 
-	// Eseguiamo la query
+	// Ora aggiungi la clausola GROUP BY
+	query += `
+        GROUP BY h.HotelID, h.Name, h.Location, h.Description, h.Services, h.Rating, h.Images
+    `
+
+	fmt.Println("servizi:", params)
+
+	// Esegui la query
 	rows, err := db.Query(query, params...)
 	if err != nil {
 		return nil, fmt.Errorf("errore durante l'esecuzione della query: %v", err)
 	}
 	defer rows.Close()
 
-	// Prepariamo l'array di risposta
+	// Prepara la slice di risposta
 	var hotels []types.SearchResponse
 	for rows.Next() {
 		var hotelID int
@@ -506,7 +509,7 @@ func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, ser
 			return nil, fmt.Errorf("errore durante la scansione delle righe: %v", err)
 		}
 
-		// Convertiamo la stringa dei servizi in una slice, eliminando eventuali spazi in eccesso.
+		// Converte la stringa dei servizi in una slice
 		serviceList := strings.Split(servicesStr, ",")
 		for i, s := range serviceList {
 			serviceList[i] = strings.TrimSpace(s)
@@ -636,31 +639,75 @@ func GetHotelReviews(db *sql.DB, hotelID int) ([]types.Review, error) {
 	return reviews, nil
 }
 
-func GetAvailableRooms(db *sql.DB, hotelID int, checkOutDate, checkInDate string) ([]types.Room, error) {
+func GetAvailableRooms(db *sql.DB, hotelID int, checkOutDate, checkInDate, username string) ([]types.RoomUser, error) {
 	query := `
-        SELECT RoomID, Name, Description, PricePerNight, MaxGuests, TipologiaStanza, Images
-		FROM rooms
-		WHERE HotelID = ?
-		AND IsAvailable = TRUE
-		AND NOT EXISTS (
-    		SELECT 1 FROM bookings
-    		WHERE bookings.RoomID = rooms.RoomID
-      		AND (DATE(bookings.CheckInDate) < ? AND DATE(bookings.CheckOutDate) > ?)
-	);
+        SELECT 
+            r.RoomID, 
+            r.Name, 
+            r.Description, 
+            r.PricePerNight, 
+            r.MaxGuests, 
+            r.TipologiaStanza, 
+            r.Images,
+            CASE WHEN i.InterestID IS NULL THEN false ELSE true END AS IsInterestSet
+        FROM rooms r
+        LEFT JOIN interests i ON r.RoomID = i.RoomID AND i.Username = ?
+        WHERE r.HotelID = ?
+          AND r.IsAvailable = TRUE
+          AND NOT EXISTS (
+              SELECT 1 FROM bookings b
+              WHERE b.RoomID = r.RoomID
+                AND (DATE(b.CheckInDate) < ? AND DATE(b.CheckOutDate) > ?)
+          );
     `
-
-	rows, err := db.Query(query, hotelID, checkOutDate, checkInDate)
+	rows, err := db.Query(query, username, hotelID, checkOutDate, checkInDate)
 	if err != nil {
-		return nil, fmt.Errorf("errore durante l'esecuzione della query: %w", err)
+		return nil, fmt.Errorf("errore durante l'esecuzione della query: %v", err)
 	}
 	defer rows.Close()
 
-	var rooms []types.Room
+	var rooms []types.RoomUser
 	for rows.Next() {
-		var room types.Room
-		// Assicurati che i campi della struct types.Room corrispondano all'ordine dei campi selezionati
-		if err := rows.Scan(&room.RoomID, &room.RoomName, &room.RoomDescription, &room.PricePerNight, &room.MaxGuests, &room.RoomType, &room.Images); err != nil {
-			return nil, fmt.Errorf("errore durante la scansione dei dati: %w", err)
+		var room types.RoomUser
+		err := rows.Scan(&room.RoomID, &room.RoomName, &room.RoomDescription, &room.PricePerNight, &room.MaxGuests, &room.RoomType, &room.Images, &room.IsInterestSet)
+		if err != nil {
+			return nil, fmt.Errorf("errore durante la scansione dei dati: %v", err)
+		}
+		rooms = append(rooms, room)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return rooms, nil
+}
+
+func GetRoomsUser(db *sql.DB, hotelID int, username string) ([]types.RoomUser, error) {
+	query := `
+        SELECT 
+            r.RoomID, 
+            r.Name, 
+            r.Description, 
+            r.PricePerNight, 
+            r.MaxGuests, 
+            r.TipologiaStanza, 
+            r.Images,
+            CASE WHEN i.InterestID IS NULL THEN false ELSE true END AS IsInterestSet
+        FROM rooms r
+        LEFT JOIN interests i ON r.RoomID = i.RoomID AND i.Username = ?
+        WHERE r.HotelID = ?
+    `
+	rows, err := db.Query(query, username, hotelID)
+	if err != nil {
+		return nil, fmt.Errorf("errore durante l'esecuzione della query: %v", err)
+	}
+	defer rows.Close()
+
+	var rooms []types.RoomUser
+	for rows.Next() {
+		var room types.RoomUser
+		err := rows.Scan(&room.RoomID, &room.RoomName, &room.RoomDescription, &room.PricePerNight, &room.MaxGuests, &room.RoomType, &room.Images, &room.IsInterestSet)
+		if err != nil {
+			return nil, fmt.Errorf("errore durante la scansione dei dati: %v", err)
 		}
 		rooms = append(rooms, room)
 	}

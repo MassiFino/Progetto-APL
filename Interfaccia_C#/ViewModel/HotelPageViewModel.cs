@@ -309,7 +309,17 @@ namespace Interfaccia_C_.ViewModel
                 Debug.WriteLine("Immaginissima: " + hotel.ImageSource);
             }
 
-            SetInterestCommand = new Command<Room>(async (selectedRoom) => await OnSetInterest(selectedRoom));
+            SetInterestCommand = new Command<Room>(async (selectedRoom) =>
+            {
+                if (selectedRoom.IsInterestSet)
+                {
+                    await Shell.Current.DisplayAlert("Info", "Hai già impostato l'interesse per questa stanza", "OK");
+                }
+                else
+                {
+                    await OnSetInterest(selectedRoom);
+                }
+            });
 
         }
         private async void CercaStanza()
@@ -326,6 +336,9 @@ namespace Interfaccia_C_.ViewModel
                     CheckInDate = this.CheckInDate.ToString("yyyy-MM-dd"),
                     CheckOutDate = this.CheckOutDate.ToString("yyyy-MM-dd")
                 };
+
+                var token = await SecureStorage.GetAsync("jwt_token");
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 var json = JsonSerializer.Serialize(payload);
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
@@ -380,9 +393,14 @@ namespace Interfaccia_C_.ViewModel
             {
                 using var client = new HttpClient();
 
+                var token = await SecureStorage.GetAsync("jwt_token");
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 var json = JsonSerializer.Serialize(new { HotelID = HotelID });
                 var content = new StringContent(json, Encoding.UTF8, "application/json");
-                var response = await client.PostAsync("http://localhost:9000/getRooms", content);
+
+                var response = await client.PostAsync("http://localhost:9000/getRoomsUser", content);
 
 
                 if (response.IsSuccessStatusCode)

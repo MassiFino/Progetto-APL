@@ -122,6 +122,8 @@ func getUserDataHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
 		return
 	}
+
+	fmt.Printf("Data utente ricevuta: %+v\n", req)
 	//fmt.Printf("Dati ricevuti: %+v\n", req)
 	// Recupera i dati dell'utente dal database usando la funzione GetUser
 	user, err := database.GetUser(db, req.Username)
@@ -547,7 +549,7 @@ func getAvailableRoomsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Chiama la funzione del package database per ottenere le stanze disponibili
-	rooms, err := database.GetAvailableRooms(db, req.HotelID, req.CheckOutDate, req.CheckInDate)
+	rooms, err := database.GetAvailableRooms(db, req.HotelID, req.CheckOutDate, req.CheckInDate, req.Username)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Errore nel recupero delle stanze disponibili: %v", err), http.StatusInternalServerError)
 		return
@@ -557,6 +559,30 @@ func getAvailableRoomsHandler(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(rooms); err != nil {
 		http.Error(w, "Errore durante la codifica della risposta JSON", http.StatusInternalServerError)
 	}
+}
+
+func getRoomsUserHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Decodifica il corpo della richiesta (che ora contiene anche Username)
+	var req types.GetRoomsUserRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	// Usa il campo Username dal payload
+	rooms, err := database.GetRoomsUser(db, req.HotelID, req.Username)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore nel recupero delle stanze: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(rooms)
 }
 
 func addBookingHandler(w http.ResponseWriter, r *http.Request) {
@@ -861,6 +887,7 @@ func main() {
 	http.HandleFunc("/getInterests", GetInterestsHandler)
 	http.HandleFunc("/deleteInterest", DeleteInterestHandler)
 	http.HandleFunc("/updateRoomPrice", UpdateRoomPriceHandler)
+	http.HandleFunc("/getRoomsUser", getRoomsUserHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)

@@ -192,10 +192,27 @@ type GetRoomsReviewsRequest struct {
 	HotelID int `json:"HotelID"`
 }
 
+type GetRoomsUserRequest struct {
+	HotelID  int    `json:"HotelID"`
+	Username string `json:"Username"`
+}
+
 type AvailableRoomsRequest struct {
 	HotelID      int    `json:"HotelID"`
-	CheckInDate  string `json:"CheckInDate"`  // ad es. "2025-03-01"
-	CheckOutDate string `json:"CheckOutDate"` // ad es. "2025-03-05"
+	CheckInDate  string `json:"CheckInDate"`
+	CheckOutDate string `json:"CheckOutDate"`
+	Username     string `json:"Username"`
+}
+
+type RoomUser struct {
+	RoomID          int     `json:"RoomID"`
+	RoomName        string  `json:"RoomName"`
+	RoomDescription string  `json:"RoomDescription"`
+	PricePerNight   float64 `json:"PricePerNight"`
+	MaxGuests       int     `json:"MaxGuests"`
+	RoomType        string  `json:"RoomType"`
+	Images          string  `json:"Images"`
+	IsInterestSet   bool    `json:"IsInterestSet"` // Indica se l'utente ha già impostato l'interesse
 }
 
 type BookingRoomRequest struct {

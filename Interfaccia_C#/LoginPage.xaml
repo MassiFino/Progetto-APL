@@ -1,125 +1,124 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Interfaccia_C_.LoginPage"
-             xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel">
-
+<ContentPage 
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Interfaccia_C_.LoginPage"
+    xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel">
     <ContentPage.Content>
-        <Grid>
-            <!-- Sfondo gradiente -->
+        <!-- Grid esterno che occupa tutto lo schermo -->
+        <Grid VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
             <Grid.Background>
-                <LinearGradientBrush StartPoint="0,0"
-                        EndPoint="0,1">
-                    <GradientStop Color="AliceBlue"
-                            Offset="0.0"/>
-                    <GradientStop Color="AliceBlue"
-                            Offset="1.0"/>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                    <GradientStop Color="AliceBlue" Offset="0.0"/>
+                    <GradientStop Color="AliceBlue" Offset="1.0"/>
                 </LinearGradientBrush>
             </Grid.Background>
 
-            <!-- Box centrale -->
-            <ScrollView VerticalOptions="Center">
+            <!-- ScrollView per supportare eventuale scrolling su schermi piccoli -->
+            <ScrollView VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
+                <!-- Border esterno senza arrotondamenti -->
                 <Border Stroke="LightGray"
-                        StrokeThickness="1"
-                        BackgroundColor="White"
-                        Padding="20"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center"
-                        WidthRequest="400"
-                        StrokeShape="RoundRectangle 20">
-                    <VerticalStackLayout Spacing="20"
-                            Padding="30"
-                            VerticalOptions="Center">
+                StrokeThickness="1"
+                BackgroundColor="White"
+                Padding="20"
+                VerticalOptions="FillAndExpand"
+                HorizontalOptions="FillAndExpand">
+                    <!-- Container per il contenuto a larghezza fissa -->
+                    <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="400"/>
+                        </Grid.ColumnDefinitions>
+                        <VerticalStackLayout Grid.Column="0" 
+                                 Spacing="20"
+                                 Padding="30"
+                                 HorizontalOptions="Center">
+                            <!-- Immagine -->
+                            <Border StrokeThickness="1"
+                      HeightRequest="150"
+                      WidthRequest="150"
+                      HorizontalOptions="Center">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="25"/>
+                                </Border.StrokeShape>
+                                <Image Source="designer.jpg"/>
+                            </Border>
 
-                        <!-- Image -->
-                        <Border
-                            StrokeThickness="1"
-                            HeightRequest="150"
-                            WidthRequest="150"
-                            HorizontalOptions="Center">
-                            <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="25"/>
-                            </Border.StrokeShape>
-                            <Image Source="designer.jpg"/>
-                        </Border>
+                            <!-- Messaggio di benvenuto -->
+                            <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
+                                <Label Text="Welcome!"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="Black"
+                       HorizontalTextAlignment="Center"/>
+                                <Label Text="Login to your account"
+                       FontSize="18"
+                       TextColor="Gray"
+                       HorizontalTextAlignment="Center"/>
+                            </VerticalStackLayout>
 
+                            <!-- Campo per il nome utente -->
+                            <Border Stroke="LightGray"
+                      StrokeShape="RoundRectangle 25"
+                      BackgroundColor="White"
+                      Padding="10"
+                      HorizontalOptions="Center">
+                                <HorizontalStackLayout Spacing="10">
+                                    <Image Source="account.png"
+                         HeightRequest="20"
+                         WidthRequest="20"
+                         VerticalOptions="Center"/>
+                                    <Entry Placeholder="Username"
+                         Text="{Binding Username}"
+                         Keyboard="Text"
+                         HorizontalOptions="Center"
+                         WidthRequest="240"
+                         TextColor="Black"/>
+                                </HorizontalStackLayout>
+                            </Border>
 
-                        <!-- Welcome Message -->
-                        <VerticalStackLayout Spacing="5"
-                                HorizontalOptions="Center">
-                            <Label Text="Welcome!"
-                                   FontSize="28"
-                                   FontAttributes="Bold"
-                                   TextColor="Black"
-                                   HorizontalTextAlignment="Center"/>
-                            <Label Text="Login to your account"
-                                   FontSize="18"
-                                   TextColor="Gray"
-                                   HorizontalTextAlignment="Center"/>
+                            <!-- Campo per la password -->
+                            <Border Stroke="LightGray"
+                      StrokeShape="RoundRectangle 25"
+                      BackgroundColor="White"
+                      Padding="10"
+                      HorizontalOptions="Center">
+                                <HorizontalStackLayout Spacing="10">
+                                    <Image Source="lucchetto2.png"
+                         HeightRequest="20"
+                         WidthRequest="20"
+                         VerticalOptions="Center"/>
+                                    <Entry Placeholder="Password"
+                         Text="{Binding Password}"
+                         IsPassword="True"
+                         HorizontalOptions="Center"
+                         WidthRequest="240"
+                         TextColor="Black"/>
+                                </HorizontalStackLayout>
+                            </Border>
+
+                            <!-- Bottone per il login -->
+                            <Button Text="Sign In"
+                      Command="{Binding LoginCommand}"
+                      BackgroundColor="#007BFF"
+                      TextColor="White"
+                      CornerRadius="25"
+                      HeightRequest="50"
+                      HorizontalOptions="Center"
+                      WidthRequest="240"/>
+
+                            <!-- Link per il Signup -->
+                            <HorizontalStackLayout HorizontalOptions="Center">
+                                <Label Text="Don't have account?"
+                       TextColor="Gray"/>
+                                <Label Text="Sign up here"
+                       TextColor="#50b3f2">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding GoToRegisterCommand}"/>
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </HorizontalStackLayout>
                         </VerticalStackLayout>
-
-                        <!-- Username Entry -->
-                        <Border Stroke="LightGray"
-                                StrokeShape="RoundRectangle 25"
-                                BackgroundColor="White"
-                                Padding="10">
-                            <HorizontalStackLayout Spacing="10">
-                                <Image Source="account.png"
-                                       HeightRequest="20"
-                                       WidthRequest="20"
-                                       VerticalOptions="Center"/>
-                                <Entry Placeholder="Username"
-                                       WidthRequest="240"
-                                       Text="{Binding Username}"
-                                       Keyboard="Text"
-                                       HorizontalOptions="FillAndExpand"
-                                       TextColor="Black"/>
-                            </HorizontalStackLayout>
-                        </Border>
-
-                        <!-- Password Entry -->
-                        <Border Stroke="LightGray"
-                                StrokeShape="RoundRectangle 25"
-                                BackgroundColor="White"
-                                Padding="10">
-                            <HorizontalStackLayout Spacing="10">
-                                <Image Source="lucchetto2.png"
-                                       HeightRequest="20"
-                                       WidthRequest="20"
-                                       VerticalOptions="Center"/>
-                                <Entry Placeholder="Password"
-                                       Text="{Binding Password}"
-                                       IsPassword="True"
-                                       HorizontalOptions="FillAndExpand"
-                                       WidthRequest="240"
-                                       TextColor="Black"/>
-                            </HorizontalStackLayout>
-                        </Border>
-
-                        <!-- Login Button -->
-                        <Button Text="Sign In"
-                                Command="{Binding LoginCommand}"
-                                BackgroundColor="#007BFF"
-                                TextColor="White"
-                                CornerRadius="25"
-                                HeightRequest="50"
-                                HorizontalOptions="FillAndExpand"/>
-
-                        <!-- Signup Link -->
-                        <HorizontalStackLayout HorizontalOptions="Center">
-                            <Label Text="Don't have account?"
-                                   TextColor="Gray"/>
-                            <Label Text="Sign up here"
-                                    TextColor="#50b3f2">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding GoToRegisterCommand}"/>
-                                </Label.GestureRecognizers>
-                            </Label>
-
-
-                        </HorizontalStackLayout>
-
-                    </VerticalStackLayout>
+                    </Grid>
                 </Border>
             </ScrollView>
         </Grid>

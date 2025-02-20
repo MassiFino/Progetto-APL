@@ -452,17 +452,54 @@ def get_hotel_reviews(request: GetRoomsReviewsRequest):
         raise HTTPException(status_code=502, detail=str(e))
 
 @app.post("/getAvailableRooms")
-def get_available_rooms(request: AvailableRoomsRequest):
+def get_available_rooms(request: AvailableRoomsRequest, credentials: HTTPAuthorizationCredentials = Depends(security)):
     try:
 
+        token = credentials.credentials
+
         print("Richiesta ricevuta:", request.dict())
+        payload = decode_jwt_token(token)
+        username = payload.get("username")
+
+        data = request.dict()
+        data["Username"] = username
         # Inoltra la richiesta al backend Go usando connect_go
-        response = connect_go("getAvailableRooms", request.dict())
+        response = connect_go("getAvailableRooms", data)
 
         print("Risposta ricevuta:", response)
         return response
     except ConnectionError as e:
         raise HTTPException(status_code=502, detail=str(e))
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token scaduto")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Token non valido")
+
+@app.post("/getRoomsUser")
+def get_rooms_user(request: GetRoomsReviewsRequest, credentials: HTTPAuthorizationCredentials = Depends(security)):
+    try:
+
+        token = credentials.credentials
+
+        print("Richiesta ricevuta:", request.dict())
+        payload = decode_jwt_token(token)
+        username = payload.get("username")
+
+        data = request.dict()
+        data["Username"] = username
+
+        print("Data da inviare a Go getRoomsUser:", data)
+        # Inoltra la richiesta al backend Go
+        response = connect_go("getRoomsUser", data)
+        print(response)
+
+        return response
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail="Token scaduto")
+    except jwt.InvalidTokenError:
+        raise HTTPException(status_code=401, detail="Token non valido")
 
 
 @app.post("/addBooking")

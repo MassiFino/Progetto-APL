@@ -310,7 +310,8 @@ namespace Interfaccia_C_.ViewModel
                     var responseContent = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine("Risposta JSON: " + responseContent);
 
-                    var registerResponse = JsonSerializer.Deserialize<RegisterResponse>(responseContent);
+                    var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+                    var registerResponse = JsonSerializer.Deserialize<RegisterResponse>(responseContent, options);
 
                     if (registerResponse != null && registerResponse.Status == "ok")
                     {

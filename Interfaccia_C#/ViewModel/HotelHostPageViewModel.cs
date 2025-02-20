@@ -72,20 +72,6 @@ namespace Interfaccia_C_.ViewModel
             public ImageSource ImageSource { get; set; }
 
 
-            private bool _isInterestSet = false;
-            public bool IsInterestSet
-            {
-                get => _isInterestSet;
-                set
-                {
-                    if (_isInterestSet != value)
-                    {
-                        _isInterestSet = value;
-                        OnPropertyChanged();
-                    }
-                }
-            }
-
             public event PropertyChangedEventHandler PropertyChanged;
             protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null) =>
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
