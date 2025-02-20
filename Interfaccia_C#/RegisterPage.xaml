@@ -10,163 +10,184 @@
         <Grid>
             <!-- Sfondo gradiente -->
             <Grid.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="AliceBlue" Offset="0.0" />
-                    <GradientStop Color="AliceBlue" Offset="1.0" />
+                <LinearGradientBrush StartPoint="0,0"
+                        EndPoint="0,1">
+                    <GradientStop Color="AliceBlue"
+                            Offset="0.0"/>
+                    <GradientStop Color="AliceBlue"
+                            Offset="1.0"/>
                 </LinearGradientBrush>
             </Grid.Background>
 
             <!-- Box centrale -->
             <ScrollView VerticalOptions="Center">
-                <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="White" Padding="20"
-                        HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="400"
+                <Border Stroke="LightGray"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        Padding="20"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        WidthRequest="400"
                         StrokeShape="RoundRectangle 20">
-                    <VerticalStackLayout Spacing="20" Padding="30" VerticalOptions="Center">
+                    <VerticalStackLayout Spacing="20"
+                            Padding="30"
+                            VerticalOptions="Center">
 
-                        <Border 
-                            StrokeThickness="1" 
-                            HeightRequest="150"     
-                            WidthRequest="150" 
+                        <Border
+                            StrokeThickness="1"
+                            HeightRequest="150"
+                            WidthRequest="150"
                             HorizontalOptions="Center">
                             <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="25" />
+                                <RoundRectangle CornerRadius="25"/>
                             </Border.StrokeShape>
-                            <Image Source="designer.jpg" />
+                            <Image Source="designer.jpg"/>
                         </Border>
                         <!-- Titolo -->
-                        <Label Text="Create an Account" 
-                               FontSize="28" 
-                               FontAttributes="Bold" 
-                               TextColor="Black" 
-                               HorizontalTextAlignment="Center" />
+                        <Label Text="Create an Account"
+                               FontSize="28"
+                               FontAttributes="Bold"
+                               TextColor="Black"
+                               HorizontalTextAlignment="Center"/>
 
                         <!-- Campi di input -->
-                        <Border Stroke="LightGray" 
-                                StrokeShape="RoundRectangle 25" 
-                                BackgroundColor="White" 
+                        <Border Stroke="LightGray"
+                                StrokeShape="RoundRectangle 25"
+                                BackgroundColor="White"
                                 Padding="10">
                             <HorizontalStackLayout Spacing="10">
-                                <Image Source="account.png" 
-                                       HeightRequest="20" 
-                                       WidthRequest="20" 
-                                       VerticalOptions="Center" />
-                                <Entry Placeholder="Name" 
-                                       Text="{Binding Name}" 
-                                        WidthRequest="240"
-                                        TextColor="Black" 
-                                       />
-                            </HorizontalStackLayout>
-                        </Border>
-
-                        <Border Stroke="LightGray" 
-                                StrokeShape="RoundRectangle 25" 
-                                BackgroundColor="White" 
-                                Padding="10">
-                            <HorizontalStackLayout Spacing="10">
-                                <Image Source="email.png" 
-                                       HeightRequest="20" 
-                                       WidthRequest="20" 
-                                       VerticalOptions="Center" />
-                                <Entry Placeholder="Email" 
-                                       Text="{Binding Email}" 
-                                       Keyboard="Email" 
-                                        WidthRequest="240"
-                                        TextColor="Black" 
-                                       />
-                            </HorizontalStackLayout>
-                        </Border>
-
-                        <Border Stroke="LightGray" 
-                                StrokeShape="RoundRectangle 25" 
-                                BackgroundColor="White" 
-                                Padding="10">
-                            <HorizontalStackLayout Spacing="10">
-                                <Image Source="lucchetto3.png" 
-                                       HeightRequest="20" 
-                                       WidthRequest="20" 
-                                       VerticalOptions="Center" />
-                                <Entry Placeholder="Password" 
-                                       Text="{Binding Password}" 
-                                       IsPassword="True"   
+                                <Image Source="account.png"
+                                       HeightRequest="20"
+                                       WidthRequest="20"
+                                       VerticalOptions="Center"/>
+                                <Entry Placeholder="Name"
+                                       Text="{Binding Name}"
                                        WidthRequest="240"
-                                       TextColor="Black" 
-                                       />
+                                       TextColor="Black"/>
                             </HorizontalStackLayout>
                         </Border>
 
-                        <Border Stroke="LightGray" 
-                                StrokeShape="RoundRectangle 25" 
-                                BackgroundColor="White" 
+                        <Border Stroke="LightGray"
+                                StrokeShape="RoundRectangle 25"
+                                BackgroundColor="White"
                                 Padding="10">
                             <HorizontalStackLayout Spacing="10">
-                                <Image Source="lucchetto1.png" 
-                                  HeightRequest="20" 
-                                  WidthRequest="20" 
-                                  VerticalOptions="Center" />
-                                <Entry Placeholder="Confirm Password" 
-                                  Text="{Binding ConfirmPassword}" 
-                                  TextColor="Black"
-                                  WidthRequest="240"
-                                  IsPassword="True" />
+                                <Image Source="email.png"
+                                       HeightRequest="20"
+                                       WidthRequest="20"
+                                       VerticalOptions="Center"/>
+                                <Entry Placeholder="Email"
+                                       Text="{Binding Email}"
+                                       Keyboard="Email"
+                                       WidthRequest="240"
+                                       TextColor="Black"/>
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <Border Stroke="LightGray"
+                                StrokeShape="RoundRectangle 25"
+                                BackgroundColor="White"
+                                Padding="10">
+                            <HorizontalStackLayout Spacing="10">
+                                <Image Source="lucchetto3.png"
+                                       HeightRequest="20"
+                                       WidthRequest="20"
+                                       VerticalOptions="Center"/>
+                                <Entry Placeholder="Password"
+                                       Text="{Binding Password}"
+                                       IsPassword="True"
+                                       WidthRequest="240"
+                                       TextColor="Black"/>
+                            </HorizontalStackLayout>
+                        </Border>
+
+                        <Border Stroke="LightGray"
+                                StrokeShape="RoundRectangle 25"
+                                BackgroundColor="White"
+                                Padding="10">
+                            <HorizontalStackLayout Spacing="10">
+                                <Image Source="lucchetto1.png"
+                                       HeightRequest="20"
+                                       WidthRequest="20"
+                                       VerticalOptions="Center"/>
+                                <Entry Placeholder="Confirm Password"
+                                       Text="{Binding ConfirmPassword}"
+                                       TextColor="Black"
+                                       WidthRequest="240"
+                                       IsPassword="True"/>
                             </HorizontalStackLayout>
                         </Border>
 
                         <!-- Layout principale -->
-                        <StackLayout Orientation="Horizontal" VerticalOptions="CenterAndExpand" HorizontalOptions="Center" Spacing="30">
+                        <StackLayout Orientation="Horizontal"
+                                VerticalOptions="CenterAndExpand"
+                                HorizontalOptions="Center"
+                                Spacing="30">
                             <!-- Opzione User -->
-                            <StackLayout Orientation="Vertical" HorizontalOptions="Center" Spacing="5">
-                                <Label Text="User" FontSize="14" TextColor="Black" HorizontalOptions="Center" />
-                                <RadioButton GroupName="UserType" 
-                         IsChecked="{Binding IsUserSelected, Mode=TwoWay}" 
-                         HorizontalOptions="Center" 
-                         Value="User"/>
+                            <StackLayout Orientation="Vertical"
+                                    HorizontalOptions="Center"
+                                    Spacing="5">
+                                <Label Text="User"
+                                        FontSize="14"
+                                        TextColor="Black"
+                                        HorizontalOptions="Center"/>
+                                <RadioButton GroupName="UserType"
+                                             IsChecked="{Binding IsUserSelected, Mode=TwoWay}"
+                                             HorizontalOptions="Center"
+                                             Value="User"/>
                             </StackLayout>
 
                             <!-- Opzione Host -->
-                            <StackLayout Orientation="Vertical" HorizontalOptions="Center" Spacing="5">
-                                <Label Text="Host" FontSize="14" TextColor="Black" HorizontalOptions="Center" />
-                                <RadioButton GroupName="UserType" 
-                         IsChecked="{Binding IsHostSelected, Mode=TwoWay}" 
-                         HorizontalOptions="Center" 
-                         Value="Host"/>
+                            <StackLayout Orientation="Vertical"
+                                    HorizontalOptions="Center"
+                                    Spacing="5">
+                                <Label Text="Host"
+                                        FontSize="14"
+                                        TextColor="Black"
+                                        HorizontalOptions="Center"/>
+                                <RadioButton GroupName="UserType"
+                                             IsChecked="{Binding IsHostSelected, Mode=TwoWay}"
+                                             HorizontalOptions="Center"
+                                             Value="Host"/>
                             </StackLayout>
                         </StackLayout>
                         <!-- Label per il titolo -->
                         <Label Text="Profile Picture"
-                           FontSize="16"
-                           TextColor="Gray"
-                           HorizontalTextAlignment="Center" />  
-                            <!-- Bottone di caricamento -->
-                            <Button Text="Upload Image"
+                               FontSize="16"
+                               TextColor="Gray"
+                               HorizontalTextAlignment="Center"/>
+                        <!-- Bottone di caricamento -->
+                        <Button Text="Upload Image"
                                 Command="{Binding UploadImageCommand}"
                                 BackgroundColor="#007BFF"
                                 TextColor="White"
                                 CornerRadius="25"
                                 HeightRequest="40"
-                                WidthRequest="150" />
+                                WidthRequest="150"/>
 
                         <!-- Conferma caricamento -->
-                            <Label Text="{Binding UploadStatusMessage}"
+                        <Label Text="{Binding UploadStatusMessage}"
                                FontSize="14"
                                TextColor="Green"
                                IsVisible="{Binding IsUploadComplete}"
-                               HorizontalTextAlignment="Center" />
-                        
+                               HorizontalTextAlignment="Center"/>
+
                         <!-- Bottone per la registrazione -->
                         <Button Text="Register"
-                              Command="{Binding RegisterCommand}"
-                              BackgroundColor="#28A745"
-                              TextColor="White"
-                              CornerRadius="25"
-                              HeightRequest="40"
-                              WidthRequest="150" />     
+                                Command="{Binding RegisterCommand}"
+                                BackgroundColor="#28A745"
+                                TextColor="White"
+                                CornerRadius="25"
+                                HeightRequest="40"
+                                WidthRequest="150"/>
                         <!-- Link al login -->
                         <HorizontalStackLayout HorizontalOptions="Center">
-                            <Label Text="Already have an account?" 
-                                   TextColor="Gray" />
-                            <Label Text="Login here" TextColor="#50b3f2">
+                            <Label Text="Already have an account?"
+                                   TextColor="Gray"/>
+                            <Label Text="Login here"
+                                    TextColor="#50b3f2">
                                 <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding GoToLoginCommand}" />
+                                    <TapGestureRecognizer Command="{Binding GoToLoginCommand}"/>
                                 </Label.GestureRecognizers>
                             </Label>
                         </HorizontalStackLayout>

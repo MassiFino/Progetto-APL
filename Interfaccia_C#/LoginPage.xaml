@@ -5,111 +5,123 @@
              xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel">
 
     <ContentPage.Content>
-     <Grid>
-         <!-- Sfondo gradiente -->
-         <Grid.Background>
-             <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                 <GradientStop Color="AliceBlue" Offset="0.0" />
-                 <GradientStop Color="AliceBlue" Offset="1.0" />
-             </LinearGradientBrush>
-         </Grid.Background>
+        <Grid>
+            <!-- Sfondo gradiente -->
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0"
+                        EndPoint="0,1">
+                    <GradientStop Color="AliceBlue"
+                            Offset="0.0"/>
+                    <GradientStop Color="AliceBlue"
+                            Offset="1.0"/>
+                </LinearGradientBrush>
+            </Grid.Background>
 
-         <!-- Box centrale -->
-         <ScrollView VerticalOptions="Center">
-                <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="White" Padding="20"
-                HorizontalOptions="Center" VerticalOptions="Center" WidthRequest="400"
-                StrokeShape="RoundRectangle 20">
-                    <VerticalStackLayout Spacing="20" Padding="30" VerticalOptions="Center">
+            <!-- Box centrale -->
+            <ScrollView VerticalOptions="Center">
+                <Border Stroke="LightGray"
+                        StrokeThickness="1"
+                        BackgroundColor="White"
+                        Padding="20"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        WidthRequest="400"
+                        StrokeShape="RoundRectangle 20">
+                    <VerticalStackLayout Spacing="20"
+                            Padding="30"
+                            VerticalOptions="Center">
 
-             <!-- Image -->
-                        <Border 
-                            StrokeThickness="1" 
-                            HeightRequest="150"     
-                            WidthRequest="150" 
+                        <!-- Image -->
+                        <Border
+                            StrokeThickness="1"
+                            HeightRequest="150"
+                            WidthRequest="150"
                             HorizontalOptions="Center">
                             <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="25" />
+                                <RoundRectangle CornerRadius="25"/>
                             </Border.StrokeShape>
-                            <Image Source="designer.jpg" />
+                            <Image Source="designer.jpg"/>
                         </Border>
 
 
                         <!-- Welcome Message -->
-        <VerticalStackLayout Spacing="5" HorizontalOptions="Center">
-            <Label Text="Welcome!" 
-                       FontSize="28" 
-                       FontAttributes="Bold" 
-                       TextColor="Black" 
-                       HorizontalTextAlignment="Center" />
-            <Label Text="Login to your account" 
-                       FontSize="18" 
-                       TextColor="Gray" 
-                       HorizontalTextAlignment="Center" />
-        </VerticalStackLayout>
+                        <VerticalStackLayout Spacing="5"
+                                HorizontalOptions="Center">
+                            <Label Text="Welcome!"
+                                   FontSize="28"
+                                   FontAttributes="Bold"
+                                   TextColor="Black"
+                                   HorizontalTextAlignment="Center"/>
+                            <Label Text="Login to your account"
+                                   FontSize="18"
+                                   TextColor="Gray"
+                                   HorizontalTextAlignment="Center"/>
+                        </VerticalStackLayout>
 
-        <!-- Username Entry -->
-        <Border Stroke="LightGray" 
-                    StrokeShape="RoundRectangle 25" 
-                    BackgroundColor="White" 
-                    Padding="10">
-            <HorizontalStackLayout Spacing="10">
-                <Image Source="account.png" 
-                           HeightRequest="20" 
-                           WidthRequest="20" 
-                           VerticalOptions="Center" />
-                    <Entry Placeholder="Username" 
-                           WidthRequest="240"
-                           Text="{Binding Username}" 
-                           Keyboard="Text" 
-                           HorizontalOptions="FillAndExpand" 
-                           TextColor="Black" />            
-            </HorizontalStackLayout>
-        </Border>
-
-        <!-- Password Entry -->
-        <Border Stroke="LightGray" 
-                    StrokeShape="RoundRectangle 25" 
-                    BackgroundColor="White" 
-                    Padding="10">
-            <HorizontalStackLayout Spacing="10">
-                <Image Source="lucchetto2.png" 
-                           HeightRequest="20" 
-                           WidthRequest="20" 
-                           VerticalOptions="Center" />
-                        <Entry Placeholder="Password" 
-                           Text="{Binding Password}" 
-                           IsPassword="True" 
-                           HorizontalOptions="FillAndExpand"
-                           WidthRequest="240"
-                           TextColor="Black" />
+                        <!-- Username Entry -->
+                        <Border Stroke="LightGray"
+                                StrokeShape="RoundRectangle 25"
+                                BackgroundColor="White"
+                                Padding="10">
+                            <HorizontalStackLayout Spacing="10">
+                                <Image Source="account.png"
+                                       HeightRequest="20"
+                                       WidthRequest="20"
+                                       VerticalOptions="Center"/>
+                                <Entry Placeholder="Username"
+                                       WidthRequest="240"
+                                       Text="{Binding Username}"
+                                       Keyboard="Text"
+                                       HorizontalOptions="FillAndExpand"
+                                       TextColor="Black"/>
                             </HorizontalStackLayout>
-        </Border>
+                        </Border>
 
-        <!-- Login Button -->
-        <Button Text="Sign In" 
-                    Command="{Binding LoginCommand}" 
-                    BackgroundColor="#007BFF" 
-                    TextColor="White" 
-                    CornerRadius="25" 
-                    HeightRequest="50" 
-                    HorizontalOptions="FillAndExpand" />
+                        <!-- Password Entry -->
+                        <Border Stroke="LightGray"
+                                StrokeShape="RoundRectangle 25"
+                                BackgroundColor="White"
+                                Padding="10">
+                            <HorizontalStackLayout Spacing="10">
+                                <Image Source="lucchetto2.png"
+                                       HeightRequest="20"
+                                       WidthRequest="20"
+                                       VerticalOptions="Center"/>
+                                <Entry Placeholder="Password"
+                                       Text="{Binding Password}"
+                                       IsPassword="True"
+                                       HorizontalOptions="FillAndExpand"
+                                       WidthRequest="240"
+                                       TextColor="Black"/>
+                            </HorizontalStackLayout>
+                        </Border>
 
-        <!-- Signup Link -->
-        <HorizontalStackLayout HorizontalOptions="Center">
-            <Label Text="Don't have account?" 
-                       TextColor="Gray" />
-            <Label Text="Sign up here" TextColor="#50b3f2">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding GoToRegisterCommand}" />
-                </Label.GestureRecognizers>
-            </Label>
+                        <!-- Login Button -->
+                        <Button Text="Sign In"
+                                Command="{Binding LoginCommand}"
+                                BackgroundColor="#007BFF"
+                                TextColor="White"
+                                CornerRadius="25"
+                                HeightRequest="50"
+                                HorizontalOptions="FillAndExpand"/>
+
+                        <!-- Signup Link -->
+                        <HorizontalStackLayout HorizontalOptions="Center">
+                            <Label Text="Don't have account?"
+                                   TextColor="Gray"/>
+                            <Label Text="Sign up here"
+                                    TextColor="#50b3f2">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding GoToRegisterCommand}"/>
+                                </Label.GestureRecognizers>
+                            </Label>
 
 
-        </HorizontalStackLayout>
+                        </HorizontalStackLayout>
 
-    </VerticalStackLayout>
-    </Border>
-    </ScrollView>
-    </Grid>
+                    </VerticalStackLayout>
+                </Border>
+            </ScrollView>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

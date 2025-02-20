@@ -5,46 +5,98 @@
              BackgroundColor="AliceBlue"
              Padding="0">
 
-    <VerticalStackLayout Margin="10" Spacing="15">
+    <VerticalStackLayout Margin="10"
+            Spacing="15">
 
         <!-- Profilo Utente -->
-        <Border Stroke="#20B2AA" StrokeThickness="1" BackgroundColor="#00CED1" Padding="20"
-               HorizontalOptions="Center" VerticalOptions="Center"                StrokeShape="RoundRectangle 20">
+        <Border Stroke="#20B2AA"
+                StrokeThickness="1"
+                BackgroundColor="#00CED1"
+                Padding="20"
+                HorizontalOptions="Center"
+                VerticalOptions="Center"
+                StrokeShape="RoundRectangle 20">
 
 
-            <Grid Margin="10" ColumnDefinitions="Auto, *" RowDefinitions="Auto, Auto, Auto, Auto, Auto">
-                <Border Stroke="LightGray" StrokeThickness="1" Padding="5" Grid.RowSpan="5" HorizontalOptions="Center" VerticalOptions="Center" StrokeShape="RoundRectangle 10">
-                    <Image Source="{Binding ProfileImage}" WidthRequest="80" HeightRequest="80" VerticalOptions="CenterAndExpand"/>
+            <Grid Margin="10"
+                    ColumnDefinitions="Auto, *"
+                    RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+                <Border Stroke="LightGray"
+                        StrokeThickness="1"
+                        Padding="5"
+                        Grid.RowSpan="5"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        StrokeShape="RoundRectangle 10">
+                    <Image Source="{Binding ProfileImage}"
+                            WidthRequest="80"
+                            HeightRequest="80"
+                            VerticalOptions="CenterAndExpand"/>
                 </Border>
-                <StackLayout Grid.Column="1" Grid.Row="0" Spacing="10" VerticalOptions="Start" Padding="5">
+                <StackLayout Grid.Column="1"
+                        Grid.Row="0"
+                        Spacing="10"
+                        VerticalOptions="Start"
+                        Padding="5">
                     <HorizontalStackLayout Spacing="10">
-                       
-                        <Label Text="Nome Utente:" FontAttributes="Bold" FontSize="16" TextColor="#FF6347" VerticalOptions="Center" Margin="10" />
-                        <Label Text="{Binding UserName}" FontSize="18" TextColor="Black" VerticalOptions="Center" Margin="10" />
 
-                        <Label Text="Email:" FontAttributes="Bold" FontSize="16" TextColor="#FF6347" VerticalOptions="Center" Margin="10" />
-                        <Label Text="{Binding Email}" FontSize="14" TextColor="Gray" VerticalOptions="Center" Margin="10" />
+                        <Label Text="Nome Utente:"
+                                FontAttributes="Bold"
+                                FontSize="16"
+                                TextColor="#FF6347"
+                                VerticalOptions="Center"
+                                Margin="10"/>
+                        <Label Text="{Binding UserName}"
+                                FontSize="18"
+                                TextColor="Black"
+                                VerticalOptions="Center"
+                                Margin="10"/>
 
-                        <Label Text="Ruolo:" FontAttributes="Bold" FontSize="16" TextColor="#FF6347" VerticalOptions="Center" Margin="10" />
-                        <Label Text="{Binding Role}" FontSize="14" TextColor="Gray" VerticalOptions="Center" Margin="10" />
-                        
+                        <Label Text="Email:"
+                                FontAttributes="Bold"
+                                FontSize="16"
+                                TextColor="#FF6347"
+                                VerticalOptions="Center"
+                                Margin="10"/>
+                        <Label Text="{Binding Email}"
+                                FontSize="14"
+                                TextColor="Gray"
+                                VerticalOptions="Center"
+                                Margin="10"/>
+
+                        <Label Text="Ruolo:"
+                                FontAttributes="Bold"
+                                FontSize="16"
+                                TextColor="#FF6347"
+                                VerticalOptions="Center"
+                                Margin="10"/>
+                        <Label Text="{Binding Role}"
+                                FontSize="14"
+                                TextColor="Gray"
+                                VerticalOptions="Center"
+                                Margin="10"/>
+
                     </HorizontalStackLayout>
                 </StackLayout>
             </Grid>
         </Border>
 
-  
+
         <HorizontalStackLayout Spacing="10">
-            <Label Text="{Binding Message}" FontSize="20" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" 
-          IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}" />
+            <Label Text="{Binding Message}"
+                    FontSize="20"
+                    FontAttributes="Bold"
+                    TextColor="Black"
+                    HorizontalOptions="Center"
+                   IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}"/>
             <Button Text="Aggiungi un hotel"
                     Command="{Binding AddHotelCommand}"
                     BackgroundColor="#28A745"
                     TextColor="White"
                     CornerRadius="20"
                     HeightRequest="40"
-                    WidthRequest="150" />
-         
+                    WidthRequest="150"/>
+
         </HorizontalStackLayout>
 
         <!-- Scorrimento solo per la lista degli hotel -->
@@ -52,45 +104,80 @@
             <CollectionView ItemsSource="{Binding OwnedHotels}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Border Padding="10" Margin="0,0" BackgroundColor="LightYellow" Stroke="#FFA500" StrokeShape="RoundRectangle 20">
+                        <Border Padding="10"
+                                Margin="0,0"
+                                BackgroundColor="LightYellow"
+                                Stroke="#FFA500"
+                                StrokeShape="RoundRectangle 20">
                             <HorizontalStackLayout Spacing="20">
-                                <Frame HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent" CornerRadius="20" Padding="0" HeightRequest="150" WidthRequest="150">
-                                    <Image Source="{Binding ImageSource}" Aspect="AspectFill" WidthRequest="180" HeightRequest="180" VerticalOptions="CenterAndExpand" />
+                                <Frame HasShadow="False"
+                                        BackgroundColor="Transparent"
+                                        BorderColor="Transparent"
+                                        CornerRadius="20"
+                                        Padding="0"
+                                        HeightRequest="150"
+                                        WidthRequest="150">
+                                    <Image Source="{Binding ImageSource}"
+                                            Aspect="AspectFill"
+                                            WidthRequest="180"
+                                            HeightRequest="180"
+                                            VerticalOptions="CenterAndExpand"/>
                                 </Frame>
 
-                                <StackLayout VerticalOptions="CenterAndExpand" Spacing="10" HorizontalOptions="FillAndExpand">
-                                    <Label Text="{Binding Name}" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
-                                    <Label Text="{Binding Location}" FontSize="14" TextColor="#FFD700"/>
-                                    <Label Text="{Binding Description}" FontSize="12" TextColor="#4682B4"/>
+                                <StackLayout VerticalOptions="CenterAndExpand"
+                                        Spacing="10"
+                                        HorizontalOptions="FillAndExpand">
+                                    <Label Text="{Binding Name}"
+                                            FontSize="20"
+                                            FontAttributes="Bold"
+                                            TextColor="Black"/>
+                                    <Label Text="{Binding Location}"
+                                            FontSize="14"
+                                            TextColor="#FFD700"/>
+                                    <Label Text="{Binding Description}"
+                                            FontSize="12"
+                                            TextColor="#4682B4"/>
 
-                                    <StackLayout Orientation="Horizontal" Spacing="10">
-                                        <Label Text="Servizi:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding ServiziStringa}" FontSize="12" TextColor="#D2691E"/>
+                                    <StackLayout Orientation="Horizontal"
+                                            Spacing="10">
+                                        <Label Text="Servizi:"
+                                                FontAttributes="Bold"
+                                                FontSize="14"
+                                                TextColor="Black"/>
+                                        <Label Text="{Binding ServiziStringa}"
+                                                FontSize="12"
+                                                TextColor="#D2691E"/>
                                     </StackLayout>
 
-                                    <StackLayout Orientation="Horizontal" Spacing="10">
-                                        <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding Rating}" FontSize="12" TextColor="#D2691E"/>
+                                    <StackLayout Orientation="Horizontal"
+                                            Spacing="10">
+                                        <Label Text="Voto:"
+                                                FontAttributes="Bold"
+                                                FontSize="14"
+                                                TextColor="Black"/>
+                                        <Label Text="{Binding Rating}"
+                                                FontSize="12"
+                                                TextColor="#D2691E"/>
                                     </StackLayout>
                                     <HorizontalStackLayout Spacing="20">
                                         <Button Text="Visualizza Hotel"
-                                            BackgroundColor="#FF1493"
-                                            TextColor="White"
-                                            CornerRadius="10"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProfilHostPageViewModel}}, Path= GuardaCommand}"
-                                            CommandParameter="{Binding .}" 
-                                            Margin="0,10,0,0" />
-                                            <Button Text="Aggiungi una stanza"
-                                            BackgroundColor="#FF1493"
-                                            TextColor="White"
-                                            CornerRadius="10"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProfilHostPageViewModel}}, Path= AddRoomCommand}"
-                                            CommandParameter="{Binding .}" 
-                                            Margin="0,10,0,0" />       
+                                                BackgroundColor="#FF1493"
+                                                TextColor="White"
+                                                CornerRadius="10"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProfilHostPageViewModel}}, Path= GuardaCommand}"
+                                                CommandParameter="{Binding .}"
+                                                Margin="0,10,0,0"/>
+                                        <Button Text="Aggiungi una stanza"
+                                                BackgroundColor="#FF1493"
+                                                TextColor="White"
+                                                CornerRadius="10"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ProfilHostPageViewModel}}, Path= AddRoomCommand}"
+                                                CommandParameter="{Binding .}"
+                                                Margin="0,10,0,0"/>
 
                                     </HorizontalStackLayout>
-                                    
-                                    
+
+
                                 </StackLayout>
                             </HorizontalStackLayout>
                         </Border>

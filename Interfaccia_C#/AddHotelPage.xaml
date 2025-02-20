@@ -1,4 +1,4 @@
-﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel"
              x:Class="Interfaccia_C_.AddHotelPage"
@@ -9,109 +9,201 @@
     <ScrollView>
         <VerticalStackLayout Spacing="20">
             <!-- Sezione per aggiungere l'hotel e la prima stanza -->
-            <Border IsVisible="{Binding IsAddHotelVisible}" Stroke="LightGray" StrokeThickness="1" BackgroundColor="LightSkyBlue" Padding="20"
-                HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand"
-                StrokeShape="RoundRectangle 20">
+            <Border IsVisible="{Binding IsAddHotelVisible}"
+                    Stroke="LightGray"
+                    StrokeThickness="1"
+                    BackgroundColor="LightSkyBlue"
+                    Padding="20"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    StrokeShape="RoundRectangle 20">
                 <VerticalStackLayout Spacing="15">
-                    <Label Text="Nome dell'hotel" FontSize="16" TextColor="Black"/>
-                    <Entry x:Name="HotelNameEntry" Placeholder="Inserisci il nome dell'hotel" TextColor="Black"
-                       Text="{Binding HotelName}" MaxLength="150" HeightRequest="45"/>
+                    <Label Text="Nome dell'hotel"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Entry x:Name="HotelNameEntry"
+                            Placeholder="Inserisci il nome dell'hotel"
+                            TextColor="Black"
+                           Text="{Binding HotelName}"
+                            MaxLength="150"
+                            HeightRequest="45"/>
 
-                    <Label Text="Posizione dell'hotel" FontSize="16" TextColor="Black"/>
-                    <Entry x:Name="HotelLocationEntry" Placeholder="Inserisci la posizione" TextColor="Black"
-                       Text="{Binding Location}" MaxLength="200" HeightRequest="45"/>
+                    <Label Text="Posizione dell'hotel"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Entry x:Name="HotelLocationEntry"
+                            Placeholder="Inserisci la posizione"
+                            TextColor="Black"
+                           Text="{Binding Location}"
+                            MaxLength="200"
+                            HeightRequest="45"/>
 
-                    <Label Text="Descrizione dell'hotel" FontSize="16" TextColor="Black"/>
-                    <Editor x:Name="HotelDescriptionEditor" Placeholder="Inserisci la descrizione" TextColor="Black"
-                        Text="{Binding Description}" MaxLength="500" HeightRequest="100"/>
+                    <Label Text="Descrizione dell'hotel"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Editor x:Name="HotelDescriptionEditor"
+                            Placeholder="Inserisci la descrizione"
+                            TextColor="Black"
+                            Text="{Binding Description}"
+                            MaxLength="500"
+                            HeightRequest="100"/>
 
                     <!-- Aggiunta delle opzioni -->
-                  
-                        <VerticalStackLayout>
-                            <!-- Prima riga con le prime 3 opzioni -->
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
-                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                                    <Label Text="Wi-Fi" TextColor="Black" />
-                                    <Switch IsToggled="{Binding IsWiFiEnabled}" />
-                                </StackLayout>
-                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                                    <Label Text="Parking" TextColor="Black" />
-                                    <Switch IsToggled="{Binding IsParkingEnabled}" />
-                                </StackLayout>
-                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                                    <Label Text="Breakfast" TextColor="Black" />
-                                    <Switch IsToggled="{Binding IsBreakfastEnabled}" />
-                                </StackLayout>
+
+                    <VerticalStackLayout>
+                        <!-- Prima riga  -->
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+                            <!-- Wi-Fi -->
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                    <Image Source="wifi.png" WidthRequest="20" HeightRequest="20"/>
+                                    <Label Text="Wi-Fi" TextColor="Black"/>
+                                </HorizontalStackLayout>
+                                <Switch IsToggled="{Binding IsWiFiEnabled}"/>
                             </StackLayout>
 
-                            <!-- Seconda riga con altre 3 opzioni -->
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
-                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                                    <Label Text="Pool" TextColor="Black" />
-                                    <Switch IsToggled="{Binding IsPoolEnabled}" />
-                                </StackLayout>
-                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                                    <Label Text="Gym" TextColor="Black" />
-                                    <Switch IsToggled="{Binding IsGymEnabled}" />
-                                </StackLayout>
-                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                                    <Label Text="Spa" TextColor="Black" />
-                                    <Switch IsToggled="{Binding IsSpaEnabled}" />
-                                </StackLayout>
+                            <!-- Parking -->
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                    <Image Source="parking.png" WidthRequest="20" HeightRequest="20"/>
+                                    <Label Text="Parking" TextColor="Black"/>
+                                </HorizontalStackLayout>
+                                <Switch IsToggled="{Binding IsParkingEnabled}"/>
                             </StackLayout>
 
-                            <!-- Terza riga con le ultime 3 opzioni -->
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
-                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                                    <Label Text="Room Service" TextColor="Black" />
-                                    <Switch IsToggled="{Binding IsRoomServiceEnabled}" />
-                                </StackLayout>
-                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                                    <Label Text="Pets Allowed" TextColor="Black" />
-                                    <Switch IsToggled="{Binding IsPetsAllowed}" />
-                                </StackLayout>
-                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                                    <Label Text="Restaurant" TextColor="Black" />
-                                    <Switch IsToggled="{Binding IsRestaurantEnabled}" />
-                                </StackLayout>
+                            <!-- Breakfast -->
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                    <Image Source="breakfast.png" WidthRequest="20" HeightRequest="20"/>
+                                    <Label Text="Breakfast" TextColor="Black"/>
+                                </HorizontalStackLayout>
+                                <Switch IsToggled="{Binding IsBreakfastEnabled}"/>
                             </StackLayout>
 
-                            <!-- Quarta riga con l'ultima opzione -->
-                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
-                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
-                                    <Label Text="Air Conditioning" TextColor="Black" />
-                                    <Switch IsToggled="{Binding IsAirConditioningEnabled}" />
-                                </StackLayout>
+                            <!-- Restaurant -->
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                    <Image Source="restaurant.png" WidthRequest="20" HeightRequest="20"/>
+                                    <Label Text="Restaurant" TextColor="Black" HorizontalOptions="Center"/>
+                                </HorizontalStackLayout>
+                                <Switch IsToggled="{Binding IsRestaurantEnabled}"/>
                             </StackLayout>
-                        </VerticalStackLayout>
+                        </StackLayout>
+
+                        <!-- Seconda riga -->
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+
+
+
+                            <!-- Gym -->
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                    <Image Source="gym.png" WidthRequest="20" HeightRequest="20"/>
+                                    <Label Text="Gym" TextColor="Black" HorizontalOptions="Center"/>
+                                </HorizontalStackLayout>
+                                <Switch IsToggled="{Binding IsGymEnabled}"/>
+                            </StackLayout>
+
+                            <!-- Spa -->
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                    <Image Source="spa.png" WidthRequest="20" HeightRequest="20"/>
+                                    <Label Text="Spa" TextColor="Black" HorizontalOptions="Center"/>
+                                </HorizontalStackLayout>
+                                <Switch IsToggled="{Binding IsSpaEnabled}"/>
+                            </StackLayout>
+                            <!-- Quarta riga: Air Conditioning -->
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                    <Image Source="air.png" WidthRequest="20" HeightRequest="20"/>
+                                    <Label Text="Air Conditioning" TextColor="Black" HorizontalOptions="Center"/>
+                                </HorizontalStackLayout>
+                                <Switch IsToggled="{Binding IsAirConditioningEnabled}"/>
+
+                            </StackLayout>
+                            <!-- Room Service -->
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                    <Image Source="roomservice.png" WidthRequest="20" HeightRequest="20"/>
+                                    <Label Text="Room Service" TextColor="Black" HorizontalOptions="Center"/>
+                                </HorizontalStackLayout>
+                                <Switch IsToggled="{Binding IsRoomServiceEnabled}"/>
+                            </StackLayout>
+                        </StackLayout>
+
+                        <!-- Terza riga-->
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+
+
+
+                            <!-- Pets Allowed -->
+                            <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                    <Image Source="pets.png" WidthRequest="20" HeightRequest="20"/>
+                                    <Label Text="Pets Allowed" TextColor="Black" HorizontalOptions="Center"/>
+                                </HorizontalStackLayout>
+                                <Switch IsToggled="{Binding IsPetsAllowed}"/>
+                            </StackLayout>
+
+
+
+                        </StackLayout>
+
+
+
+                    </VerticalStackLayout>
 
                     <!-- Sezione per l'immagine dell'hotel -->
-                    <Button Text="Carica Immagine" Command="{Binding UploadHotelImageCommand}" BackgroundColor="MediumPurple" TextColor="Black" />
+                    <Button Text="Carica Immagine"
+                            Command="{Binding UploadHotelImageCommand}"
+                            BackgroundColor="MediumPurple"
+                            TextColor="Black"/>
 
                     <!-- Visualizza le immagini dell'hotel caricate -->
                     <StackLayout IsVisible="{Binding IsHotelImageUploaded}">
-                        <Label Text="{Binding HotelImageNames}" FontSize="14" TextColor="DarkGreen" />
+                        <Label Text="{Binding HotelImageNames}"
+                                FontSize="14"
+                                TextColor="DarkGreen"/>
                     </StackLayout>
 
                     <!-- Sezione per aggiungere la stanza -->
-                    <Label Text="Nome della Stanza" FontSize="16" TextColor="Black"/>
-                    <Entry x:Name="RoomNameEntry" Placeholder="Inserisci il nome della stanza" TextColor="Black"
-                       Text="{Binding RoomName}" HeightRequest="45"/>
+                    <Label Text="Nome della Stanza"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Entry x:Name="RoomNameEntry"
+                            Placeholder="Inserisci il nome della stanza"
+                            TextColor="Black"
+                           Text="{Binding RoomName}"
+                            HeightRequest="45"/>
 
-                    <Label Text="Descrizione della Stanza" FontSize="16" TextColor="Black"/>
-                    <Editor x:Name="RoomDescriptionEditor" Placeholder="Descrizione della stanza"  TextColor="Black"
-                        Text="{Binding RoomDescription}" HeightRequest="100"/>
+                    <Label Text="Descrizione della Stanza"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Editor x:Name="RoomDescriptionEditor"
+                            Placeholder="Descrizione della stanza"
+                            TextColor="Black"
+                            Text="{Binding RoomDescription}"
+                            HeightRequest="100"/>
 
-                    <Label Text="Prezzo per notte (€)" FontSize="16" TextColor="Black"/>
-                    <Entry x:Name="PricePerNightEntry" Placeholder="Es. 100.00" TextColor="Black"
-                       Text="{Binding PricePerNight}" Keyboard="Numeric" HeightRequest="45"/>
-                 
-                    <Label Text="Tipologia di stanza" FontSize="16" TextColor="Black"/>
-                    <Picker x:Name="RoomTypePicker" 
-                             HeightRequest="40"
-                             TextColor="Black"                             BackgroundColor="Blue"
-                             SelectedIndex="0"
-                        SelectedItem="{Binding RoomType}">
+                    <Label Text="Prezzo per notte (€)"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Entry x:Name="PricePerNightEntry"
+                            Placeholder="Es. 100.00"
+                            TextColor="Black"
+                           Text="{Binding PricePerNight}"
+                            Keyboard="Numeric"
+                            HeightRequest="45"/>
+
+                    <Label Text="Tipologia di stanza"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Picker x:Name="RoomTypePicker"
+                            HeightRequest="40"
+                            TextColor="Black"
+                            BackgroundColor="Blue"
+                            SelectedIndex="0"
+                            SelectedItem="{Binding RoomType}">
                         <Picker.Items>
                             <x:String>Singola</x:String>
                             <x:String>Doppia</x:String>
@@ -123,47 +215,80 @@
                     </Picker>
 
                     <!-- Aggiungi immagine della stanza -->
-                    <Button Text="Carica Immagine" Command="{Binding UploadRoomImageCommand}" BackgroundColor="MediumPurple" TextColor="White" />
+                    <Button Text="Carica Immagine"
+                            Command="{Binding UploadRoomImageCommand}"
+                            BackgroundColor="MediumPurple"
+                            TextColor="White"/>
 
                     <!-- Visualizza le immagini della stanza caricate -->
                     <StackLayout IsVisible="{Binding IsRoomImageUploaded}">
-                        <Label Text="{Binding RoomImageNames}" FontSize="14" TextColor="DarkGreen"/>
+                        <Label Text="{Binding RoomImageNames}"
+                                FontSize="14"
+                                TextColor="DarkGreen"/>
                     </StackLayout>
 
-                    <Button Text="Aggiungi Hotel e Prima Stanza" Command="{Binding AddHotelAndRoomCommand}"
-                        BackgroundColor="#28A745" TextColor="White" CornerRadius="20" HeightRequest="50"/>
+                    <Button Text="Aggiungi Hotel e Prima Stanza"
+                            Command="{Binding AddHotelAndRoomCommand}"
+                            BackgroundColor="#28A745"
+                            TextColor="White"
+                            CornerRadius="20"
+                            HeightRequest="50"/>
                 </VerticalStackLayout>
             </Border>
 
             <!-- Messaggio di successo -->
-            <Label Text="Hotel aggiunto con successo!" FontSize="18" TextColor="DarkRed" 
-       HorizontalOptions="Center" IsVisible="{Binding IsHotelSaved}" />
+            <Label Text="Hotel aggiunto con successo!"
+                    FontSize="18"
+                    TextColor="DarkRed"
+                   HorizontalOptions="Center"
+                    IsVisible="{Binding IsHotelSaved}"/>
 
 
 
             <!-- Sezione per aggiungere una nuova stanza -->
-            <Border IsVisible="{Binding IsAddRoomVisible}" Stroke="LightGray" StrokeThickness="1" BackgroundColor="LightCoral" Padding="20"
-                    HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" StrokeShape="RoundRectangle 20">
+            <Border IsVisible="{Binding IsAddRoomVisible}"
+                    Stroke="LightGray"
+                    StrokeThickness="1"
+                    BackgroundColor="LightCoral"
+                    Padding="20"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    StrokeShape="RoundRectangle 20">
                 <VerticalStackLayout Spacing="15">
-                    <Label Text="Nome della Stanza" FontSize="16" TextColor="Black"/>
-                    <Entry x:Name="AdditionalRoomNameEntry" Placeholder="Inserisci il nome della stanza" 
-                           Text="{Binding AdditionalRoomName}" HeightRequest="45"/>
+                    <Label Text="Nome della Stanza"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Entry x:Name="AdditionalRoomNameEntry"
+                            Placeholder="Inserisci il nome della stanza"
+                           Text="{Binding AdditionalRoomName}"
+                            HeightRequest="45"/>
 
-                    <Label Text="Descrizione della Stanza" FontSize="16" TextColor="Black"/>
-                    <Editor x:Name="AdditionalRoomDescriptionEditor" Placeholder="Descrizione della stanza" 
-                            Text="{Binding AdditionalRoomDescription}" HeightRequest="100"/>
+                    <Label Text="Descrizione della Stanza"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Editor x:Name="AdditionalRoomDescriptionEditor"
+                            Placeholder="Descrizione della stanza"
+                            Text="{Binding AdditionalRoomDescription}"
+                            HeightRequest="100"/>
 
-                    <Label Text="Prezzo per notte (€)" FontSize="16" TextColor="Black"/>
-                    <Entry x:Name="AdditionalPricePerNightEntry" Placeholder="Es. 100.00" 
-                           Text="{Binding AdditionalPricePerNight}" Keyboard="Numeric" HeightRequest="45"/>
+                    <Label Text="Prezzo per notte (€)"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Entry x:Name="AdditionalPricePerNightEntry"
+                            Placeholder="Es. 100.00"
+                           Text="{Binding AdditionalPricePerNight}"
+                            Keyboard="Numeric"
+                            HeightRequest="45"/>
 
-                   
-                    <Label Text="Tipologia di stanza" FontSize="16" TextColor="Black"/>
-                    <Picker x:Name="AdditionalRoomTypePicker" 
-                             HeightRequest="40"
-                             TextColor="White"
-                             BackgroundColor="Blue"
-                             SelectedIndex="0"
+
+                    <Label Text="Tipologia di stanza"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Picker x:Name="AdditionalRoomTypePicker"
+                            HeightRequest="40"
+                            TextColor="White"
+                            BackgroundColor="Blue"
+                            SelectedIndex="0"
                             SelectedItem="{Binding AdditionalRoomType}">
                         <Picker.Items>
                             <x:String>Singola</x:String>
@@ -176,15 +301,24 @@
                     </Picker>
 
                     <!-- Aggiungi immagine della stanza -->
-                    <Button Text="Carica Immagine" Command="{Binding UploadAdditionalRoomImageCommand}" BackgroundColor="MediumPurple" TextColor="White"/>
+                    <Button Text="Carica Immagine"
+                            Command="{Binding UploadAdditionalRoomImageCommand}"
+                            BackgroundColor="MediumPurple"
+                            TextColor="White"/>
 
                     <!-- Visualizza i nomi delle immagini della stanza caricate -->
                     <StackLayout>
-                        <Label Text="{Binding AdditionalRoomImageNames}" FontSize="14" TextColor="DarkGreen"/>
+                        <Label Text="{Binding AdditionalRoomImageNames}"
+                                FontSize="14"
+                                TextColor="DarkGreen"/>
                     </StackLayout>
 
-                    <Button Text="Aggiungi Stanza" Command="{Binding AddRoomCommand}" 
-                            BackgroundColor="#28A745" TextColor="White" CornerRadius="20" HeightRequest="50"/>
+                    <Button Text="Aggiungi Stanza"
+                            Command="{Binding AddRoomCommand}"
+                            BackgroundColor="#28A745"
+                            TextColor="White"
+                            CornerRadius="20"
+                            HeightRequest="50"/>
                 </VerticalStackLayout>
             </Border>
         </VerticalStackLayout>

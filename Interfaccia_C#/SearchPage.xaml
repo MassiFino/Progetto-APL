@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage 
+<ContentPage
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:vm="clr-namespace:Interfaccia_C_.ViewModel"
@@ -22,30 +22,40 @@
             </Grid.RowDefinitions>
 
             <!-- Row 0: Controlli di ricerca e filtri -->
-            <VerticalStackLayout Grid.Row="0" Margin="10" Spacing="15">
+            <VerticalStackLayout Grid.Row="0"
+                    Margin="10"
+                    Spacing="15">
                 <!-- Filtro di ricerca -->
-                <Border Stroke="LightGray" StrokeThickness="1" BackgroundColor="AliceBlue" Padding="20"
-                HorizontalOptions="Center" VerticalOptions="Center"
-                StrokeShape="RoundRectangle 20">
+                <Border Stroke="#4682B4" StrokeThickness="2" BackgroundColor="#B0E0E6" Padding="20"
+        HorizontalOptions="Center" VerticalOptions="Center" StrokeShape="RoundRectangle 25">
                     <VerticalStackLayout Spacing="10">
-                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                        <HorizontalStackLayout HorizontalOptions="Center"
+                                Spacing="10">
                             <!-- Campo di ricerca città -->
-                            <Entry Placeholder="Cerca città" 
-                     WidthRequest="200" HeightRequest="40" TextColor="Black"
-                     Text="{Binding SearchCity, Mode=TwoWay}" />
+                            <Entry Placeholder="🔍 Cerca città" 
+                       WidthRequest="200" 
+                       HeightRequest="40" 
+                       TextColor="Black"
+                       Text="{Binding SearchCity, Mode=TwoWay}" />
                             <!-- DatePicker per check-in -->
-                            <DatePicker Format="dd/MM/yyyy" 
-                          WidthRequest="150" HeightRequest="40" TextColor="Black"
-                          Date="{Binding CheckInDate}" />
+                            <DatePicker Format="dd/MM/yyyy"
+                                        WidthRequest="150"
+                                    HeightRequest="40"
+                                    TextColor="Black"
+                                        Date="{Binding CheckInDate}"/>
                             <!-- DatePicker per check-out -->
-                            <DatePicker Format="dd/MM/yyyy" 
-                          WidthRequest="150" HeightRequest="40" TextColor="Black"
-                          Date="{Binding CheckOutDate}" />
+                            <DatePicker Format="dd/MM/yyyy"
+                                        WidthRequest="150"
+                                    HeightRequest="40"
+                                    TextColor="Black"
+                                        Date="{Binding CheckOutDate}"/>
                             <!-- Picker per numero ospiti -->
-                            <Picker WidthRequest="200" HeightRequest="40" TextColor="Black"
-                      BackgroundColor="LightBlue"
-                      SelectedIndex="0"
-                      SelectedItem="{Binding SelectedGuest, Mode=TwoWay}">
+                            <Picker WidthRequest="200"
+                                    HeightRequest="40"
+                                    TextColor="Black"
+                                    BackgroundColor="LightBlue"
+                                    SelectedIndex="0"
+                                    SelectedItem="{Binding SelectedGuest, Mode=TwoWay}">
                                 <Picker.Items>
                                     <x:String>Numero ospiti</x:String>
                                     <x:String>1</x:String>
@@ -56,71 +66,125 @@
                                 </Picker.Items>
                             </Picker>
                             <!-- Bottone di ricerca -->
-                            <Button Text="Cerca" 
-                      WidthRequest="100" HeightRequest="40"
-                      Command="{Binding SearchCommand}" 
-                      BackgroundColor="#800080" TextColor="White"/>
+                            <Button Text="Cerca"
+                                    WidthRequest="100"
+                                    HeightRequest="40"
+                                    Command="{Binding SearchCommand}"
+                                    BackgroundColor="#800080"
+                                    TextColor="White"/>
                         </HorizontalStackLayout>
 
                         <!-- Sezione Filtri -->
                         <VerticalStackLayout Spacing="10">
-                            <!-- Prima riga: Wi‑Fi, Parking, Breakfast -->
-                            <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Spacing="20">
-                                <VerticalStackLayout HorizontalOptions="Center">
-                                    <Label Text="Wi‑Fi" TextColor="Black" HorizontalOptions="Center"/>
-                                    <Switch IsToggled="{Binding IsWiFiEnabled}" />
-                                </VerticalStackLayout>
-                                <VerticalStackLayout HorizontalOptions="Center">
-                                    <Label Text="Parking" TextColor="Black" HorizontalOptions="Center"/>
-                                    <Switch IsToggled="{Binding IsParkingEnabled}" />
-                                </VerticalStackLayout>
-                                <VerticalStackLayout HorizontalOptions="Center">
-                                    <Label Text="Breakfast" TextColor="Black" HorizontalOptions="Center"/>
-                                    <Switch IsToggled="{Binding IsBreakfastEnabled}" />
-                                </VerticalStackLayout>
-                            </HorizontalStackLayout>
-                            <!-- Seconda riga: Pool, Gym, Spa -->
-                            <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Spacing="20">
-                                <VerticalStackLayout HorizontalOptions="Center">
-                                    <Label Text="Pool" TextColor="Black" HorizontalOptions="Center"/>
-                                    <Switch IsToggled="{Binding IsPoolEnabled}" />
-                                </VerticalStackLayout>
-                                <VerticalStackLayout HorizontalOptions="Center">
-                                    <Label Text="Gym" TextColor="Black" HorizontalOptions="Center"/>
-                                    <Switch IsToggled="{Binding IsGymEnabled}" />
-                                </VerticalStackLayout>
-                                <VerticalStackLayout HorizontalOptions="Center">
-                                    <Label Text="Spa" TextColor="Black" HorizontalOptions="Center"/>
-                                    <Switch IsToggled="{Binding IsSpaEnabled}" />
-                                </VerticalStackLayout>
-                            </HorizontalStackLayout>
-                            <!-- Terza riga: Room Service, Pets Allowed, Restaurant -->
-                            <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Spacing="20">
-                                <VerticalStackLayout HorizontalOptions="Center">
-                                    <Label Text="Room Service" TextColor="Black" HorizontalOptions="Center"/>
-                                    <Switch IsToggled="{Binding IsRoomServiceEnabled}" />
-                                </VerticalStackLayout>
-                                <VerticalStackLayout HorizontalOptions="Center">
-                                    <Label Text="Pets Allowed" TextColor="Black" HorizontalOptions="Center"/>
-                                    <Switch IsToggled="{Binding IsPetsAllowed}" />
-                                </VerticalStackLayout>
-                                <VerticalStackLayout HorizontalOptions="Center">
-                                    <Label Text="Restaurant" TextColor="Black" HorizontalOptions="Center"/>
-                                    <Switch IsToggled="{Binding IsRestaurantEnabled}" />
-                                </VerticalStackLayout>
-                            </HorizontalStackLayout>
-                            <!-- Quarta riga: Air Conditioning -->
-                            <HorizontalStackLayout HorizontalOptions="CenterAndExpand" Spacing="20">
-                                <VerticalStackLayout HorizontalOptions="Center">
-                                    <Label Text="Air Conditioning" TextColor="Black" HorizontalOptions="Center"/>
-                                    <Switch IsToggled="{Binding IsAirConditioningEnabled}" />
-                                </VerticalStackLayout>
-                            </HorizontalStackLayout>
+                            <!-- Prima riga  -->
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+                                <!-- Wi-Fi -->
+                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                    <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                        <Image Source="wifi.png" WidthRequest="20" HeightRequest="20"/>
+                                        <Label Text="Wi-Fi" TextColor="Black"/>
+                                    </HorizontalStackLayout>
+                                    <Switch IsToggled="{Binding IsWiFiEnabled}"/>
+                                </StackLayout>
+
+                                <!-- Parking -->
+                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                    <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                        <Image Source="parking.png" WidthRequest="20" HeightRequest="20"/>
+                                        <Label Text="Parking" TextColor="Black"/>
+                                    </HorizontalStackLayout>
+                                    <Switch IsToggled="{Binding IsParkingEnabled}"/>
+                                </StackLayout>
+
+                                <!-- Breakfast -->
+                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                    <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                        <Image Source="breakfast.png" WidthRequest="20" HeightRequest="20"/>
+                                        <Label Text="Breakfast" TextColor="Black"/>
+                                    </HorizontalStackLayout>
+                                    <Switch IsToggled="{Binding IsBreakfastEnabled}"/>
+                                </StackLayout>
+
+                                <!-- Restaurant -->
+                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                    <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                        <Image Source="restaurant.png" WidthRequest="20" HeightRequest="20"/>
+                                        <Label Text="Restaurant" TextColor="Black" HorizontalOptions="Center"/>
+                                    </HorizontalStackLayout>
+                                    <Switch IsToggled="{Binding IsRestaurantEnabled}"/>
+                                </StackLayout>
+                            </StackLayout>
+
+                            <!-- Seconda riga -->
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+
+                                
+
+                                <!-- Gym -->
+                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                    <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                        <Image Source="gym.png" WidthRequest="20" HeightRequest="20"/>
+                                        <Label Text="Gym" TextColor="Black" HorizontalOptions="Center"/>
+                                    </HorizontalStackLayout>
+                                    <Switch IsToggled="{Binding IsGymEnabled}"/>
+                                </StackLayout>
+
+                                <!-- Spa -->
+                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                    <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                        <Image Source="spa.png" WidthRequest="20" HeightRequest="20"/>
+                                        <Label Text="Spa" TextColor="Black" HorizontalOptions="Center"/>
+                                    </HorizontalStackLayout>
+                                    <Switch IsToggled="{Binding IsSpaEnabled}"/>
+                                </StackLayout>
+                                <!-- Quarta riga: Air Conditioning -->
+                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                    <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                        <Image Source="air.png" WidthRequest="20" HeightRequest="20"/>
+                                        <Label Text="Air Conditioning" TextColor="Black" HorizontalOptions="Center"/>
+                                    </HorizontalStackLayout>
+                                    <Switch IsToggled="{Binding IsAirConditioningEnabled}"/>
+
+                                </StackLayout>
+                                <!-- Room Service -->
+                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                    <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                        <Image Source="roomservice.png" WidthRequest="20" HeightRequest="20"/>
+                                        <Label Text="Room Service" TextColor="Black" HorizontalOptions="Center"/>
+                                    </HorizontalStackLayout>
+                                    <Switch IsToggled="{Binding IsRoomServiceEnabled}"/>
+                                </StackLayout>
+                            </StackLayout>
+                            
+                            <!-- Terza riga-->
+                            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Spacing="20">
+
+                              
+
+                                <!-- Pets Allowed -->
+                                <StackLayout Orientation="Vertical" VerticalOptions="Center">
+                                    <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                        <Image Source="pets.png" WidthRequest="20" HeightRequest="20"/>
+                                        <Label Text="Pets Allowed" TextColor="Black" HorizontalOptions="Center"/>
+                                    </HorizontalStackLayout>
+                                    <Switch IsToggled="{Binding IsPetsAllowed}"/>
+                                </StackLayout>
+
+                              
+                              
+                            </StackLayout>
+
+                            
+
                         </VerticalStackLayout>
 
                         <!-- Picker per l'ordinamento -->
-                        <Picker WidthRequest="200" HeightRequest="50" TextColor="Black" BackgroundColor="LightBlue"
-                    SelectedIndex="0" SelectedItem="{Binding SelectedOrderBy, Mode=TwoWay}">
+                        <Picker WidthRequest="200"
+                                HeightRequest="50"
+                                TextColor="Black"
+                                BackgroundColor="LightBlue"
+                                SelectedIndex="0"
+                                SelectedItem="{Binding SelectedOrderBy, Mode=TwoWay}">
                             <Picker.Items>
                                 <x:String>Order by</x:String>
                                 <x:String>Prezzo: crescente</x:String>
@@ -131,49 +195,91 @@
                         </Picker>
 
                         <!-- Eventuale messaggio -->
-                        <Label Text="{Binding Message}" 
-                   FontSize="20" FontAttributes="Bold" TextColor="Black" 
-                   HorizontalOptions="Center"
-                   IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}"/>
+                        <Label Text="{Binding Message}"
+                               FontSize="20"
+                                FontAttributes="Bold"
+                                TextColor="Black"
+                               HorizontalOptions="Center"
+                               IsVisible="{Binding Message, Converter={StaticResource StringToVisibilityConverter}}"/>
                     </VerticalStackLayout>
                 </Border>
             </VerticalStackLayout>
             <!-- Fine Row 0 -->
 
             <!-- Row 1: Risultati della ricerca -->
-            <CollectionView Grid.Row="1" ItemsSource="{Binding ResearchHotels}" BackgroundColor="AliceBlue" Margin="10">
+            <CollectionView Grid.Row="1"
+                    ItemsSource="{Binding ResearchHotels}"
+                    BackgroundColor="AliceBlue"
+                    Margin="10">
                 <CollectionView.ItemsLayout>
-                    <GridItemsLayout Orientation="Vertical" Span="2" HorizontalItemSpacing="5" VerticalItemSpacing="5"/>
+                    <GridItemsLayout Orientation="Vertical"
+                            Span="2"
+                            HorizontalItemSpacing="5"
+                            VerticalItemSpacing="5"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:Hotel">
-                        <Border Padding="10" Margin="5" BackgroundColor="LightYellow" Stroke="#FFA500" StrokeShape="RoundRectangle 20">
+                        <Border Padding="10"
+                                Margin="5"
+                                BackgroundColor="LightYellow"
+                                Stroke="#FFA500"
+                                StrokeShape="RoundRectangle 20">
                             <HorizontalStackLayout Spacing="10">
-                                <Frame HasShadow="False" BackgroundColor="Transparent" BorderColor="Transparent" 
-                       CornerRadius="20" Padding="0" HeightRequest="150" WidthRequest="150">
-                                    <Image Source="{Binding ImageSource}" Aspect="AspectFill" 
-                         WidthRequest="150" HeightRequest="150" VerticalOptions="CenterAndExpand"/>
+                                <Frame HasShadow="False"
+                                        BackgroundColor="Transparent"
+                                        BorderColor="Transparent"
+                                       CornerRadius="20"
+                                        Padding="0"
+                                        HeightRequest="150"
+                                        WidthRequest="150">
+                                    <Image Source="{Binding ImageSource}"
+                                            Aspect="AspectFill"
+                                           WidthRequest="150"
+                                            HeightRequest="150"
+                                            VerticalOptions="CenterAndExpand"/>
                                 </Frame>
-                                <StackLayout VerticalOptions="CenterAndExpand" Spacing="10" HorizontalOptions="FillAndExpand">
-                                    <Label Text="{Binding Name}" FontSize="20" FontAttributes="Bold" TextColor="Black"/>
-                                    <Label Text="{Binding Location}" FontSize="14" TextColor="#FFD700"/>
-                                    <Label Text="{Binding Description}" FontSize="12" TextColor="#4682B4" 
-                         LineBreakMode="TailTruncation" MaxLines="2"/>
-                                    <StackLayout Orientation="Horizontal" Spacing="5">
-                                        <Label Text="Servizi:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding ServiziStringa}" FontSize="12" TextColor="#D2691E"/>
+                                <StackLayout VerticalOptions="CenterAndExpand"
+                                        Spacing="10"
+                                        HorizontalOptions="FillAndExpand">
+                                    <Label Text="{Binding Name}"
+                                            FontSize="20"
+                                            FontAttributes="Bold"
+                                            TextColor="Black"/>
+                                    <Label Text="{Binding Location}"
+                                            FontSize="14"
+                                            TextColor="#FFD700"/>
+                                    <Label Text="{Binding Description}"
+                                            FontSize="12"
+                                            TextColor="#4682B4"
+                                           LineBreakMode="TailTruncation"
+                                            MaxLines="2"/>
+                                    <StackLayout Orientation="Horizontal"
+                                            Spacing="5">
+                                        <Label Text="Servizi:"
+                                                FontAttributes="Bold"
+                                                FontSize="14"
+                                                TextColor="Black"/>
+                                        <Label Text="{Binding ServiziStringa}"
+                                                FontSize="12"
+                                                TextColor="#D2691E"/>
                                     </StackLayout>
-                                    <StackLayout Orientation="Horizontal" Spacing="5">
-                                        <Label Text="Voto:" FontAttributes="Bold" FontSize="14" TextColor="Black"/>
-                                        <Label Text="{Binding Rating}" FontSize="12" TextColor="#D2691E"/>
+                                    <StackLayout Orientation="Horizontal"
+                                            Spacing="5">
+                                        <Label Text="Voto:"
+                                                FontAttributes="Bold"
+                                                FontSize="14"
+                                                TextColor="Black"/>
+                                        <Label Text="{Binding Rating}"
+                                                FontSize="12"
+                                                TextColor="#D2691E"/>
                                     </StackLayout>
                                     <HorizontalStackLayout Spacing="10">
                                         <Button Text="Visualizza"
-                            BackgroundColor="#FF1493"
-                            TextColor="White"
-                            CornerRadius="10"
-                            Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.ViewHotelCommand}"
-                            CommandParameter="{Binding .}" />
+                                                BackgroundColor="#FF1493"
+                                                TextColor="White"
+                                                CornerRadius="10"
+                                                Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.ViewHotelCommand}"
+                                                CommandParameter="{Binding .}"/>
                                     </HorizontalStackLayout>
                                 </StackLayout>
                             </HorizontalStackLayout>

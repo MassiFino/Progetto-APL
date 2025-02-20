@@ -29,7 +29,7 @@ namespace Interfaccia_C_.ViewModel
         private bool _isPetsAllowed;
         private bool _isRestaurantEnabled;
         private bool _isAirConditioningEnabled;
-   
+
         // Proprietà per la stanza iniziale
         private string _roomName;
         private string _roomDescription;
@@ -490,7 +490,7 @@ namespace Interfaccia_C_.ViewModel
             UploadAdditionalRoomImageCommand = new Command(async () => await OnUploadAdditionalRoomImage());
         }
 
-        
+
         private async Task OnUploadHotelImage()
         {
             try
@@ -603,43 +603,44 @@ namespace Interfaccia_C_.ViewModel
             }
         }
         public string ImageHotel;
-private async Task<double> GetAveragePrice(string RoomType, string Location)
-{   // Controlla se RoomType o Location sono nulli o vuoti
-    if (string.IsNullOrWhiteSpace(RoomType) || string.IsNullOrWhiteSpace(Location))
-    {
-        return 0;
-    }
-    var token = await SecureStorage.GetAsync("jwt_token");
-    
-    using var client = new HttpClient();
-    var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/getAveragePrice");
-    request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        //Controllo del prezzo medio del tipo di stanza e della località inserita prima dell'inserimento
+        private async Task<double> GetAveragePrice(string RoomType, string Location)
+        {   // Controlla se RoomType o Location sono nulli o vuoti
+            if (string.IsNullOrWhiteSpace(RoomType) || string.IsNullOrWhiteSpace(Location))
+            {
+                return 0;
+            }
+            var token = await SecureStorage.GetAsync("jwt_token");
 
-    var payload = new { RoomType, Location };
-    var json = JsonSerializer.Serialize(payload);
-    request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            using var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/getAveragePrice");
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-    var response = await client.SendAsync(request);
+            var payload = new { RoomType, Location };
+            var json = JsonSerializer.Serialize(payload);
+            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
-    if (!response.IsSuccessStatusCode)
-    {
-        var errorContent = await response.Content.ReadAsStringAsync();
-        Debug.WriteLine($"Errore nella richiesta: {response.StatusCode}, {errorContent}");
-        return 0; // Se la richiesta fallisce, restituisce 0
-    }
+            var response = await client.SendAsync(request);
 
-    var responseBody = await response.Content.ReadAsStringAsync();
-    var responseJson = JsonDocument.Parse(responseBody);
-    if (responseJson.RootElement.TryGetProperty("avgPrice", out var avgPriceElement) && avgPriceElement.TryGetDouble(out double avgPrice))
-    {
-        return avgPrice;
-    }
-    return 0;
-}
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                Debug.WriteLine($"Errore nella richiesta: {response.StatusCode}, {errorContent}");
+                return 0; // Se la richiesta fallisce, restituisce 0
+            }
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+            var responseJson = JsonDocument.Parse(responseBody);
+            if (responseJson.RootElement.TryGetProperty("avgPrice", out var avgPriceElement) && avgPriceElement.TryGetDouble(out double avgPrice))
+            {
+                return avgPrice;
+            }
+            return 0;
+        }
         private async Task OnAddHotelAndRoom()
         {// Controllo dei campi obbligatori
-            if (string.IsNullOrWhiteSpace(HotelName) || string.IsNullOrWhiteSpace(Location) || string.IsNullOrWhiteSpace(RoomName) ||
-                string.IsNullOrWhiteSpace(RoomDescription) || PricePerNight <= 0 ||  MaxGuests <= 0 ||
+            if (string.IsNullOrWhiteSpace(Description) || string.IsNullOrWhiteSpace(HotelName) || string.IsNullOrWhiteSpace(Location) || string.IsNullOrWhiteSpace(RoomName) ||
+                string.IsNullOrWhiteSpace(RoomDescription) || PricePerNight <= 0 || MaxGuests <= 0 ||
         string.IsNullOrWhiteSpace(RoomType))  // Verifica che RoomType non sia null o vuoto
             {
                 // Mostra un avviso all'utente se uno dei campi obbligatori è vuoto
@@ -652,34 +653,34 @@ private async Task<double> GetAveragePrice(string RoomType, string Location)
                 return;
             }
 
-    // 🔍 Controllo del prezzo medio prima dell'inserimento
-                double avgPrice = await GetAveragePrice(RoomType, Location);
+            // 🔍 Controllo del prezzo medio del tipo di stanza e della località inserita prima dell'inserimento
+            double avgPrice = await GetAveragePrice(RoomType, Location);
 
-                if (avgPrice == 0)
+            if (avgPrice == 0)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Informazione",
+                    $"Non è stato trovato alcun valore medio corrispondente per le stanze di tipo {RoomType} in {Location}. Procedi pure con l'inserimento.",
+                    "OK");
+            }
+            else if (avgPrice > 0 && PricePerNight != avgPrice)
+            {
+                string suggestion = PricePerNight > avgPrice ? "abbassare" : "alzare";
+                string message = $"Il prezzo inserito **{PricePerNight:C}** è diverso dal **prezzo medio** per le stanze di tipo **{RoomType}** in **{Location}**.\n\n" +
+                                $"**Prezzo medio attuale**: {avgPrice:C}\n" +
+                                $"Ti suggeriamo di **{suggestion} il prezzo per essere più competitivo**.\n\nVuoi modificarlo?";
+
+                bool adjustPrice = await Application.Current.MainPage.DisplayAlert(
+                    "Suggerimento Prezzo",
+                    message,
+                    "Sì, lo cambio",
+                    "No, mantieni");
+
+                if (adjustPrice)
                 {
-                    await Application.Current.MainPage.DisplayAlert(
-                        "Informazione",
-                        $"Non è stato trovato alcun valore medio corrispondente per le stanze di tipo {RoomType} in {Location}. Procedi pure con l'inserimento.",
-                        "OK");
+                    return; // L'utente deve reinserire il prezzo
                 }
-                else if (avgPrice > 0 && PricePerNight != avgPrice)
-                {
-                    string suggestion = PricePerNight > avgPrice ? "abbassare" : "alzare";
-                    string message = $"📊 Il prezzo inserito **{PricePerNight:C}** è diverso dal **prezzo medio** per le stanze di tipo **{RoomType}** in **{Location}**.\n\n" +
-                                    $"💰 **Prezzo medio attuale**: {avgPrice:C}\n" +
-                                    $"🔍 Ti suggeriamo di **{suggestion} il prezzo per essere più competitivo**.\n\nVuoi modificarlo?";
-
-                    bool adjustPrice = await Application.Current.MainPage.DisplayAlert(
-                        "Suggerimento Prezzo",
-                        message,
-                        "Sì, lo cambio",
-                        "No, mantieni");
-
-                    if (adjustPrice)
-                    {
-                        return; // L'utente deve reinserire il prezzo
-                    }
-                }
+            }
 
             var activeServices = GetActiveServices();
 
@@ -715,7 +716,7 @@ private async Task<double> GetAveragePrice(string RoomType, string Location)
             Debug.WriteLine($"RoomType: {RoomType}");
 
             Debug.WriteLine($"Stampo tutto il paylod: {payload}");
-           
+
             try
             {
                 using var client = new HttpClient();
@@ -748,7 +749,7 @@ private async Task<double> GetAveragePrice(string RoomType, string Location)
                         ImageHotel = null; // Supponendo che ImageHotel sia un oggetto o un percorso dell'immagine
                         HotelImageNames = string.Empty;
                         RoomType = string.Empty;
-                        RoomImageNames= string.Empty;
+                        RoomImageNames = string.Empty;
 
                     }
                     else
@@ -765,7 +766,7 @@ private async Task<double> GetAveragePrice(string RoomType, string Location)
                         PricePerNight = 0; // Imposta un valore predefinito per il prezzo
                         MaxGuests = 0; // Imposta il valore predefinito per il numero di ospiti
                         RoomType = string.Empty;
-                        RoomImageNames= string.Empty;
+                        RoomImageNames = string.Empty;
                         RoomImagePath = string.Empty;       // Svuota il percorso dell'immagine
 
                         // Mostra un altro messaggio
@@ -784,7 +785,7 @@ private async Task<double> GetAveragePrice(string RoomType, string Location)
                 }
                 else
                 {
-                   
+
                     IsHotelSaved = false;
                     IsSuccessVisible = false;
                     IsErrorVisible = true;
@@ -810,37 +811,37 @@ private async Task<double> GetAveragePrice(string RoomType, string Location)
             AdditionalMaxGuests <= 0 ||
             string.IsNullOrWhiteSpace(AdditionalRoomType))
             {
-            IsErrorVisible = true;
-            IsSuccessVisible = false;
-            return;
+                IsErrorVisible = true;
+                IsSuccessVisible = false;
+                return;
             }
             // 🔍 Controllo del prezzo medio prima dell'inserimento
             double avgPrice = await GetAveragePrice(AdditionalRoomType, Location);
 
             if (avgPrice == 0)
             {
-            await Application.Current.MainPage.DisplayAlert(
-                "Informazione",
-                $"Non è stato trovato alcun valore medio corrispondente per le stanze di tipo {AdditionalRoomType} in {Location}. Procedi pure con l'inserimento.",
-                "OK");
+                await Application.Current.MainPage.DisplayAlert(
+                    "Informazione",
+                    $"Non è stato trovato alcun valore medio corrispondente per le stanze di tipo {AdditionalRoomType} in {Location}. Procedi pure con l'inserimento.",
+                    "OK");
             }
             else if (avgPrice > 0 && AdditionalPricePerNight != avgPrice)
             {
-            string suggestion = AdditionalPricePerNight > avgPrice ? "abbassare" : "alzare";
-            string message = $"📊 Il prezzo inserito **{AdditionalPricePerNight:C}** è diverso dal **prezzo medio** per le stanze di tipo **{AdditionalRoomType}** in **{Location}**.\n\n" +
-                    $"💰 **Prezzo medio attuale**: {avgPrice:C}\n" +
-                    $"🔍 Ti suggeriamo di **{suggestion} il prezzo per essere più competitivo**.\n\nVuoi modificarlo?";
+                string suggestion = AdditionalPricePerNight > avgPrice ? "abbassare" : "alzare";
+                string message = $"📊 Il prezzo inserito **{AdditionalPricePerNight:C}** è diverso dal **prezzo medio** per le stanze di tipo **{AdditionalRoomType}** in **{Location}**.\n\n" +
+                        $"💰 **Prezzo medio attuale**: {avgPrice:C}\n" +
+                        $"🔍 Ti suggeriamo di **{suggestion} il prezzo per essere più competitivo**.\n\nVuoi modificarlo?";
 
-            bool adjustPrice = await Application.Current.MainPage.DisplayAlert(
-                "Suggerimento Prezzo",
-                message,
-                "Sì, lo cambio",
-                "No, mantieni");
+                bool adjustPrice = await Application.Current.MainPage.DisplayAlert(
+                    "Suggerimento Prezzo",
+                    message,
+                    "Sì, lo cambio",
+                    "No, mantieni");
 
-            if (adjustPrice)
-            {
-                return; // L'utente deve reinserire il prezzo
-            }
+                if (adjustPrice)
+                {
+                    return; // L'utente deve reinserire il prezzo
+                }
             }
             Debug.WriteLine($"Location: {this.Location}");
 
@@ -854,80 +855,80 @@ private async Task<double> GetAveragePrice(string RoomType, string Location)
 
             var payload = new
             {
-            HotelName = this.HotelName,
-            RoomName = this.AdditionalRoomName,
-            RoomDescription = this.AdditionalRoomDescription,
-            PricePerNight = this.AdditionalPricePerNight,
-            MaxGuests = this.AdditionalMaxGuests,
-            RoomType = this.AdditionalRoomType,
-            RoomImagePath = this.AdditionalRoomImagePath
+                HotelName = this.HotelName,
+                RoomName = this.AdditionalRoomName,
+                RoomDescription = this.AdditionalRoomDescription,
+                PricePerNight = this.AdditionalPricePerNight,
+                MaxGuests = this.AdditionalMaxGuests,
+                RoomType = this.AdditionalRoomType,
+                RoomImagePath = this.AdditionalRoomImagePath
             };
 
             try
             {
-            Debug.WriteLine("Sono qui dentro");
+                Debug.WriteLine("Sono qui dentro");
 
-            using var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/addRoom");
-            var json = JsonSerializer.Serialize(payload);
-            request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                using var client = new HttpClient();
+                var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/addRoom");
+                var json = JsonSerializer.Serialize(payload);
+                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
 
-            var response = await client.SendAsync(request);
+                var response = await client.SendAsync(request);
 
-            if (response.IsSuccessStatusCode)
-            {
-                IsSuccessVisible = true;
-                IsErrorVisible = false;
-
-                string previewMessage = "Stanza e hotel aggiunto con successo";
-                bool confirm = await Application.Current.MainPage.DisplayAlert(
-                "Conferma Selezione",
-                previewMessage + "\n\nVuoi inserire un'altra stanza?",
-                "Sì",
-                "No");
-
-                if (confirm)
+                if (response.IsSuccessStatusCode)
                 {
-                // Svuotamento dei campi
-                AdditionalRoomName = string.Empty;
-                AdditionalRoomDescription = string.Empty;
-                AdditionalPricePerNight = 0;
-                AdditionalMaxGuests = 0;
-                AdditionalRoomType = string.Empty;
-                AdditionalRoomImagePath = string.Empty;
-                AdditionalRoomImageNames = string.Empty;
+                    IsSuccessVisible = true;
+                    IsErrorVisible = false;
+
+                    string previewMessage = "Stanza e hotel aggiunto con successo";
+                    bool confirm = await Application.Current.MainPage.DisplayAlert(
+                    "Conferma Selezione",
+                    previewMessage + "\n\nVuoi inserire un'altra stanza?",
+                    "Sì",
+                    "No");
+
+                    if (confirm)
+                    {
+                        // Svuotamento dei campi
+                        AdditionalRoomName = string.Empty;
+                        AdditionalRoomDescription = string.Empty;
+                        AdditionalPricePerNight = 0;
+                        AdditionalMaxGuests = 0;
+                        AdditionalRoomType = string.Empty;
+                        AdditionalRoomImagePath = string.Empty;
+                        AdditionalRoomImageNames = string.Empty;
+                    }
+                    else
+                    {
+                        Location = string.Empty;
+                        AdditionalRoomName = string.Empty;
+                        AdditionalRoomDescription = string.Empty;
+                        AdditionalPricePerNight = 0;
+                        AdditionalMaxGuests = 0;
+                        AdditionalRoomType = string.Empty;
+                        AdditionalRoomImagePath = string.Empty;
+                        AdditionalRoomImageNames = string.Empty;
+                        // Reset delle visibilità per la schermata dell'hotel
+                        IsHotelSaved = false;
+                        IsSuccessVisible = false;
+                        IsErrorVisible = false;
+                        IsAddHotelVisible = true;
+                        IsAddRoomVisible = false;
+                    }
                 }
                 else
                 {
-                Location = string.Empty;
-                AdditionalRoomName = string.Empty;
-                AdditionalRoomDescription = string.Empty;
-                AdditionalPricePerNight = 0;
-                AdditionalMaxGuests = 0;
-                AdditionalRoomType = string.Empty;
-                AdditionalRoomImagePath = string.Empty;
-                AdditionalRoomImageNames = string.Empty;
-                // Reset delle visibilità per la schermata dell'hotel
-                IsHotelSaved = false;
-                IsSuccessVisible = false;
-                IsErrorVisible = false;
-                IsAddHotelVisible = true;
-                IsAddRoomVisible = false;
+                    IsSuccessVisible = false;
+                    IsErrorVisible = true;
                 }
-            }
-            else
-            {
-                IsSuccessVisible = false;
-                IsErrorVisible = true;
-            }
 
-            OnPropertyChanged(nameof(IsSuccessVisible));
-            OnPropertyChanged(nameof(IsErrorVisible));
+                OnPropertyChanged(nameof(IsSuccessVisible));
+                OnPropertyChanged(nameof(IsErrorVisible));
             }
             catch (Exception)
             {
-            IsSuccessVisible = false;
-            IsErrorVisible = true;
+                IsSuccessVisible = false;
+                IsErrorVisible = true;
             }
         }
 

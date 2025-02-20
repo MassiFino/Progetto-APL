@@ -24,7 +24,6 @@ namespace Interfaccia_C_.ViewModel
         {
             // Inizializza il comando
             LogoutCommand = new Command(ExecuteLogout);
-            ProfileCommand = new Command(ExecuteProfileUserNavigation);
 
         }
 
@@ -46,10 +45,7 @@ namespace Interfaccia_C_.ViewModel
             // Naviga alla pagina di login
             await appShell.GoToAsync("//LoginPage");
         }
-        //da verificare se servirà
-        private async void ExecuteProfileUserNavigation()
-        {
-            await Shell.Current.GoToAsync("ProfileHostPage");
-        }
+        //da verificare se servirï¿½
+    
     }
 }

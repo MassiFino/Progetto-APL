@@ -9,58 +9,96 @@
              Padding="0">
 
     <ScrollView>
-        <VerticalStackLayout Margin="10" Spacing="15">
+        <VerticalStackLayout Margin="10"
+                Spacing="15">
 
 
 
             <!-- Sezione principale per l'aggiunta stanza -->
-            <StackLayout>
-                <Label Text="Aggiungi una stanza per questo hotel"
-                      FontSize="26" 
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center" 
-                       TextColor="#FF4500"  
-                    Margin="0,10"/>
-                    <Label Text="{Binding Name}" 
-                      FontSize="26" 
-                       FontAttributes="Bold, Italic"
-                       HorizontalOptions="Center" 
-                       TextColor="#FFD700" 
-                    Margin="0,5"/>
-                    <!-- Location dell'hotel -->
-                <Label Text="{Binding Location}" 
-                       FontSize="18"
-                       FontAttributes="Italic"
-                       HorizontalOptions="Center" 
-                       TextColor="#1E90FF"  
-                    Margin="0,5"/>
-            </StackLayout>
-
+            
             <!-- Sezione per aggiungere la stanza -->
-            <Border IsVisible="{Binding IsAddRoomVisible}" Stroke="LightGray" StrokeThickness="1" BackgroundColor="LightCoral" Padding="20" 
-                    HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+            <Border IsVisible="{Binding IsAddRoomVisible}"
+                    Stroke="LightGray"
+                    StrokeThickness="1"
+                    BackgroundColor="LightCoral"
+                    Padding="20"
+                    HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20"/>
                 </Border.StrokeShape>
+                <VerticalStackLayout Spacing="10">
 
-                <StackLayout Spacing="10">
-                    <Label Text="Nome della Stanza" FontSize="16" TextColor="Black"/>
-                    <Entry x:Name="RoomNameEntry" Placeholder="Inserisci il nome della stanza" 
+                    <Label Text="Aggiungi una stanza per questo hotel"
+               FontSize="26"
+               FontAttributes="Bold"
+               HorizontalOptions="Center"
+               TextColor="DarkRed"
+               Margin="0,10"/>
+                    <HorizontalStackLayout HorizontalOptions="Center">
+                        <Label Text="Nome Hotel: "
+FontSize="26"
+FontAttributes="Bold, Italic"
+HorizontalOptions="Center"
+TextColor="#FFD700"
+Margin="0,5"/>
+                        <Label Text="{Binding Name}"
+           FontSize="26"
+           FontAttributes="Bold, Italic"
+           HorizontalOptions="Center"
+           TextColor="#FFD700"
+           Margin="0,5"/>
+                    </HorizontalStackLayout>
+                    <!-- Location dell'hotel -->
+                    <HorizontalStackLayout HorizontalOptions="Center">
+                        <Label Text="Location:  "
+           FontSize="18"
+           FontAttributes="Italic"
+           TextColor="#1E90FF"
+           Margin="0,5"/>
+
+                        <Label Text="{Binding Location}"
+           FontSize="18"
+           FontAttributes="Italic"
+           TextColor="#1E90FF"
+           Margin="0,5"/>
+                    </HorizontalStackLayout>
+
+
+
+                    <StackLayout Spacing="10">
+                    <Label Text="Nome della Stanza"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Entry x:Name="RoomNameEntry"
+                            Placeholder="Inserisci il nome della stanza"
                            TextColor="Black"
-                           Text="{Binding RoomName}" HeightRequest="45"/>
+                           Text="{Binding RoomName}"
+                            HeightRequest="45"/>
 
-                    <Label Text="Descrizione della Stanza" FontSize="16" TextColor="Black"/>
-                    <Editor x:Name="RoomDescriptionEditor" Placeholder="Descrizione della stanza"  
+                    <Label Text="Descrizione della Stanza"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Editor x:Name="RoomDescriptionEditor"
+                            Placeholder="Descrizione della stanza"
                             TextColor="Black"
-                            Text="{Binding RoomDescription}" HeightRequest="100"/>
+                            Text="{Binding RoomDescription}"
+                            HeightRequest="100"/>
 
-                    <Label Text="Prezzo per notte (€)" FontSize="16" TextColor="Black"/>
-                    <Entry x:Name="PricePerNightEntry" Placeholder="Es. 100.00" 
+                    <Label Text="Prezzo per notte (€)"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Entry x:Name="PricePerNightEntry"
+                            Placeholder="Es. 100.00"
                            TextColor="Black"
-                           Text="{Binding PricePerNight}" Keyboard="Numeric" HeightRequest="45"/>
+                           Text="{Binding PricePerNight}"
+                            Keyboard="Numeric"
+                            HeightRequest="45"/>
 
-                    <Label Text="Tipologia di stanza" FontSize="16" TextColor="Black"/>
-                    <Picker x:Name="RoomTypePicker" 
+                    <Label Text="Tipologia di stanza"
+                            FontSize="16"
+                            TextColor="Black"/>
+                    <Picker x:Name="RoomTypePicker"
                             HeightRequest="40"
                             TextColor="Black"
                             BackgroundColor="Blue"
@@ -73,27 +111,30 @@
                             <x:String>Quadrupla</x:String>
                             <x:String>Suite</x:String>
                             <x:String>Deluxe</x:String>
-                            <x:String>Accessible Room</x:String>
                         </Picker.Items>
                     </Picker>
 
                     <!-- Caricamento immagine stanza -->
-                    <Button Text="Carica Immagine" 
-                            Command="{Binding UploadRoomImageCommand}" 
-                            BackgroundColor="MediumPurple" 
+                    <Button Text="Carica Immagine"
+                            Command="{Binding UploadRoomImageCommand}"
+                            BackgroundColor="MediumPurple"
                             TextColor="White"/>
 
                     <!-- Visualizza le immagini della stanza caricate -->
-                    <Label Text="{Binding RoomImageNames}" FontSize="14" TextColor="DarkGreen"/>
+                    <Label Text="{Binding RoomImageNames}"
+                            FontSize="14"
+                            TextColor="DarkGreen"/>
 
                     <!-- Bottone per aggiungere stanza -->
-                    <Button Text="Aggiungi Stanza" 
+                    <Button Text="Aggiungi Stanza"
                             Command="{Binding AddRoomCommand}"
-                            BackgroundColor="#28A745" 
-                            TextColor="White" 
-                            CornerRadius="20" 
+                            BackgroundColor="#28A745"
+                            TextColor="White"
+                            CornerRadius="20"
                             HeightRequest="50"/>
                 </StackLayout>
+                </VerticalStackLayout>
+
             </Border>
 
         </VerticalStackLayout>

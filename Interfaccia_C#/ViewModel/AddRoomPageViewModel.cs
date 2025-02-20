@@ -164,7 +164,7 @@ namespace Interfaccia_C_.ViewModel
             UploadRoomImageCommand = new Command(async () => await OnUploadRoomImage());
 
         }
-
+        //Controllo del prezzo medio del tipo di stanza e della località inserita prima dell'inserimento
         private async Task<double> GetAveragePrice(string RoomType, string Location)
         {   // Controlla se RoomType o Location sono nulli o vuoti
            
@@ -212,9 +212,9 @@ namespace Interfaccia_C_.ViewModel
             else if (avgPrice > 0 && PricePerNight != avgPrice)
             {
                 string suggestion = PricePerNight > avgPrice ? "abbassare" : "alzare";
-                string message = $"📊 Il prezzo inserito **{PricePerNight:C}** è diverso dal **prezzo medio** per le stanze di tipo **{RoomType}** in **{Location}**.\n\n" +
-                                $"💰 **Prezzo medio attuale**: {avgPrice:C}\n" +
-                                $"🔍 Ti suggeriamo di **{suggestion} il prezzo per essere più competitivo**.\n\nVuoi modificarlo?";
+                string message = $"Il prezzo inserito **{PricePerNight:C}** è diverso dal **prezzo medio** per le stanze di tipo **{RoomType}** in **{Location}**.\n\n" +
+                                $"**Prezzo medio attuale**: {avgPrice:C}\n" +
+                                $"Ti suggeriamo di **{suggestion} il prezzo per essere più competitivo**.\n\nVuoi modificarlo?";
 
                 bool adjustPrice = await Application.Current.MainPage.DisplayAlert(
                     "Suggerimento Prezzo",

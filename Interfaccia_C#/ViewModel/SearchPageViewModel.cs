@@ -161,8 +161,13 @@ namespace Interfaccia_C_.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Errore", Message, "OK");
                 return;
             }
+            if (string.IsNullOrWhiteSpace(SelectedGuest))
+            {
+                await Application.Current.MainPage.DisplayAlert("Attenzione", "Seleziona il numero di ospiti", "OK");
+                return;
+            }
 
-            var activeServices = GetActiveServices();
+            List<string> activeServices = GetActiveServices();
             Debug.WriteLine($"Ricerca per: {SearchCity}, check-in: {CheckInDate:dd/MM/yyyy}, check-out: {CheckOutDate:dd/MM/yyyy}");
             var searchParameters = new Dictionary<string, object>
             {
@@ -172,7 +177,7 @@ namespace Interfaccia_C_.ViewModel
                 { "Guests", SelectedGuest },
                 { "Services", activeServices }
             };
-
+            Debug.WriteLine($"Services: {string.Join(", ", activeServices)}");
             if (!string.IsNullOrWhiteSpace(SelectedOrderBy) && SelectedOrderBy != "Order by")
             {
                 searchParameters.Add("OrderBy", SelectedOrderBy);

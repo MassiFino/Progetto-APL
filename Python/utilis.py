@@ -93,6 +93,7 @@ def assign_points_for_booking(
 
     room_type_bonus_map = {
         "Suite": 5,
+        "Quadrupla": 4,
         "Deluxe": 3,
         "Doppia": 2,
         "Tripla": 2,

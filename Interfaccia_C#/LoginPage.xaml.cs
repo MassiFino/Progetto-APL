@@ -1,5 +1,5 @@
 namespace Interfaccia_C_;
-using Interfaccia_C_.ViewModel; 
+using Interfaccia_C_.ViewModel;
 
 public partial class LoginPage : ContentPage
 {

@@ -7,34 +7,42 @@
              Padding="0">
 
     <ScrollView>
-        <VerticalStackLayout Padding="15" Spacing="25">
+        <VerticalStackLayout Padding="15"
+                Spacing="25">
 
             <!-- Sezione Room Name -->
             <Label Text="Nome Hotel: "
-                 FontSize="22"
-                 FontAttributes="Bold"
-                 TextColor="DarkMagenta"
-                 HorizontalOptions="Start"
-                 Margin="0,2"/>    
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="DarkMagenta"
+                   HorizontalOptions="Start"
+                   Margin="0,2"/>
             <Label Text="{Binding HotelName}"
-                 FontSize="20"
-                 FontAttributes="Bold"
-                 HorizontalOptions="Start"
-                 TextColor="DarkSalmon"
-                 Margin="0,5"/>
-            <BoxView HeightRequest="2" BackgroundColor="#00BFFF" HorizontalOptions="FillAndExpand" Margin="0,10"/>
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Start"
+                   TextColor="DarkSalmon"
+                   Margin="0,5"/>
+            <BoxView HeightRequest="2"
+                    BackgroundColor="#00BFFF"
+                    HorizontalOptions="FillAndExpand"
+                    Margin="0,10"/>
 
             <!-- Separazione tra le sezioni -->
-            <Label Text="Immagine della stanza "  FontSize="20"
-                FontAttributes="Bold"
-                HorizontalOptions="Start"
-                TextColor="DarkMagenta" 
-                Margin="0,5"/>
+            <Label Text="Immagine della stanza "
+                    FontSize="20"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Start"
+                   TextColor="DarkMagenta"
+                   Margin="0,5"/>
 
             <!-- Sezione Room Image -->
-            <Border Stroke="#00BFFF" StrokeThickness="2" Padding="0" Margin="0,10">
+            <Border Stroke="#00BFFF"
+                    StrokeThickness="2"
+                    Padding="0"
+                    Margin="0,10">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="20" />
+                    <RoundRectangle CornerRadius="20"/>
                 </Border.StrokeShape>
                 <Image Source="{Binding ImageSource}"
                        Aspect="AspectFill"
@@ -44,87 +52,102 @@
                        VerticalOptions="CenterAndExpand"/>
             </Border>
 
-           
+
 
             <!-- Separazione tra le sezioni -->
-            <BoxView HeightRequest="2" BackgroundColor="LightCoral" HorizontalOptions="FillAndExpand" Margin="0,10"/>
+            <BoxView HeightRequest="2"
+                    BackgroundColor="LightCoral"
+                    HorizontalOptions="FillAndExpand"
+                    Margin="0,10"/>
 
-            <Border StrokeThickness="2" Stroke="#00BFFF" Padding="10" >
+            <Border StrokeThickness="2"
+                    Stroke="#00BFFF"
+                    Padding="10">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="30" />
+                    <RoundRectangle CornerRadius="30"/>
                 </Border.StrokeShape>
                 <VerticalStackLayout>
                     <!-- Sezione Check-in e Check-out -->
                     <Label Text="Check-in Date"
-               FontSize="20"
-               FontAttributes="Bold"
-               TextColor="#008B8B"
-               HorizontalOptions="Start"
-               Margin="0,5"/>
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="#008B8B"
+                           HorizontalOptions="Start"
+                           Margin="0,5"/>
                     <Label Text="{Binding CheckInDate, StringFormat='{0:dd/MM/yyyy}'}"
-               FontSize="16"
-               HorizontalOptions="Start"
-               TextColor="#696969"
-               Margin="0,5"/>
+                           FontSize="16"
+                           HorizontalOptions="Start"
+                           TextColor="#696969"
+                           Margin="0,5"/>
 
                     <Label Text="Check-out Date"
-               FontSize="20"
-               FontAttributes="Bold"
-               TextColor="#008B8B"
-               HorizontalOptions="Start"
-               Margin="0,5"/>
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="#008B8B"
+                           HorizontalOptions="Start"
+                           Margin="0,5"/>
                     <Label Text="{Binding CheckOutDate, StringFormat='{0:dd/MM/yyyy}'}"
-               FontSize="16"
-               HorizontalOptions="Start"
-               TextColor="#696969"
-               Margin="0,5"/>
+                           FontSize="16"
+                           HorizontalOptions="Start"
+                           TextColor="#696969"
+                           Margin="0,5"/>
 
                     <!-- Separazione tra le sezioni -->
-                    <BoxView HeightRequest="2" BackgroundColor="#00BFFF" HorizontalOptions="FillAndExpand" Margin="0,10"/>
+                    <BoxView HeightRequest="2"
+                            BackgroundColor="#00BFFF"
+                            HorizontalOptions="FillAndExpand"
+                            Margin="0,10"/>
 
                     <!-- Sezione Total Amount -->
                     <Label Text="Total Amount"
-               FontSize="20"
-               FontAttributes="Bold"
-               TextColor="#FF6347"
-               HorizontalOptions="Start"
-               Margin="0,10"/>
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="#FF6347"
+                           HorizontalOptions="Start"
+                           Margin="0,10"/>
                     <Label Text="{Binding TotalAmount, StringFormat='{0:C}'}"
-               FontSize="16"
-               HorizontalOptions="Start"
-               TextColor="#696969"
-               Margin="0,5"/>
-                    <BoxView HeightRequest="2" BackgroundColor="#00BFFF" HorizontalOptions="FillAndExpand" Margin="0,10"/>
+                           FontSize="16"
+                           HorizontalOptions="Start"
+                           TextColor="#696969"
+                           Margin="0,5"/>
+                    <BoxView HeightRequest="2"
+                            BackgroundColor="#00BFFF"
+                            HorizontalOptions="FillAndExpand"
+                            Margin="0,10"/>
 
                     <!-- Sezione Room Name -->
                     <Label Text="Room Name"
-     FontSize="20"
-     FontAttributes="Bold"
-     TextColor="DarkBlue"
-     HorizontalOptions="Start"
-     Margin="0,10"/>
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="DarkBlue"
+                           HorizontalOptions="Start"
+                           Margin="0,10"/>
                     <Label Text="{Binding RoomName}"
-     FontSize="16"
-     HorizontalOptions="Start"
-     TextColor="#696969"
-     Margin="0,5"/>
+                           FontSize="16"
+                           HorizontalOptions="Start"
+                           TextColor="#696969"
+                           Margin="0,5"/>
                     <!-- Separazione tra le sezioni -->
-                    <BoxView HeightRequest="2" BackgroundColor="#00BFFF" HorizontalOptions="FillAndExpand" Margin="0,10"/>
+                    <BoxView HeightRequest="2"
+                            BackgroundColor="#00BFFF"
+                            HorizontalOptions="FillAndExpand"
+                            Margin="0,10"/>
 
-                  
+
 
                     <!-- Pulsanti di azione -->
-                    <HorizontalStackLayout Spacing="20" Margin="0,15">
+                    <HorizontalStackLayout Spacing="20"
+                            Margin="0,15">
                         <Button Text="Conferma Prenotazione"
-                    Command="{Binding ConfermaPrenotazioneCommand}"
-                    BackgroundColor="#008000"
-                    TextColor="White"
-                    CornerRadius="10"/>
+                                Command="{Binding ConfermaPrenotazioneCommand}"
+                                BackgroundColor="#008000"
+                                TextColor="White"
+                                CornerRadius="10"/>
                         <Button Text="Applica Sconto"
-                    Command="{Binding ApplicaScontoCommand}"
-                    BackgroundColor="#FFA500"
-                    TextColor="White"
-                    CornerRadius="10"/>
+                                Command="{Binding ApplicaScontoCommand}"
+                                BackgroundColor="#FFA500"
+                                TextColor="White"
+                                CornerRadius="10"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Border>

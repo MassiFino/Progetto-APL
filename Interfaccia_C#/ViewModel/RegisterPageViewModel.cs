@@ -326,7 +326,7 @@ namespace Interfaccia_C_.ViewModel
 
                             var hostShell = new HostShell();
                             Application.Current.MainPage = hostShell;
-                            await hostShell.GoToAsync("//ProfileHostPage");
+                            await hostShell.GoToAsync("//ProfilePage");
                         }
                         else
                         {

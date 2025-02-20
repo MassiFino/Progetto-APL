@@ -2,10 +2,10 @@
 using Interfaccia_C_.ViewModel;
 
 public partial class HostShell : Shell
-    {
+{
 
-        public HostShell()
-        {
+    public HostShell()
+    {
         InitializeComponent();
         BindingContext = new HostShellViewModel();
         Routing.RegisterRoute("HotelHostPage", typeof(HotelHostPage));
@@ -16,4 +16,3 @@ public partial class HostShell : Shell
     }
 
 }
-         

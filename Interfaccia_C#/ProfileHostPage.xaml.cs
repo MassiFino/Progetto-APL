@@ -20,5 +20,5 @@ public partial class ProfileHostPage : ContentPage
         await _viewModel.LoadUserData();
         await _viewModel.LoadHotelData();
     }
-    
+
 }

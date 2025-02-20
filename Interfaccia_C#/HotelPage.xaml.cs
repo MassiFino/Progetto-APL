@@ -18,7 +18,7 @@ public partial class HotelPage : ContentPage, IQueryAttributable
         }
     }
 
- 
+
 
     protected override async void OnAppearing()
     {
@@ -27,7 +27,7 @@ public partial class HotelPage : ContentPage, IQueryAttributable
         var token = await SecureStorage.GetAsync("jwt_token");
         if (string.IsNullOrEmpty(token))
         {
-            // Se non c'è il token, reindirizza l'utente al login
+            // Se non c'ï¿½ il token, reindirizza l'utente al login
             await Shell.Current.GoToAsync("//LoginPage");
             return;
         }
