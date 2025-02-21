@@ -2,8 +2,7 @@ import os
 from fastapi import FastAPI, HTTPException, Depends
 from pydantic import BaseModel
 import requests
-from user_owner import SignIn, SignUp
-from utilis import connect_go, assign_points_for_booking, apply_discount_by_points_euro, assign_points_for_review, create_cost_chart
+from utilis import connect_go, assign_points_for_booking, apply_discount_by_points_euro, assign_points_for_review, create_cost_chart,verifica_email,verifica_password
 from typing import Optional
 from jwt_utils import create_jwt_token, decode_jwt_token
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -129,17 +128,16 @@ class UpdateRoomPriceRequest(BaseModel):
 
 @app.post("/login")
 def login(request: LoginRequest):
+
+    password_valida, messaggio_password = verifica_password(request.Password)
+    if not password_valida:
+        raise HTTPException(status_code=400, detail=messaggio_password)
+
+    
+    print("Username dell'utente loggato:", request.Username)
+    #Se email e password sono valide, procedi con il login
     payload = {"Username": request.Username, "Password": request.Password}
     print("Payload inviato:", payload)
-    #global current_username  # Dichiarazione esplicita della variabile globale
-    # Validazione tramite SigIn
-    success, messaggio = SignIn(payload)
-    if not success:
-        raise HTTPException(status_code=400, detail=messaggio)
-    #current_username = request.Username
-
-    print("Username dell'utente loggato:", request.Username)
-
     try:
         response = connect_go("login", payload)
         print(response)
@@ -165,18 +163,21 @@ def login(request: LoginRequest):
 
 @app.post("/signup")
 def signup(request: SignupRequest):
-    payload = {"Username": request.Username, "Email": request.Email, "Password": request.Password, "PImage": request.PImage, "Role": request.Role}
-    print("Payload inviato:", payload)
-    #global current_username  # Dichiarazione esplicita della variabile globale
+    
+    email_valida, messaggio_email = verifica_email(request.Email)
+    if not email_valida:
+        raise HTTPException(status_code=400, detail=messaggio_email)
+    
+    password_valida, messaggio_password = verifica_password(request.Password)
+    if not password_valida:
+        raise HTTPException(status_code=400, detail=messaggio_password)
 
-    # Validazione tramite SigIn
-    success, messaggio = SignUp(payload)
-    if not success:
-        raise HTTPException(status_code=400, detail=messaggio)
-      # Aggiorna la variabile globale con l'email dell'utente
     #current_username = request.Username
     print("Username dell'utente loggato:", request.Username)
-
+    
+    payload = {"Username": request.Username, "Email": request.Email, "Password": request.Password, "PImage": request.PImage, "Role": request.Role}
+    print("Payload inviato:", payload)
+    
     try:
         #print("Payload inviato:", request.dict())
         response = connect_go("signup", request.dict())

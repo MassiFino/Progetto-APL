@@ -19,12 +19,10 @@ namespace Interfaccia_C_.ViewModel
     {
         // Comando di logout
         public ICommand LogoutCommand { get; }
-        public ICommand ProfileCommand { get; }
         public UserShellViewModel()
         {
             // Inizializza il comando
             LogoutCommand = new Command(ExecuteLogout);
-            ProfileCommand= new Command(ExecuteProfileUserNavigation);
 
         }
 
@@ -47,9 +45,5 @@ namespace Interfaccia_C_.ViewModel
         }
 
 
-        private async void ExecuteProfileUserNavigation()
-        {
-            await Shell.Current.GoToAsync("//ProfileUserPage");
-        }
     }
 }

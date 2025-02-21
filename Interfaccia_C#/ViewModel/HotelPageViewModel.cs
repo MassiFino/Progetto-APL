@@ -27,7 +27,7 @@ namespace Interfaccia_C_.ViewModel
         public string Description { get; }
         public double Rating { get; }
         public string Services { get; set; }
-        public string Images { get; set; }  // Stringa che contiene il path (o i path)
+        public string Images { get; set; }  
         public ImageSource ImageSource { get; set; }
 
         public string ServiziStringa { get; set; }
@@ -241,7 +241,7 @@ namespace Interfaccia_C_.ViewModel
                 {
                     roomID = roomSelezionata.RoomID,
                     roomName = roomSelezionata.RoomName,
-                    roomImage= roomSelezionata.Images,
+                    roomImage = roomSelezionata.Images,
                     checkInDate = CheckInDate,
                     checkOutDate = CheckOutDate,
                     totalAmount = roomSelezionata.PricePerNight * (CheckOutDate - CheckInDate).Days,
@@ -323,7 +323,7 @@ namespace Interfaccia_C_.ViewModel
 
         }
         private async void CercaStanza()
-        {                
+        {
 
             try
             {
@@ -384,7 +384,7 @@ namespace Interfaccia_C_.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Errore", ex.Message, "OK");
             }
         }
-       
+
 
 
         public async System.Threading.Tasks.Task LoadRoomsAsync()
@@ -470,7 +470,7 @@ namespace Interfaccia_C_.ViewModel
 
                     }
                 }
-           
+
                 else
                 {
                     Debug.WriteLine($"Errore nel recupero delle recensioni: {response.StatusCode}");
@@ -538,7 +538,7 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-          private async Task OnSetInterest(Room selectedRoom)
+        private async Task OnSetInterest(Room selectedRoom)
         {
             var token = await SecureStorage.GetAsync("jwt_token");
             if (string.IsNullOrEmpty(token))

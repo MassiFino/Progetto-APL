@@ -7,238 +7,248 @@
              BackgroundColor="LightYellow"
              Padding="0">
     <ScrollView>
-        <VerticalStackLayout Padding="15" Spacing="25">
+        <VerticalStackLayout Padding="15"
+                Spacing="25">
             <!-- Sezione Nome dell'Hotel -->
             <Label Text="{Binding Name}"
-             FontSize="36"
-             FontAttributes="Bold"
-             HorizontalOptions="Center"
-             TextColor="#FF6347"
-             Margin="0,10"/>
+                   FontSize="36"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"
+                   TextColor="#FF6347"
+                   Margin="0,10"/>
             <!-- Immagine principale dell'hotel con effetto bordo arrotondato -->
             <Border Stroke="#00BFFF"
-              StrokeThickness="2"
-              Padding="0"
-              Margin="0,10">
+                    StrokeThickness="2"
+                    Padding="0"
+                    Margin="0,10">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20"/>
                 </Border.StrokeShape>
                 <Image Source="{Binding ImageSource}"
-               Aspect="AspectFill"
-               HeightRequest="300"
-               WidthRequest="300"
-               HorizontalOptions="Center"
-               VerticalOptions="CenterAndExpand"/>
+                       Aspect="AspectFill"
+                       HeightRequest="300"
+                       WidthRequest="300"
+                       HorizontalOptions="Center"
+                       VerticalOptions="CenterAndExpand"/>
             </Border>
             <!-- Descrizione dell'hotel -->
             <Border Stroke="#FF4500"
-              StrokeThickness="2"
-              BackgroundColor="#FFF8DC"
-              Padding="10"
-              Margin="0,20">
+                    StrokeThickness="2"
+                    BackgroundColor="#FFF8DC"
+                    Padding="10"
+                    Margin="0,20">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20"/>
                 </Border.StrokeShape>
                 <StackLayout>
                     <Label Text="Descrizione"
-                 FontSize="20"
-                 FontAttributes="Bold"
-                 TextColor="#8B0000"
-                 HorizontalOptions="Start"
-                 Margin="0,5"/>
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           TextColor="#8B0000"
+                           HorizontalOptions="Start"
+                           Margin="0,5"/>
                     <Label Text="{Binding Description}"
-                 FontSize="16"
-                 LineBreakMode="WordWrap"
-                 HorizontalOptions="Start"
-                 TextColor="#696969"
-                 Margin="0,5"/>
+                           FontSize="16"
+                           LineBreakMode="WordWrap"
+                           HorizontalOptions="Start"
+                           TextColor="#696969"
+                           Margin="0,5"/>
                 </StackLayout>
             </Border>
             <!-- Separazione -->
             <BoxView HeightRequest="2"
-               BackgroundColor="#00BFFF"
-               HorizontalOptions="FillAndExpand"
-               Margin="0,10"/>
+                     BackgroundColor="#00BFFF"
+                     HorizontalOptions="FillAndExpand"
+                     Margin="0,10"/>
             <!-- Location -->
             <Label Text="Location"
-             FontSize="20"
-             FontAttributes="Bold"
-             TextColor="#008B8B"
-             HorizontalOptions="Start"
-             Margin="0,5"/>
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#008B8B"
+                   HorizontalOptions="Start"
+                   Margin="0,5"/>
             <Label Text="{Binding Location}"
-             FontSize="16"
-             HorizontalOptions="Start"
-             TextColor="#696969"
-             Margin="0,5"/>
+                   FontSize="16"
+                   HorizontalOptions="Start"
+                   TextColor="#696969"
+                   Margin="0,5"/>
             <!-- Separazione -->
             <BoxView HeightRequest="2"
-               BackgroundColor="#00BFFF"
-               HorizontalOptions="FillAndExpand"
-               Margin="0,10"/>
+                     BackgroundColor="#00BFFF"
+                     HorizontalOptions="FillAndExpand"
+                     Margin="0,10"/>
             <!-- Servizi -->
             <Label Text="Servizi Offerti"
-             FontSize="20"
-             FontAttributes="Bold"
-             TextColor="#8A2BE2"
-             HorizontalOptions="Start"
-             Margin="0,5"/>
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#8A2BE2"
+                   HorizontalOptions="Start"
+                   Margin="0,5"/>
             <Border Stroke="#FF6347"
-              StrokeThickness="2"
-              BackgroundColor="#E6E6FA"
-              Padding="10"
-              Margin="0,10">
+                    StrokeThickness="2"
+                    BackgroundColor="#E6E6FA"
+                    Padding="10"
+                    Margin="0,10">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="20"/>
                 </Border.StrokeShape>
                 <Label Text="{Binding Services}"
-               FontSize="16"
-               HorizontalOptions="Start"
-               TextColor="#696969"
-               LineBreakMode="WordWrap"
-               Margin="0,5"/>
+                       FontSize="16"
+                       HorizontalOptions="Start"
+                       TextColor="#696969"
+                       LineBreakMode="WordWrap"
+                       Margin="0,5"/>
             </Border>
             <!-- Separazione -->
             <BoxView HeightRequest="2"
-               BackgroundColor="#00BFFF"
-               HorizontalOptions="FillAndExpand"
-               Margin="0,10"/>
+                     BackgroundColor="#00BFFF"
+                     HorizontalOptions="FillAndExpand"
+                     Margin="0,10"/>
             <!-- Rating -->
             <Label Text="Valutazione"
-             FontSize="20"
-             FontAttributes="Bold"
-             TextColor="#2F4F4F"
-             HorizontalOptions="Start"
-             Margin="0,5"/>
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="#2F4F4F"
+                   HorizontalOptions="Start"
+                   Margin="0,5"/>
             <Label Text="{Binding Rating}"
-             FontSize="16"
-             HorizontalOptions="Start"
-             TextColor="#696969"
-             Margin="0,5"/>
+                   FontSize="16"
+                   HorizontalOptions="Start"
+                   TextColor="#696969"
+                   Margin="0,5"/>
             <!-- Separazione finale -->
             <BoxView HeightRequest="2"
-               BackgroundColor="#00BFFF"
-               HorizontalOptions="FillAndExpand"
-               Margin="0,10"/>
+                     BackgroundColor="#00BFFF"
+                     HorizontalOptions="FillAndExpand"
+                     Margin="0,10"/>
             <!-- Sezione Disponibilità -->
             <Label Text="Stanze disponibili"
-             FontSize="Medium"
-             FontAttributes="Bold"
-             TextColor="Black"
-             HorizontalOptions="Center"/>
+                   FontSize="Medium"
+                   FontAttributes="Bold"
+                   TextColor="Black"
+                   HorizontalOptions="Center"/>
             <Border Stroke="DarkOrange"
-              StrokeThickness="1"
-              BackgroundColor="LightGreen"
-              Padding="20"
-              WidthRequest="1500"
-              HorizontalOptions="Center"
-              VerticalOptions="Center">
+                    StrokeThickness="1"
+                    BackgroundColor="LightGreen"
+                    Padding="20"
+                    WidthRequest="1500"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="30"/>
                 </Border.StrokeShape>
                 <!-- Layout per DatePicker e CollectionView -->
                 <VerticalStackLayout Spacing="20"
-                             HorizontalOptions="Center"
-                             VerticalOptions="Center">
+                                     HorizontalOptions="Center"
+                                     VerticalOptions="Center">
                     <HorizontalStackLayout HorizontalOptions="Center"
-                                 Spacing="10">
+                                           Spacing="10">
                         <DatePicker Date="{Binding CheckInDate}"
-                        Format="dd/MM/yyyy"
-                        WidthRequest="150"
-                        HeightRequest="40"/>
+                                    Format="dd/MM/yyyy"
+                                    WidthRequest="150"
+                                    HeightRequest="40"/>
                         <DatePicker Date="{Binding CheckOutDate}"
-                        Format="dd/MM/yyyy"
-                        WidthRequest="150"
-                        HeightRequest="40"/>
+                                    Format="dd/MM/yyyy"
+                                    WidthRequest="150"
+                                    HeightRequest="40"/>
                         <Button Text="Cerca stanza"
-                    Command="{Binding CercaStanzaCommand}"
-                    IsEnabled="{Binding IsSearchEnabled}"
-                    WidthRequest="200"
-                    HeightRequest="30"/>
+                                Command="{Binding CercaStanzaCommand}"
+                                IsEnabled="{Binding IsSearchEnabled}"
+                                WidthRequest="200"
+                                HeightRequest="30"/>
                     </HorizontalStackLayout>
                     <Label Text="{Binding SearchErrorMessage}"
-                 FontSize="14"
-                 TextColor="Red"
-                 HorizontalOptions="Center"/>
+                           FontSize="14"
+                           TextColor="Red"
+                           HorizontalOptions="Center"/>
                     <Label Text="Nessuna stanza è disponibile per tale data"
-                 FontSize="16"
-                 HorizontalOptions="Center"
-                 TextColor="Red"
-                 IsVisible="{Binding NoRoomsAvailable}"/>
+                           FontSize="16"
+                           HorizontalOptions="Center"
+                           TextColor="Red"
+                           IsVisible="{Binding NoRoomsAvailable}"/>
                     <!-- CollectionView per le stanze -->
                     <CollectionView ItemsSource="{Binding Rooms}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Border Stroke="DarkOrange"
-                        StrokeThickness="1"
-                        BackgroundColor="LightYellow"
-                        Padding="10"
-                        WidthRequest="1400"
-                        HorizontalOptions="Center"
-                        VerticalOptions="Center">
+                                        StrokeThickness="1"
+                                        BackgroundColor="LightYellow"
+                                        Padding="10"
+                                        WidthRequest="1400"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="30"/>
                                     </Border.StrokeShape>
                                     <!-- Grid a 3 colonne: immagine, dettagli, controllo interesse -->
                                     <Grid ColumnDefinitions="150,*,50"
-                        VerticalOptions="Center"
-                        HorizontalOptions="FillAndExpand">
+                                          VerticalOptions="Center"
+                                          HorizontalOptions="FillAndExpand">
                                         <!-- Colonna 0: Immagine della stanza -->
                                         <Frame Grid.Column="0"
-                           HasShadow="False"
-                           BackgroundColor="Transparent"
-                           BorderColor="Transparent"
-                           CornerRadius="20"
-                           Padding="0"
-                           HeightRequest="150"
-                           WidthRequest="150">
+                                               HasShadow="False"
+                                               BackgroundColor="Transparent"
+                                               BorderColor="Transparent"
+                                               CornerRadius="20"
+                                               Padding="0"
+                                               HeightRequest="150"
+                                               WidthRequest="150">
                                             <Image Source="{Binding ImageSource}"
-                             Aspect="AspectFill"/>
+                                                   Aspect="AspectFill"/>
                                         </Frame>
                                         <!-- Colonna 1: Dettagli della stanza -->
                                         <VerticalStackLayout Grid.Column="1"
-                                         Spacing="5"
-                                         VerticalOptions="Center"
-                                         Padding="10,0">
+                                                             Spacing="5"
+                                                             VerticalOptions="Center"
+                                                             Padding="10,0">
                                             <Label Text="{Binding RoomName}"
-                             FontAttributes="Bold"
-                             FontSize="16"
-                             TextColor="Black"/>
+                                                   FontAttributes="Bold"
+                                                   FontSize="16"
+                                                   TextColor="Black"/>
                                             <Label Text="{Binding RoomDescription}"
-                             MaxLines="3"
-                             LineBreakMode="TailTruncation"
-                             FontSize="14"
-                             TextColor="Black"/>
+                                                   MaxLines="3"
+                                                   LineBreakMode="TailTruncation"
+                                                   FontSize="14"
+                                                   TextColor="Black"/>
+                                            <Label Text="Numero Massimo di ospiti:"
+                                                   FontAttributes="Bold"
+                                                   FontSize="14"
+                                                   TextColor="Black"/>
+                                            <Label Text="{Binding MaxGuests}"
+                                                   MaxLines="3"
+                                                   LineBreakMode="TailTruncation"
+                                                   FontSize="14"
+                                                   TextColor="Black"/>
                                             <Label Text="Prezzo per notte:"
-                             FontAttributes="Bold"
-                             FontSize="14"
-                             TextColor="Black"/>
+                                                   FontAttributes="Bold"
+                                                   FontSize="14"
+                                                   TextColor="Black"/>
                                             <Label Text="{Binding PricePerNight, StringFormat='€ {0:F2}'}"
-                             FontSize="12"
-                             TextColor="Black"/>
+                                                   FontSize="12"
+                                                   TextColor="Black"/>
                                             <Button Text="Prenota stanza"
-                              WidthRequest="200"
-                              HeightRequest="30"
-                              FontSize="14"
-                              Padding="5"
-                              HorizontalOptions="Start"
-                              Command="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.PrenotaStanzaCommand}"
-                              CommandParameter="{Binding .}"
-                              IsVisible="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.IsSearchMode}"
-                              IsEnabled="{Binding CanBook}"/>
+                                                    WidthRequest="200"
+                                                    HeightRequest="30"
+                                                    FontSize="14"
+                                                    Padding="5"
+                                                    HorizontalOptions="Start"
+                                                    Command="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.PrenotaStanzaCommand}"
+                                                    CommandParameter="{Binding .}"
+                                                    IsVisible="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.IsSearchMode}"
+                                                    IsEnabled="{Binding CanBook}"/>
                                         </VerticalStackLayout>
                                         <!-- Colonna 2: Controllo per interesse -->
                                         <Grid Grid.Column="2"
-                          VerticalOptions="Center"
-                          HorizontalOptions="Center">
+                                              VerticalOptions="Center"
+                                              HorizontalOptions="Center">
                                             <!-- ImageButton sempre visibile; la logica (alert o set) è gestita nel comando -->
                                             <ImageButton x:Name="interestButton"
-                                   Source="bell.png"
-                                   BackgroundColor="Transparent"
-                                   Command="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.SetInterestCommand}"
-                                   CommandParameter="{Binding .}"
-                                   WidthRequest="40"
-                                   HeightRequest="40"/>
+                                                         Source="bell.png"
+                                                         BackgroundColor="Transparent"
+                                                         Command="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.SetInterestCommand}"
+                                                         CommandParameter="{Binding .}"
+                                                         WidthRequest="40"
+                                                         HeightRequest="40"/>
                                         </Grid>
                                     </Grid>
                                 </Border>
@@ -249,70 +259,70 @@
             </Border>
             <!-- Sezione Recensioni degli ospiti -->
             <Label Text="Recensioni degli ospiti"
-             FontSize="Medium"
-             FontAttributes="Bold"
-             TextColor="Black"
-             HorizontalOptions="Center"/>
+                   FontSize="Medium"
+                   FontAttributes="Bold"
+                   TextColor="Black"
+                   HorizontalOptions="Center"/>
             <Border Stroke="DarkOrange"
-              StrokeThickness="1"
-              BackgroundColor="DarkOrange"
-              Padding="10"
-              HorizontalOptions="Center"
-              VerticalOptions="Center"
-              WidthRequest="1500"
-              StrokeShape="RoundRectangle 30">
+                    StrokeThickness="1"
+                    BackgroundColor="DarkOrange"
+                    Padding="10"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    WidthRequest="1500"
+                    StrokeShape="RoundRectangle 30">
                 <CollectionView ItemsSource="{Binding Reviews}">
                     <CollectionView.EmptyView>
                         <Label Text="Nessuna recensione presente"
-                   FontSize="18"
-                   TextColor="Gray"
-                   HorizontalOptions="Center"
-                   VerticalOptions="Center"/>
+                               FontSize="18"
+                               TextColor="Gray"
+                               HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
                     </CollectionView.EmptyView>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Border Stroke="DarkOrange"
-                      StrokeThickness="1"
-                      BackgroundColor="LightSalmon"
-                      Padding="10"
-                      HorizontalOptions="Center"
-                      VerticalOptions="Center"
-                      StrokeShape="RoundRectangle 30">
+                                    StrokeThickness="1"
+                                    BackgroundColor="LightSalmon"
+                                    Padding="10"
+                                    HorizontalOptions="Center"
+                                    VerticalOptions="Center"
+                                    StrokeShape="RoundRectangle 30">
                                 <StackLayout Padding="10">
                                     <Label Text="{Binding ReviewerName}"
-                         FontAttributes="Bold"
-                         FontSize="16"/>
+                                           FontAttributes="Bold"
+                                           FontSize="16"/>
                                     <StackLayout IsVisible="{Binding IsReviewSectionVisible}"
-                               Spacing="5"
-                               Padding="5">
+                                                 Spacing="5"
+                                                 Padding="5">
                                         <Label Text="Data Recensione:"
-                           FontAttributes="Bold"
-                           FontSize="14"
-                           TextColor="Black"/>
+                                               FontAttributes="Bold"
+                                               FontSize="14"
+                                               TextColor="Black"/>
                                         <Label Text="{Binding CreatedAt}"
-                           FontSize="12"
-                           TextColor="Black"/>
+                                               FontSize="12"
+                                               TextColor="Black"/>
                                         <Label Text="Inserita da:"
-                           FontAttributes="Bold"
-                           FontSize="14"
-                           TextColor="Black"/>
+                                               FontAttributes="Bold"
+                                               FontSize="14"
+                                               TextColor="Black"/>
                                         <Label Text="{Binding Username}"
-                           FontSize="12"
-                           TextColor="Black"/>
+                                               FontSize="12"
+                                               TextColor="Black"/>
                                         <Label Text="Commento:"
-                           FontAttributes="Bold"
-                           FontSize="14"
-                           TextColor="Black"/>
+                                               FontAttributes="Bold"
+                                               FontSize="14"
+                                               TextColor="Black"/>
                                         <Label Text="{Binding Comment}"
-                           FontSize="12"
-                           TextColor="Black"/>
+                                               FontSize="12"
+                                               TextColor="Black"/>
                                         <Label Text="Voto:"
-                           FontAttributes="Bold"
-                           FontSize="14"
-                           TextColor="Black"/>
+                                               FontAttributes="Bold"
+                                               FontSize="14"
+                                               TextColor="Black"/>
                                         <Label Text="{Binding Rating}"
-                           FontSize="12"
-                           TextColor="Black"/>
+                                               FontSize="12"
+                                               TextColor="Black"/>
                                     </StackLayout>
                                 </StackLayout>
                             </Border>

@@ -45,7 +45,6 @@ namespace Interfaccia_C_.ViewModel
             // Naviga alla pagina di login
             await appShell.GoToAsync("//LoginPage");
         }
-        //da verificare se servir�
     
     }
 }

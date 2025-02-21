@@ -1,7 +1,6 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
-//using AudioUnit;
 
 namespace Interfaccia_C_.Model
 {
@@ -9,14 +8,14 @@ namespace Interfaccia_C_.Model
 
     public class Booking: INotifyPropertyChanged
     {
-        public int bookingID { get; set; }  // Identificativo univoco della prenotazione
+        public int bookingID { get; set; }  
         public int roomID { get; set; }
         public string username { get; set; }  // Nome utente del cliente
-        public DateTime checkInDate { get; set; }  // Data di check-in
-        public DateTime checkOutDate { get; set; }  // Data di check-out
+        public DateTime checkInDate { get; set; }  
+        public DateTime checkOutDate { get; set; }  
         public double totalAmount { get; set; }  // Importo totale della prenotazione
         public string status { get; set; }  // Stato della prenotazione
-        public string roomName { get; set; }  // Nome della stanza
+        public string roomName { get; set; } 
         public string roomImage { get; set; }
 
         public string hotelName { get; set; }  // URL o percorso dell'immagine della stanza
@@ -30,7 +29,6 @@ namespace Interfaccia_C_.Model
         public int guests { get; set; }
 
         public int nights { get; set; }
-        // Proprietà UI: Sezione “Lascia Recensione”
         private bool isReviewVisible;
         public bool IsReviewVisible
         {
@@ -83,7 +81,7 @@ namespace Interfaccia_C_.Model
                 if (_isReviewSectionVisible != value)
                 {
                     _isReviewSectionVisible = value;
-                    OnPropertyChanged();  // Assicurati che la UI venga aggiornata
+                    OnPropertyChanged();  
                 }
             }
         }
@@ -94,7 +92,7 @@ namespace Interfaccia_C_.Model
             set
             {
                 _createdAt = value;
-                OnPropertyChanged(); // Assicurati che la UI venga aggiornata
+                OnPropertyChanged(); 
             }
         }
 
@@ -105,7 +103,7 @@ namespace Interfaccia_C_.Model
             set
             {
                 _review = value;
-                OnPropertyChanged(); // Assicurati che la UI venga aggiornata
+                OnPropertyChanged(); 
             }
         }
 
@@ -116,7 +114,7 @@ namespace Interfaccia_C_.Model
             set
             {
                 _rating = value;
-                OnPropertyChanged(); // Assicurati che la UI venga aggiornata
+                OnPropertyChanged(); 
             }
         }
 
@@ -133,14 +131,13 @@ namespace Interfaccia_C_.Model
                     _messageReview = value;
                     OnPropertyChanged(nameof(MessageReview));
 
-                    // Debug per vedere se il valore cambia
                     Debug.WriteLine($"MessageReview aggiornato: {_messageReview}");
                 }
             }
         }
 
 
-        private bool _isDeleteReviewVisible = false; // default false: se non esiste la recensione, il pulsante è nascosto
+        private bool _isDeleteReviewVisible = false; // default false: se non esiste la recensione, il pulsante Ã¨ nascosto
         public bool IsDeleteReviewVisible
         {
             get => _isDeleteReviewVisible;
