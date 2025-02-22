@@ -73,7 +73,6 @@ namespace Interfaccia_C_.ViewModel
                 }
             }
         }
-        // Comando per il bottone "Cerca stanza"
         public ICommand CercaStanzaCommand { get; }
         public class Room : INotifyPropertyChanged
         {
@@ -162,7 +161,6 @@ namespace Interfaccia_C_.ViewModel
                 set { _createdAt = value; OnPropertyChanged(); }
             }
 
-            // Imposta true di default per mostrare i dettagli della recensione
             private bool _isReviewSectionVisible = true;
             public bool IsReviewSectionVisible
             {
@@ -176,7 +174,6 @@ namespace Interfaccia_C_.ViewModel
         }
 
 
-        // Nuove proprietà per le stanze e le recensioni
         public ObservableCollection<Room> Rooms { get; set; } = new ObservableCollection<Room>();
         public ObservableCollection<Review> Reviews { get; set; } = new ObservableCollection<Review>();
         public ICommand PrenotaStanzaCommand { get; }
@@ -190,7 +187,7 @@ namespace Interfaccia_C_.ViewModel
                 if (_isSearchMode != value)
                 {
                     _isSearchMode = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(); //?
                     OnPropertyChanged(nameof(NoRoomsAvailable));
                 }
             }
@@ -225,15 +222,12 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-        // Proprietà calcolata per mostrare il messaggio "Nessuna stanza disponibile..."
         public bool NoRoomsAvailable => IsSearchMode && Rooms.Count == 0;
 
         public ICommand SetInterestCommand { get; }
 
-        // Costruttore che accetta un oggetto Hotel
         public HotelPageViewModel(Hotel hotel)
         {
-            //Se è possibile cercare di mettere meno poccibile nel costruttore e creiamo un'altra funzione che carica i dati
             PrenotaStanzaCommand = new Command<Room>(async (roomSelezionata) =>
             {
                 // Naviga con Shell, passando l'oggetto hotel
@@ -245,9 +239,9 @@ namespace Interfaccia_C_.ViewModel
                     checkInDate = CheckInDate,
                     checkOutDate = CheckOutDate,
                     totalAmount = roomSelezionata.PricePerNight * (CheckOutDate - CheckInDate).Days,
-                    status = "Confirmed", // Imposta lo stato come "Confirmed" o qualunque altro valore desideri
-                    hotelID = hotel.HotelID, // Passa l'ID dell'hotel
-                    hotelName = hotel.Name, // Nome dell'hotel
+                    status = "Confirmed", // Imposta lo stato come "Confirmed" 
+                    hotelID = hotel.HotelID, 
+                    hotelName = hotel.Name, 
                     hotelLocation = this.Location, // Posizione dell'hotel
                     roomType = roomSelezionata.RoomType,
                     guests = roomSelezionata.MaxGuests,
@@ -292,9 +286,8 @@ namespace Interfaccia_C_.ViewModel
 
             if (!string.IsNullOrEmpty(hotel.Images?.Trim()))
             {
-                // Divido la stringa in più immagini
                 var imageList = hotel.Images.Split(';');
-                // Prendo la prima
+
                 var firstImage = imageList[0].Trim();
 
                 Debug.WriteLine("Path immagine (prima del combine): " + firstImage);
@@ -304,7 +297,6 @@ namespace Interfaccia_C_.ViewModel
                 var imagePath = Path.Combine(projectDirectory, firstImage);
                 Debug.WriteLine("Path completo: " + imagePath);
 
-                // Converto in ImageSource
                 ImageSource = GetImageSource(imagePath);
                 Debug.WriteLine("Immaginissima: " + hotel.ImageSource);
             }
@@ -329,7 +321,6 @@ namespace Interfaccia_C_.ViewModel
             {
                 using var client = new HttpClient();
 
-                // Costruisci il payload con HotelID, CheckInDate e CheckOutDate formattate (ISO "yyyy-MM-dd")
                 var payload = new
                 {
                     HotelID = this.HotelID,
@@ -345,20 +336,17 @@ namespace Interfaccia_C_.ViewModel
 
                 Rooms.Clear();
 
-                // Chiama l'endpoint dedicato alle stanze disponibili
                 var response = await client.PostAsync("http://localhost:9000/getAvailableRooms", content);
 
                 Debug.WriteLine($"Response: {response}");
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
-                    // Assumiamo che l'endpoint restituisca una lista di Room
                     var availableRooms = JsonSerializer.Deserialize<List<Room>>(jsonResponse);
                     if (availableRooms != null)
                     {
                         foreach (var room in availableRooms)
                         {
-                            // Se il campo Images contiene più percorsi, prendi la prima immagine
                             if (!string.IsNullOrWhiteSpace(room.Images))
                             {
                                 var imageList = room.Images.Split(',');
@@ -413,7 +401,6 @@ namespace Interfaccia_C_.ViewModel
                         foreach (var room in rooms)
                         {
 
-                            // Se il campo Images contiene più percorsi, puoi gestirlo in modo simile
                             if (!string.IsNullOrEmpty(room.Images?.Trim()))
                             {
 
@@ -525,7 +512,6 @@ namespace Interfaccia_C_.ViewModel
                 return;
             }
 
-            // Se le date sono predefinite o non coerenti, disabilita la ricerca
             if (CheckOutDate <= CheckInDate)
             {
                 IsSearchEnabled = false;
@@ -541,13 +527,8 @@ namespace Interfaccia_C_.ViewModel
         private async Task OnSetInterest(Room selectedRoom)
         {
             var token = await SecureStorage.GetAsync("jwt_token");
-            if (string.IsNullOrEmpty(token))
-            {
-                await Shell.Current.GoToAsync("//LoginPage");
-                return;
-            }
 
-            // Chiedi all'utente di inserire il valore (es. prezzo minimo o massimo) che vuole monitorare
+            // (prezzo minimo) che vuole monitorare
             string input = await Application.Current.MainPage.DisplayPromptAsync(
                 "Monitoraggio Prezzo",
                 "Inserisci il valore (es. prezzo target) da monitorare:",
@@ -560,11 +541,17 @@ namespace Interfaccia_C_.ViewModel
                 return;
             }
 
+            if (monitorValue >= selectedRoom.PricePerNight)
+            {
+                await Application.Current.MainPage.DisplayAlert("Errore", "Il valore di interesse deve essere inferiore al prezzo corrente della stanza.", "OK");
+                return;
+            }
+
             // Prepara il payload includendo il valore monitorato
             var payload = new
             {
                 RoomID = selectedRoom.RoomID,
-                MonitorValue = monitorValue  // il valore inserito dall'utente
+                MonitorValue = monitorValue  //valore inserito dall'utente
             };
             Debug.WriteLine("Paylod interessi: " + payload);
 

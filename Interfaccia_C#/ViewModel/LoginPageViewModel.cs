@@ -90,7 +90,6 @@ namespace Interfaccia_C_.ViewModel
             // Serializza l'oggetto in JSON
 
             var json = JsonSerializer.Serialize(loginRequest);
-            //mando l'oggetto json tramite richiesta http
 
             Debug.WriteLine("Contenuto della richiesta: " + json);
 
@@ -101,25 +100,20 @@ namespace Interfaccia_C_.ViewModel
 
             try
             {
-                // URL del server (modifica l'indirizzo in base alla tua configurazione)
                 var url = "http://localhost:9000/login";
 
                 // Invia la richiesta POST
                 var response = await _httpClient.PostAsync(url, content);
 
-                // Log dello stato della risposta
                 Console.WriteLine($"Response Status: {response.StatusCode}");
 
-                // Analizza la risposta
                 if (response.IsSuccessStatusCode)
                 {
-                    // Leggi il contenuto della risposta
                     var responseContent = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine("ho fatto login" + responseContent);
 
                     // Deserializza la risposta JSON in un oggetto LoginResponse
                     var userData = JsonSerializer.Deserialize<LoginResponse>(responseContent);
-                    // Assegna il valore del campo 'Role' alla variabile 'typeUser'
 
                     if (!string.IsNullOrEmpty(userData.token))
                     {
@@ -138,32 +132,27 @@ namespace Interfaccia_C_.ViewModel
 
                         Debug.WriteLine("sono un: " + role);
 
-                        // Crea una nuova Shell specifica per il ruolo Host
                         var hostShell = new HostShell();
 
                         // Imposta la nuova Shell come finestra principale
                         Application.Current.MainPage = hostShell;
 
-                        // Naviga alla pagina desiderata all'interno della nuova Shell
                         await hostShell.GoToAsync("//ProfilePage");
 
                     }
                     else
                     {
                         Debug.WriteLine("sono uno: r" + role);
-                        // Crea una nuova Shell specifica per il ruolo Host
                         var userShell = new UserShell();
 
-                        // Imposta la nuova Shell come finestra principale
                         Application.Current.MainPage = userShell;
 
-                        // Naviga alla pagina desiderata all'interno della nuova Shell
+                        // Naviga alla pagina MainPage
                         await userShell.GoToAsync("//MainPage");
                     }
                 }
                 else
                 {
-                    // Gestione degli errori di autenticazione
                     var errorContent = await response.Content.ReadAsStringAsync();
                     Console.WriteLine($"Error Response: {errorContent}");
                     await Shell.Current.DisplayAlert("Errore", "Nome utente o password non validi.", "OK");
@@ -171,7 +160,6 @@ namespace Interfaccia_C_.ViewModel
             }
             catch (Exception ex)
             {
-                // Gestione degli errori di rete o altre eccezioni
                 Console.WriteLine($"Errore nella richiesta: {ex.Message}");
                 await Shell.Current.DisplayAlert("Errore", $"Errore di connessione: {ex.Message}", "OK");
             }

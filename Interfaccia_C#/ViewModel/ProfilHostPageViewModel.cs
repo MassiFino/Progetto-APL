@@ -19,13 +19,10 @@ namespace Interfaccia_C_.ViewModel
 {
     public class ProfilHostPageViewModel : INotifyPropertyChanged
     {
-        // ObservableCollection di Hotel
         public ObservableCollection<Hotel> OwnedHotels { get; set; }
 
-        // Comando per visualizzare il singolo hotel
         public ICommand ViewHotelCommand { get; }
 
-        // Comando per aggiungere un hotel
         public ICommand AddHotelCommand { get; }
 
         private string userName;
@@ -38,9 +35,8 @@ namespace Interfaccia_C_.ViewModel
 
         public ProfilHostPageViewModel()
         {
-            // Inizializza la lista degli hotel
             OwnedHotels = new ObservableCollection<Hotel>();
-            // Comando per 'Guarda Offerta'
+
             GuardaCommand = new Command<Hotel>(async (hotelSelezionato) =>
             {
                 // Naviga con Shell, passando l'oggetto hotel
@@ -52,11 +48,8 @@ namespace Interfaccia_C_.ViewModel
                 await Shell.Current.GoToAsync("HotelHostPage", navParams);
             });
 
-            // Imposta il comando per il pulsante "Visualizza"
-            ViewHotelCommand = new Command<Hotel>(OnViewHotel);
-
-            // Comando che naviga a una pagina "AddHotelPage" (shell route)
             AddHotelCommand = new Command(async () => await Shell.Current.GoToAsync("//AddHotelPage"));
+
             AddRoomCommand = new Command<Hotel>(async (hotelSelezionato) =>
             {
                 // Naviga con Shell, passando l'oggetto hotel
@@ -69,10 +62,6 @@ namespace Interfaccia_C_.ViewModel
             });
 
         }
-
-        // ----------------
-        // PROPRIETÀ BINDATE
-        // ----------------
 
         public string UserName
         {
@@ -115,21 +104,6 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-        // -----------
-        // COMANDI
-        // -----------
-
-        // Quando l'utente clicca sul pulsante "Visualizza hotel"
-        private async void OnViewHotel(Hotel selectedHotel)
-        {
-            if (selectedHotel != null)
-            {
-                Debug.WriteLine($"Hotel selezionato: {selectedHotel.Name}");
-
-              
-            }
-        }
-
         // ----------------
         // CARICAMENTO DATI
         // ----------------
@@ -139,12 +113,6 @@ namespace Interfaccia_C_.ViewModel
             try
             {
                 var token = await SecureStorage.GetAsync("jwt_token");
-                if (string.IsNullOrEmpty(token))
-                {
-                    Debug.WriteLine("Token mancante! Reindirizzo al login?");
-                    await Shell.Current.GoToAsync("//LoginPage");
-                    return;
-                }
 
                 var url = "http://localhost:9000/getUserData";
                 using var client = new HttpClient();
@@ -167,7 +135,7 @@ namespace Interfaccia_C_.ViewModel
                         Email = userData.Email;
                         Role = userData.Role;
 
-                        // Gestisci il percorso dell'immagine
+                        // Gestisco percorso dell'immagine
                         string image = userData.PImage;
                         string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName;
                         var imagePath = Path.Combine(projectDirectory, image);
@@ -225,7 +193,6 @@ namespace Interfaccia_C_.ViewModel
 
                         foreach (var hotel in hotels)
                         {
-                            // Se la lista dei servizi è null, la inizializzi
                             if (hotel.Services == null)
                                 hotel.Services = new List<string>();
 
@@ -234,13 +201,12 @@ namespace Interfaccia_C_.ViewModel
                             {
                                 Debug.WriteLine($"Servizio dell'hotel: {service}");
                             }
-                            Debug.WriteLine($"Servizi tutti : {hotel.Name}");
+                            Debug.WriteLine($"Hotel : {hotel.Name}");
 
                             hotel.ServiziStringa = string.Join(", ", hotel.Services);
 
                             Debug.WriteLine($"Servizi tutti : {hotel.ServiziStringa}");
-                            // Se dal server arriva una proprietà "Images" con più percorsi separati da virgola
-                            // Esempio: "Pictures\\Hotel1.png, Pictures\\Hotel2.png"
+
                             if (!string.IsNullOrEmpty(hotel.Images?.Trim()))
                             {
                                 // Divido la stringa in più immagini usando il delimitatore corretto (;)

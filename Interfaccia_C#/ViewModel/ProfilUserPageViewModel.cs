@@ -175,11 +175,10 @@ namespace Interfaccia_C_.ViewModel
         public Command<Booking> InviaRecensioneCommand =>
             inviaRecensioneCommand ??= new Command<Booking>(async (booking) =>
             {
-            // Prima esegui la funzione di invio recensione
-            await OnInviaRecensione(booking);
+                await OnInviaRecensione(booking);
 
-            // Poi esegui la funzione FetchReviewData
-            await FetchReviewData(booking);
+                //per aggiornare le recensioni
+                await FetchReviewData(booking);
             });
 
         private Command<Booking> eliminaPrenotazioneCommand;
@@ -217,22 +216,14 @@ namespace Interfaccia_C_.ViewModel
             try
             {
                 var token = await SecureStorage.GetAsync("jwt_token");
-                if (string.IsNullOrEmpty(token))
-                {
-                    // Non hai il token, l'utente non è loggato
-                    Debug.WriteLine("Token mancante! Reindirizzo al login?");
-                    await Shell.Current.GoToAsync("//LoginPage");
-                    return;
-                }
 
-                var url = "http://localhost:9000/getUserData"; // Cambia l'URL se necessario
+                var url = "http://localhost:9000/getUserData"; 
                 using var client = new HttpClient();
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
 
-                // Se devi mandare un body JSON vuoto, ad es.:
+                // body JSON vuoto, ad es.:
                 requestMessage.Content = new StringContent("{}", Encoding.UTF8, "application/json");
 
-                // 3) Imposta l'header Authorization: Bearer <token>
                 requestMessage.Headers.Authorization =
                     new AuthenticationHeaderValue("Bearer", token);
 
@@ -243,23 +234,19 @@ namespace Interfaccia_C_.ViewModel
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
 
-                    // Deserializza la risposta in un oggetto UserResponse
                     var userData = JsonSerializer.Deserialize<UserResponse>(jsonResponse);
                     if (userData != null)
                     {
-                        // Assegna i valori alle proprietà
                         UserName = userData.Username;
                         Email = userData.Email;
                         Role = userData.Role;
 
                         PuntiFedelta = userData.Points;
 
-                        // Gestisci il percorso dell'immagine
                         string image = userData.PImage;
                         string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName;
                         var imagePath = Path.Combine(projectDirectory, image);
 
-                        // Imposta l'immagine del profilo se il percorso è valido
                         ProfileImage = GetImageSource(imagePath);
                     }
                 }
@@ -279,27 +266,17 @@ namespace Interfaccia_C_.ViewModel
             try
             {
                 var token = await SecureStorage.GetAsync("jwt_token");
-                if (string.IsNullOrEmpty(token))
-                {
-                    // Non hai il token, l'utente non è loggato
-                    Debug.WriteLine("Token mancante! Reindirizzo al login?");
-                    await Shell.Current.GoToAsync("//LoginPage");
-                    return;
-                }
 
                 var url = "http://localhost:9000/getBookings"; 
                 using var client = new HttpClient();
 
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, url);
 
-                // Se devi mandare un body JSON vuoto, ad es.:
                 requestMessage.Content = new StringContent("{}", Encoding.UTF8, "application/json");
 
-                // 3) Imposta l'header Authorization: Bearer <token>
                 requestMessage.Headers.Authorization =
                     new AuthenticationHeaderValue("Bearer", token);
 
-                // 4) Invii la richiesta
                 var response = await client.SendAsync(requestMessage);
 
                 var jsonR = await response.Content.ReadAsStringAsync();
@@ -333,10 +310,8 @@ namespace Interfaccia_C_.ViewModel
 
                             Debug.WriteLine($"HotelName: {booking.hotelName}");
 
-                            // Assegna l'immagine della stanza alla proprietà di binding
-                            // Gestisci il percorso dell'immagine per l'hotel
-                            // Gestisci le immagini: prendi solo la prima immagine dalla stringa separata da virgole
-                            if (!string.IsNullOrEmpty(booking.roomImage?.Trim())) // Aggiungi Trim() per rimuovere spazi bianchi
+                           
+                            if (!string.IsNullOrEmpty(booking.roomImage?.Trim())) // Trim() per rimuovere spazi bianchi
                             {
                                 var imageList = booking.roomImage.Split(','); // Dividi la stringa in un array di immagini
                                 booking.roomImage = imageList[0]; // Prendi solo la prima immagine
@@ -350,18 +325,17 @@ namespace Interfaccia_C_.ViewModel
                             string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName;
                             var imagPath = Path.Combine(projectDirectory, image);
                             Debug.WriteLine("Path completo " + imagPath);
-                            // Imposta l'immagine dell'hotel se il percorso è valido
+
                             booking.ImageSource = GetImageSource(imagPath); // Imposta la proprietà ImageSource
                             Debug.WriteLine("Immaginissima room: " + booking.ImageSource);
 
-                            // Aggiungi la prenotazione alla lista
                             OwnedBookings.Add(booking);
+
                             FetchReviewData(booking);
                         }
                     }
                     else
                     {
-                        // Se non ci sono prenotazioni, imposta il messaggio "Non hai prenotazioni"
                         Message = "Non hai prenotazioni";
                     }
                 }
@@ -446,20 +420,11 @@ namespace Interfaccia_C_.ViewModel
 
 
 
-        // Metodo che recupera la recensione (simulato, può essere un'operazione asincrona)
         public async Task FetchReviewData(Booking booking)
         {
             try
             {
-                // Recupera il token JWT dall'archivio sicuro
                 var token = await SecureStorage.GetAsync("jwt_token");
-                if (string.IsNullOrEmpty(token))
-                {
-                    // Se non c'è il token, l'utente non è loggato
-                    Debug.WriteLine("Token mancante! Reindirizzo al login?");
-                    await Shell.Current.GoToAsync("//LoginPage");
-                    return;
-                }
 
                 // Crea il payload con i dati necessari
                 var payload = new
@@ -481,20 +446,16 @@ namespace Interfaccia_C_.ViewModel
                 // Imposta l'header di autorizzazione
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                // Invia la richiesta e ottieni la risposta
                 var response = await client.SendAsync(request);
 
-                // Leggi la risposta
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 Debug.WriteLine("Questa è la risposta: " + jsonResponse);
 
-                // Verifica se la risposta è stata positiva
                 if (response.IsSuccessStatusCode)
                 {
-                    // Deserializza la risposta in un oggetto Review
                     var reviewData = JsonSerializer.Deserialize<Review>(jsonResponse);
 
-                    // Controlla se la recensione è vuota (commento, rating e data)
+                    // Controloa se la recensione è vuota (commento, rating e data)
                     if (string.IsNullOrWhiteSpace(reviewData.review) &&
                              reviewData.rating == 0 &&
                              string.IsNullOrWhiteSpace(reviewData.createdAt))
@@ -512,7 +473,6 @@ namespace Interfaccia_C_.ViewModel
                         booking.MessageReview = "Questa è la recensione che hai inserito.";
                         Debug.WriteLine(" : " + booking.MessageReview);
 
-                        // Assegna i dati della recensione alle proprietà del ViewModel
                         booking.createdAt = reviewData.createdAt;
                         booking.review = reviewData.review;
                         booking.voto = reviewData.rating;
@@ -528,7 +488,6 @@ namespace Interfaccia_C_.ViewModel
                 }
                 else
                 {
-                    // Gestisci errori di risposta dal server
                     var errorContent = await response.Content.ReadAsStringAsync();
                     await Application.Current.MainPage.DisplayAlert("Errore", $"Caricamento dati fallito: {errorContent}", "OK");
                     booking.IsReviewSectionVisible = false;
@@ -536,9 +495,8 @@ namespace Interfaccia_C_.ViewModel
             }
             catch (Exception ex)
             {
-                // Gestisci eventuali errori di rete o eccezioni
                 Debug.WriteLine("Errore durante la chiamata: " + ex.Message);
-                booking.IsReviewSectionVisible = false; // Assicurati che la recensione sia nascosta in caso di errore
+                booking.IsReviewSectionVisible = false; 
             }
         }
 
@@ -561,12 +519,6 @@ namespace Interfaccia_C_.ViewModel
 
             try
             {
-                var token = await SecureStorage.GetAsync("jwt_token");
-                if (string.IsNullOrEmpty(token))
-                {
-                    await Shell.Current.GoToAsync("//LoginPage");
-                    return;
-                }
                 using var client = new HttpClient();
 
                 // Prepara il payload per eliminare la prenotazione
@@ -606,15 +558,8 @@ namespace Interfaccia_C_.ViewModel
 
             try
             {
-                var token = await SecureStorage.GetAsync("jwt_token");
-                if (string.IsNullOrEmpty(token))
-                {
-                    await Shell.Current.GoToAsync("//LoginPage");
-                    return;
-                }
                 using var client = new HttpClient();
 
-                // Prepara il payload per eliminare la recensione
                 var payload = new
                 {
                     Username = booking.username,
@@ -654,16 +599,20 @@ namespace Interfaccia_C_.ViewModel
             try
             {
                 using var client = new HttpClient();
+
                 var content = new StringContent("{}", Encoding.UTF8, "application/json");
+
                 string token = await SecureStorage.GetAsync("jwt_token");
+
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
                 var response = await client.PostAsync("http://localhost:9000/getCostChart", content);
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonResponse = await response.Content.ReadAsStringAsync();
                     Debug.WriteLine("Response JSON: " + jsonResponse);
                     using var doc = JsonDocument.Parse(jsonResponse);
-                    // Leggi il grafico
+                    // Leggo il grafico
                     string base64 = doc.RootElement.GetProperty("chart").GetString();
                     if (!string.IsNullOrEmpty(base64))
                     {
@@ -674,7 +623,7 @@ namespace Interfaccia_C_.ViewModel
                     {
                         await Application.Current.MainPage.DisplayAlert("Attenzione", "Non sono disponibili dati di costo.", "OK");
                     }
-                    // (Opzionale) Leggi la sintesi dei dati e aggiorna una proprietà CostDataSummary, se presente
+
                     if (doc.RootElement.TryGetProperty("summary", out JsonElement summaryElem))
                     {
                         double total = summaryElem.GetProperty("total").GetDouble();
@@ -709,16 +658,11 @@ namespace Interfaccia_C_.ViewModel
             try
             {
                 var token = await SecureStorage.GetAsync("jwt_token");
-                if (string.IsNullOrEmpty(token))
-                {
-                    await Shell.Current.GoToAsync("//LoginPage");
-                    return;
-                }
+
                 using var client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var content = new StringContent("{}", Encoding.UTF8, "application/json");
 
-                // Supponiamo che l'endpoint sia /getInterests
                 var response = await client.PostAsync("http://localhost:9000/getInterests", content);
                 if (response.IsSuccessStatusCode)
                 {
@@ -745,11 +689,6 @@ namespace Interfaccia_C_.ViewModel
         private async Task DeleteInterestAsync(Interest interest)
         {
             var token = await SecureStorage.GetAsync("jwt_token");
-            if (string.IsNullOrEmpty(token))
-            {
-                await Shell.Current.GoToAsync("//LoginPage");
-                return;
-            }
 
             using var client = new HttpClient();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

@@ -14,10 +14,9 @@ namespace Interfaccia_C_.ViewModel
 {
     public class RegisterPageViewModel : INotifyPropertyChanged
     {
-        // Evento per la notifica delle modifiche delle propriet�
         public event PropertyChangedEventHandler PropertyChanged;
 
-        // Metodo per notificare la modifica delle propriet�
+        // Metodo per notificare la modifica delle proprietà
         private void OnPropertyChanged([System.Runtime.CompilerServices.CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -141,14 +140,12 @@ namespace Interfaccia_C_.ViewModel
             public string Token { get; set; } 
         }
 
-        // Propriet� per il comando di navigazione alla LoginPage
         public ICommand GoToLoginCommand { get; }
 
-        // Propriet� per il comando di registrazione
         public ICommand RegisterCommand { get; }
 
 
-        // Propriet� per la gestione dell'immagine del profilo
+        // immagine del profilo
         private string _profileImage;
         public string ProfileImage
         {
@@ -160,7 +157,7 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-        // Propriet� per il nome del file caricato (messaggio di conferma)
+        // Proprietà per il nome del file caricato (messaggio di conferma)
         private string _uploadStatusMessage;
         public string UploadStatusMessage
         {
@@ -172,7 +169,7 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-        // Propriet� per il controllo della visibilit� del messaggio di conferma
+        // controllo della visibilità del messaggio di conferma
         private bool _isUploadComplete;
         public bool IsUploadComplete
         {
@@ -184,7 +181,6 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-        // Propriet� per il comando di caricamento immagine
         public ICommand UploadImageCommand { get; }
 
         // Costruttore
@@ -192,10 +188,9 @@ namespace Interfaccia_C_.ViewModel
         {
 
             RegisterCommand = new Command(async () => await Register());
-            // Inizializza il comando di navigazione
+
             GoToLoginCommand = new Command(async () => await Shell.Current.GoToAsync("//LoginPage"));
 
-            // Inizializza il comando per caricare l'immagine
             UploadImageCommand = new Command(async () => await OnUploadImage());
         }
 
@@ -211,13 +206,11 @@ namespace Interfaccia_C_.ViewModel
                     FileTypes = FilePickerFileType.Images // Filtro per immagini
                 });
 
-                // Se l'utente ha selezionato un file
                 if (result != null)
                 {
 
-                    // Ottieni la cartella principale del progetto
+                    // cartella principale del progetto
                     string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName;
-                    // Definisci una variabile unica che contiene il percorso combinato
 
                     // Percorso della cartella "Progetto-APL" dove vuoi salvare i file
                     var localPath = Path.Combine(projectDirectory, "Pictures", "ProfilePictures");
@@ -225,7 +218,7 @@ namespace Interfaccia_C_.ViewModel
                     // Crea la directory "ProfilePictures" se non esiste
                     Directory.CreateDirectory(localPath);
 
-                    // Costruisci il percorso completo del file
+                    // percorso completo del file
                     var filePath = Path.Combine(localPath, result.FileName);
 
                     var Pat= Path.Combine("Pictures", "ProfilePictures", result.FileName);
@@ -236,19 +229,15 @@ namespace Interfaccia_C_.ViewModel
                     {
                         await stream.CopyToAsync(localFile);
                     }
-                    // Imposta il percorso dell'immagine selezionata nella propriet�
                     ProfileImage = Pat;
 
-                    // Imposta il nome del file caricato come messaggio di conferma
                     UploadStatusMessage = $"File Uploaded: {result.FileName}";
 
-                    // Imposta la visibilit� del messaggio di conferma a true
                     IsUploadComplete = true;
 
                 }
                 else
                 {
-                    // Se l'utente non ha selezionato nulla
                     ProfileImage = null;
                     UploadStatusMessage = null;
                     IsUploadComplete = false;
@@ -256,7 +245,6 @@ namespace Interfaccia_C_.ViewModel
             }
             catch (Exception ex)
             {
-                // Gestione degli errori, se qualcosa va storto
                 ProfileImage = null; // Azzera l'immagine in caso di errore
                 UploadStatusMessage = $"Error: {ex.Message}";
                 IsUploadComplete = false; // Nasconde il messaggio di conferma in caso di errore
@@ -264,10 +252,8 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-        // Metodo per gestire la registrazione
         private async Task Register()
         {
-            // 1) Controlli vari su campi vuoti e password
             if (string.IsNullOrWhiteSpace(Name) ||
                 string.IsNullOrWhiteSpace(Email) ||
                 string.IsNullOrWhiteSpace(Password) ||
@@ -282,7 +268,6 @@ namespace Interfaccia_C_.ViewModel
                 return;
             }
 
-            // 2) Prepara il payload per la richiesta
             var payload = new
             {
                 Username = this.Name,
@@ -315,7 +300,6 @@ namespace Interfaccia_C_.ViewModel
 
                     if (registerResponse != null && registerResponse.Status == "ok")
                     {
-                        // 4d) Se esiste un token, salva in SecureStorage
                         if (!string.IsNullOrEmpty(registerResponse.Token))
                         {
                             await SecureStorage.SetAsync("jwt_token", registerResponse.Token);
@@ -349,7 +333,7 @@ namespace Interfaccia_C_.ViewModel
                 }
                 else
                 {
-                    //Se lo stato non è success, leggi il contenuto di errore
+                    //Se lo stato non è success
                     var errorContent = await response.Content.ReadAsStringAsync();
                     await Shell.Current.DisplayAlert("Errore", $"Registrazione fallita: {errorContent}", "OK");
                 }

@@ -446,7 +446,6 @@ func AddRoom(db *sql.DB, hotelName, roomName, roomDescription string, pricePerNi
 }
 
 func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, services []string) ([]types.SearchResponse, error) {
-	// Inizia la query senza la clausola GROUP BY
 	query := `
         SELECT DISTINCT 
             h.HotelID, 
@@ -469,7 +468,6 @@ func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, ser
           )
     `
 
-	// Prepara i parametri di base
 	params := []interface{}{
 		"%" + location + "%",
 		guest,
@@ -477,27 +475,23 @@ func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, ser
 		checkIn,
 	}
 
-	// Aggiungi per ciascun servizio la condizione nella clausola WHERE
 	for _, service := range services {
 		query += " AND h.Services LIKE ?"
 		params = append(params, "%"+service+"%")
 	}
 
-	// Ora aggiungi la clausola GROUP BY
 	query += `
         GROUP BY h.HotelID, h.Name, h.Location, h.Description, h.Services, h.Rating, h.Images
     `
 
-	fmt.Println("servizi:", params)
+	fmt.Println("Parametri per la query:", params)
 
-	// Esegui la query
 	rows, err := db.Query(query, params...)
 	if err != nil {
 		return nil, fmt.Errorf("errore durante l'esecuzione della query: %v", err)
 	}
 	defer rows.Close()
 
-	// Prepara la slice di risposta
 	var hotels []types.SearchResponse
 	for rows.Next() {
 		var hotelID int
@@ -509,7 +503,6 @@ func SearchHotels(db *sql.DB, location, checkIn, checkOut string, guest int, ser
 			return nil, fmt.Errorf("errore durante la scansione delle righe: %v", err)
 		}
 
-		// Converte la stringa dei servizi in una slice
 		serviceList := strings.Split(servicesStr, ",")
 		for i, s := range serviceList {
 			serviceList[i] = strings.TrimSpace(s)

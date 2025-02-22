@@ -36,7 +36,6 @@ namespace Interfaccia_C_.ViewModel
             set => SetProperty(ref _offerteImperdibili, value);
         }
 
-        public ICommand RefreshCommand { get; }
         public ICommand GuardaOffertaCommand { get; set; }
 
         public MainPageViewModel()
@@ -46,7 +45,6 @@ namespace Interfaccia_C_.ViewModel
             // Comando per 'Guarda Offerta'
             GuardaOffertaCommand = new Command<Hotel>(async (hotelSelezionato) =>
             {
-                // Naviga con Shell, passando l'oggetto hotel
                 var navParams = new Dictionary<string, object>
                 {
                     ["hotel"] = hotelSelezionato
@@ -60,27 +58,9 @@ namespace Interfaccia_C_.ViewModel
             MeteGettonate = new ObservableCollection<Hotel>();
             OfferteImperdibili = new ObservableCollection<Hotel>();
 
-            RefreshCommand = new Command(async () => await CaricaDati());
-
-            _ = CheckToken();  // Avvia il controllo del token
         }
 
-        private async Task CheckToken()
-        {
-            var token = await SecureStorage.GetAsync("jwt_token");
-            if (string.IsNullOrEmpty(token))
-            {
-                // Se mancante, reindirizza al Login
-                await Shell.Current.GoToAsync("//LoginPage");
-            }
-            else
-            {
-                Debug.WriteLine($"Token presente: {token.Substring(0, Math.Min(token.Length, 10))}...");
-                await CaricaDati();
-            }
-        }
-
-        private async Task CaricaDati()
+        public async Task LoadDataAsync()
         {
             await GetMeteGettonate();
             await GetOfferteImperdibili();
@@ -170,19 +150,16 @@ namespace Interfaccia_C_.ViewModel
                 {
                     if (!string.IsNullOrEmpty(offerta.Images?.Trim()))
                     {
-                        // Divido la stringa in più immagini
                         var imageList = offerta.Images.Split(';');
                         // Prendo la prima
                         var firstImage = imageList[0].Trim();
 
                         Debug.WriteLine("Path immagine (prima del combine): " + firstImage);
 
-                        // Costruisco path completo
                         string projectDirectory = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.Parent?.FullName;
                         var imagePath = Path.Combine(projectDirectory, firstImage);
                         Debug.WriteLine("Path completo: " + imagePath);
 
-                        // Converto in ImageSource
                         offerta.ImageSource = GetImageSource(imagePath);
                         Debug.WriteLine("Immaginissima: " + offerta.ImageSource);
                     }
@@ -200,14 +177,14 @@ namespace Interfaccia_C_.ViewModel
             if (File.Exists(imagePath))
             {
                 Debug.WriteLine("Immagine trovata: " + imagePath);
-                return ImageSource.FromFile(imagePath);  // Usa FileImageSource per caricare l'immagine
+                return ImageSource.FromFile(imagePath);  // Uso FileImageSource per caricare l'immagine
 
             }
             else
             {
                 Debug.WriteLine("Immagine non trovata: " + imagePath);
 
-                return null;  // Immagine non trovata
+                return null;
             }
         }
         // INotifyPropertyChanged

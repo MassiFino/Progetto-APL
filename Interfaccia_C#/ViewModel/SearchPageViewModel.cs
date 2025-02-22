@@ -147,7 +147,6 @@ namespace Interfaccia_C_.ViewModel
             return activeServices;
         }
 
-        // Metodo per eseguire la ricerca (chiamata all'API, ecc.)
         private async Task ExecuteSearch()
         {
             // Verifica che siano state inserite le informazioni di base
@@ -166,6 +165,16 @@ namespace Interfaccia_C_.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Attenzione", "Seleziona il numero di ospiti", "OK");
                 return;
             }
+            int guests;
+            if (SelectedGuest == "5+")
+            {
+                guests = 5; 
+            }
+            else if (!int.TryParse(SelectedGuest, out guests))
+            {
+                await Application.Current.MainPage.DisplayAlert("Attenzione", "Seleziona un numero valido di ospiti", "OK");
+                return;
+            }
 
             List<string> activeServices = GetActiveServices();
             Debug.WriteLine($"Ricerca per: {SearchCity}, check-in: {CheckInDate:dd/MM/yyyy}, check-out: {CheckOutDate:dd/MM/yyyy}");
@@ -174,7 +183,7 @@ namespace Interfaccia_C_.ViewModel
                 { "City", SearchCity },
                 { "CheckInDate", CheckInDate },
                 { "CheckOutDate", CheckOutDate },
-                { "Guests", SelectedGuest },
+                { "Guests", guests },
                 { "Services", activeServices }
             };
             Debug.WriteLine($"Services: {string.Join(", ", activeServices)}");
@@ -195,7 +204,7 @@ namespace Interfaccia_C_.ViewModel
                         var resultJson = await response.Content.ReadAsStringAsync();
                         var hotels = JsonSerializer.Deserialize<List<Hotel>>(resultJson);
                         ResearchHotels.Clear();
-                        if (hotels != null)
+                        if (hotels != null && hotels.Count > 0)
                         {
                             foreach (var hotel in hotels)
                             {

@@ -184,7 +184,7 @@ namespace Interfaccia_C_.ViewModel
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
                 Debug.WriteLine($"Errore nella richiesta: {response.StatusCode}, {errorContent}");
-                return 0; // Se la richiesta fallisce, restituisce 0
+                return 0;
             }
 
             var responseBody = await response.Content.ReadAsStringAsync();
@@ -199,7 +199,6 @@ namespace Interfaccia_C_.ViewModel
         {
            Debug.WriteLine($"Location: {Location}, Room ID: {RoomType}");
 
-            // 🔍 Controllo del prezzo medio prima dell'inserimento
             double avgPrice = await GetAveragePrice(RoomType, Location);
 
             if (avgPrice == 0)
@@ -255,7 +254,6 @@ namespace Interfaccia_C_.ViewModel
             {                await Application.Current.MainPage.DisplayAlert("Successo", "Stanza inserita con successo!", "OK");
 
                
-                // Chiede all'utente se vuole inserire un'altra stanza
                 string previewMessage = "Stanza e hotel aggiunti con successo";
                 bool confirm = await Application.Current.MainPage.DisplayAlert(
                     "Conferma Selezione",
@@ -265,12 +263,12 @@ namespace Interfaccia_C_.ViewModel
 
                 if (confirm)
                 {
-                    RoomName = string.Empty;            // Svuota il nome della stanza
-                    RoomDescription = string.Empty;     // Svuota la descrizione della stanza
-                    PricePerNight = 0;                  // Svuota il prezzo per notte (imposta a 0)
-                    MaxGuests = 0;                           // Svuota il numero massimo di ospiti (imposta a 0)
-                    RoomType = string.Empty;            // Svuota la tipologia di stanza
-                    RoomImagePath = string.Empty;       // Svuota il percorso dell'immagine
+                    RoomName = string.Empty;            
+                    RoomDescription = string.Empty;     
+                    PricePerNight = 0;                  
+                    MaxGuests = 0;                           
+                    RoomType = string.Empty;            
+                    RoomImagePath = string.Empty;       
                     RoomImageNames = string.Empty;
                 }
                 else

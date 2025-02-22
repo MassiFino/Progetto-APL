@@ -16,7 +16,15 @@ public partial class ProfileHostPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        // Carica i dati dell'host all'avvio della pagina
+
+        var token = await SecureStorage.GetAsync("jwt_token");
+        if (string.IsNullOrEmpty(token))
+        {
+            // Se il token manca, reindirizza alla pagina di Login
+            await Shell.Current.GoToAsync("//LoginPage");
+            return;
+        }
+
         await _viewModel.LoadUserData();
         await _viewModel.LoadHotelData();
     }

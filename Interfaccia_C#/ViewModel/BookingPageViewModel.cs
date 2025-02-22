@@ -92,7 +92,6 @@ namespace Interfaccia_C_.ViewModel
             RoomImage = booking.roomImage;
 
             Debug.WriteLine($"Booking Details: {booking}");
-            // Stampa tutti i valori della prenotazione nella finestra di output del debugger
             Debug.WriteLine($"HotelID: {HotelID}");
             Debug.WriteLine($"HotelName: {HotelName}");
 
@@ -107,9 +106,7 @@ namespace Interfaccia_C_.ViewModel
 
             if (!string.IsNullOrEmpty(booking.roomImage?.Trim()))
             {
-                // Divido la stringa in pi� immagini
                 var imageList = booking.roomImage.Split(';');
-                // Prendo la prima
                 var firstImage = imageList[0].Trim();
 
                 Debug.WriteLine("Path immagine (prima del combine): " + firstImage);
@@ -181,11 +178,9 @@ namespace Interfaccia_C_.ViewModel
                     // Deserializzi la risposta
                     var result = JsonSerializer.Deserialize<PreviewDiscountResponse>(responseStr);
 
-                    // Adesso hai:
                     double discountedPrice = result.discounted_price;
                     int pointsUsed = result.points_used;
 
-                    // Qui controlli se i punti usati sono 0 => "Non hai abbastanza punti..."
                     if (pointsUsed == 0)
                     {
                         await Application.Current.MainPage.DisplayAlert(
@@ -227,7 +222,6 @@ namespace Interfaccia_C_.ViewModel
 
         private async Task PrenotaStanza(Booking booking)
         {
-            // Controllo se la sessione (token) � attiva
             var token = await SecureStorage.GetAsync("jwt_token");
 
             // Calcola il numero di notti
@@ -237,13 +231,6 @@ namespace Interfaccia_C_.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Errore", "Il numero di notti deve essere maggiore di zero.", "OK");
                 return;
             }
-
-            // Calcola l'importo totale lo faccio nella pagina dell'hotel quando mando i dati
-            // double totalAmount = room.PricePerNight * nights;
-
-            // Recupera l'username dal token oppure da una propriet� del ViewModel (se lo hai gi� estratto in precedenza)
-            // Qui presumo di avere un metodo GetLoggedUsername() che lo estrae dal token
-            // Crea il payload per la prenotazione
 
             var payload = new
             {

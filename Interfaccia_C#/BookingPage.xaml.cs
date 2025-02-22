@@ -25,7 +25,6 @@ public partial class BookingPage : ContentPage, IQueryAttributable
         var token = await SecureStorage.GetAsync("jwt_token");
         if (string.IsNullOrEmpty(token))
         {
-            // Se non c'? il token, reindirizza l'utente al login
             await Shell.Current.GoToAsync("//LoginPage");
             return;
         }

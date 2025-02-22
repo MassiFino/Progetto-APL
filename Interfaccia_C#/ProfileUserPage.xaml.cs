@@ -15,10 +15,18 @@ public partial class ProfileUserPage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+
+        var token = await SecureStorage.GetAsync("jwt_token");
+        if (string.IsNullOrEmpty(token))
+        {
+            // Se il token manca, reindirizza alla pagina di Login
+            await Shell.Current.GoToAsync("//LoginPage");
+            return;
+        }
+
         await _viewModel.LoadUserData();
         await _viewModel.LoadBookingData();
         await _viewModel.LoadInterestsAsync();
     }
-    // Carica i dati dell'utente all'avvio
 
 }

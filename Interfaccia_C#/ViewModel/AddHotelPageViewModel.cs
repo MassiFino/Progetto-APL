@@ -550,10 +550,10 @@ namespace Interfaccia_C_.ViewModel
                             var filePath = Path.Combine(localPath, fileName);
                             var Pat = Path.Combine("Pictures", "HotelPictures", fileName);
 
-                            // Aggiungi il percorso relativo a HotelImagePath, separato da ";" se ci sono più immagini
+                            // percorso relativo a HotelImagePath, separato da ";" se ci sono più immagini
                             if (!string.IsNullOrEmpty(HotelImagePath))
                             {
-                                HotelImagePath += ";"; // Aggiungi un separatore se c'è già un percorso
+                                HotelImagePath += ";"; 
                             }
                             HotelImagePath += Pat; // Concatenazione del percorso relativo
                             using (var stream = File.OpenRead(result))
@@ -567,7 +567,6 @@ namespace Interfaccia_C_.ViewModel
                     }
                     else
                     {
-                        // Se l'utente rifiuta, consenti una nuova selezione
                         await Application.Current.MainPage.DisplayAlert("Riprova", "Puoi selezionare nuovamente le immagini.", "OK");
                         imagePaths.Clear();
                         imageNames.Clear();
@@ -605,7 +604,7 @@ namespace Interfaccia_C_.ViewModel
         public string ImageHotel;
         //Controllo del prezzo medio del tipo di stanza e della località inserita prima dell'inserimento
         private async Task<double> GetAveragePrice(string RoomType, string Location)
-        {   // Controlla se RoomType o Location sono nulli o vuoti
+        {   
             if (string.IsNullOrWhiteSpace(RoomType) || string.IsNullOrWhiteSpace(Location))
             {
                 return 0;
@@ -640,20 +639,17 @@ namespace Interfaccia_C_.ViewModel
         private async Task OnAddHotelAndRoom()
         {// Controllo dei campi obbligatori
             if (string.IsNullOrWhiteSpace(Description) || string.IsNullOrWhiteSpace(HotelName) || string.IsNullOrWhiteSpace(Location) || string.IsNullOrWhiteSpace(RoomName) ||
-                string.IsNullOrWhiteSpace(RoomDescription) || PricePerNight <= 0 || MaxGuests <= 0 ||
-        string.IsNullOrWhiteSpace(RoomType))  // Verifica che RoomType non sia null o vuoto
+                string.IsNullOrWhiteSpace(RoomDescription) || PricePerNight <= 0 || MaxGuests <= 0 || string.IsNullOrWhiteSpace(RoomType))
             {
                 // Mostra un avviso all'utente se uno dei campi obbligatori è vuoto
                 await Application.Current.MainPage.DisplayAlert("Attenzione", "Attenzione, non ha inserito tutti i campi richiesti.", "OK");
 
-                // Impostiamo l'indicatore di errore e nascondiamo il successo
                 IsErrorVisible = true;
                 IsSuccessVisible = false;
                 OnPropertyChanged(nameof(IsErrorVisible));
                 return;
             }
 
-            // 🔍 Controllo del prezzo medio del tipo di stanza e della località inserita prima dell'inserimento
             double avgPrice = await GetAveragePrice(RoomType, Location);
 
             if (avgPrice == 0)
@@ -744,9 +740,8 @@ namespace Interfaccia_C_.ViewModel
                         IsErrorVisible = false;
                         IsAddHotelVisible = false;
                         IsAddRoomVisible = true;
-                        // Svuota tutti i campi
                         Description = string.Empty;
-                        ImageHotel = null; // Supponendo che ImageHotel sia un oggetto o un percorso dell'immagine
+                        ImageHotel = null; 
                         HotelImageNames = string.Empty;
                         RoomType = string.Empty;
                         RoomImageNames = string.Empty;
@@ -754,20 +749,19 @@ namespace Interfaccia_C_.ViewModel
                     }
                     else
                     {
-                        // Svuota tutti i campi
                         HotelName = string.Empty;
                         Location = string.Empty;
                         Description = string.Empty;
-                        ImageHotel = null; // Supponendo che ImageHotel sia un oggetto o un percorso dell'immagine
+                        ImageHotel = null; 
                         HotelImageNames = string.Empty;
-                        activeServices.Clear(); // Svuota la lista dei servizi
+                        activeServices.Clear(); 
                         RoomName = string.Empty;
                         RoomDescription = string.Empty;
-                        PricePerNight = 0; // Imposta un valore predefinito per il prezzo
-                        MaxGuests = 0; // Imposta il valore predefinito per il numero di ospiti
+                        PricePerNight = 0; 
+                        MaxGuests = 0; 
                         RoomType = string.Empty;
                         RoomImageNames = string.Empty;
-                        RoomImagePath = string.Empty;       // Svuota il percorso dell'immagine
+                        RoomImagePath = string.Empty;    
 
                         // Mostra un altro messaggio
                         await Application.Current.MainPage.DisplayAlert(
@@ -815,7 +809,6 @@ namespace Interfaccia_C_.ViewModel
                 IsSuccessVisible = false;
                 return;
             }
-            // 🔍 Controllo del prezzo medio prima dell'inserimento
             double avgPrice = await GetAveragePrice(AdditionalRoomType, Location);
 
             if (avgPrice == 0)
@@ -866,7 +859,6 @@ namespace Interfaccia_C_.ViewModel
 
             try
             {
-                Debug.WriteLine("Sono qui dentro");
 
                 using var client = new HttpClient();
                 var request = new HttpRequestMessage(HttpMethod.Post, "http://localhost:9000/addRoom");
@@ -969,7 +961,6 @@ namespace Interfaccia_C_.ViewModel
 
                 if (result != null)
                 {
-                    // Calcola il percorso del progetto (modifica in base alla tua struttura)
                     string projectDirectory = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.Parent.FullName;
                     var localPath = Path.Combine(projectDirectory, "Pictures", folder);
                     Directory.CreateDirectory(localPath);
@@ -988,7 +979,6 @@ namespace Interfaccia_C_.ViewModel
             }
             catch (Exception ex)
             {
-                // In caso di errore, restituisci un messaggio nell'imageName
                 return (null, $"Errore: {ex.Message}");
             }
             return (null, null);

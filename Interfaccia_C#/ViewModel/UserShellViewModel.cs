@@ -31,16 +31,14 @@ namespace Interfaccia_C_.ViewModel
         {
 
             SecureStorage.Remove("jwt_token");
-            // Mostra un alert di logout
+
             await App.Current.MainPage.DisplayAlert("Logout", "Sei stato disconnesso.", "OK");
 
-            // Crea una nuova Shell specifica per il ruolo Host
             var appShell = new AppShell();
 
             // Imposta la nuova Shell come finestra principale
             Application.Current.MainPage = appShell;
 
-            // Naviga alla pagina di login
             await appShell.GoToAsync("//LoginPage");
         }
 

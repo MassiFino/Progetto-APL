@@ -190,7 +190,6 @@
                                 <x:String>Prezzo: crescente</x:String>
                                 <x:String>Prezzo: decrescente</x:String>
                                 <x:String>Valutazione: migliore</x:String>
-                                <x:String>Distanza: più vicino</x:String>
                             </Picker.Items>
                         </Picker>
 

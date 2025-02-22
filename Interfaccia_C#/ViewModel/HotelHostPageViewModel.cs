@@ -130,17 +130,13 @@ namespace Interfaccia_C_.ViewModel
         }
 
 
-        // Nuove proprietà per le stanze e le recensioni
         public ObservableCollection<Room> Rooms { get; set; } = new ObservableCollection<Room>();
         public ObservableCollection<Review> Reviews { get; set; } = new ObservableCollection<Review>();
 
-        // Comando per eliminare una stanza
         public ICommand DeleteRoomCommand { get; }
 
-        // Comando per modificare la descrizione dell'hotel
         public ICommand EditHotelDescriptionCommand { get; }
 
-        // Comando per aggiungere una stanza naviga alla pagina AddRoomPage
         public ICommand AddRoomCommand { get; }
 
         public ICommand UpdateRoomPriceCommand => new Command<Room>(async (room) => await OnUpdateRoomPrice(room));
@@ -173,7 +169,6 @@ namespace Interfaccia_C_.ViewModel
                 var imagePath = Path.Combine(projectDirectory, firstImage);
                 Debug.WriteLine("Path completo: " + imagePath);
 
-                // Converto in ImageSource
                 ImageSource = GetImageSource(imagePath);
                 Debug.WriteLine("Immaginissima: " + hotel.ImageSource);
             }
@@ -213,7 +208,6 @@ namespace Interfaccia_C_.ViewModel
                         foreach (var room in rooms)
                         {
 
-                            // Se il campo Images contiene più percorsi, puoi gestirlo in modo simile
                             if (!string.IsNullOrEmpty(room.Images?.Trim()))
                             {
 
@@ -321,11 +315,6 @@ namespace Interfaccia_C_.ViewModel
         private async Task OnDeleteRoom(Room room)
         {
             var token = await SecureStorage.GetAsync("jwt_token");
-            if (string.IsNullOrEmpty(token))
-            {
-                await Shell.Current.GoToAsync("//LoginPage");
-                return;
-            }
 
             var payload = new { RoomID = room.RoomID};
             var json = JsonSerializer.Serialize(payload);
@@ -354,11 +343,7 @@ namespace Interfaccia_C_.ViewModel
                 return;
             }
             var token = await SecureStorage.GetAsync("jwt_token");
-            if (string.IsNullOrEmpty(token))
-            {
-                await Shell.Current.GoToAsync("//LoginPage");
-                return;
-            }
+  
             var payload = new { HotelID = HotelID, NewDescription = newDescription};
             var json = JsonSerializer.Serialize(payload);
             using var client = new HttpClient();
@@ -398,7 +383,6 @@ namespace Interfaccia_C_.ViewModel
 
         private async Task OnUpdateRoomPrice(Room room)
         {
-            // Chiede all'utente il nuovo prezzo
             string input = await Application.Current.MainPage.DisplayPromptAsync(
                 "Modifica Prezzo",
                 $"Inserisci il nuovo prezzo per la stanza \"{room.RoomName}\":",
@@ -411,13 +395,7 @@ namespace Interfaccia_C_.ViewModel
                 return;
             }
 
-            // Verifica la presenza del token
             var token = await SecureStorage.GetAsync("jwt_token");
-            if (string.IsNullOrEmpty(token))
-            {
-                await Shell.Current.GoToAsync("//LoginPage");
-                return;
-            }
 
             // Prepara il payload con RoomID, NewPrice e Username (che verrà aggiunto nel backend)
             var payload = new { RoomID = room.RoomID, NewPrice = newPrice };

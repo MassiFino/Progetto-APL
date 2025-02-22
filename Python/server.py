@@ -71,7 +71,7 @@ class SearchRequest(BaseModel):
     CheckInDate: str
     CheckOutDate: str
     Guests: int
-    Services: list[str]
+    Services: list[str] = []
     OrderBy: Optional[str] = None  # Campo opzionale
 
 class GetRoomsReviewsRequest(BaseModel):
@@ -425,6 +425,8 @@ def search_hotels(request: SearchRequest):
     try:
 
         response = connect_go("searchHotels", request.dict())
+
+        print("risposta della ricerca SerachPage" + str(response))
 
         return response
     except ConnectionError as e:

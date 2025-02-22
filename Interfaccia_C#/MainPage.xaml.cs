@@ -1,12 +1,33 @@
-﻿using Interfaccia_C_.ViewModel;
+﻿using Microsoft.Maui.Storage;
+using Interfaccia_C_.ViewModel;
 
-namespace Interfaccia_C_;
-
-public partial class MainPage : ContentPage
+namespace Interfaccia_C_
 {
-    public MainPage()
+    public partial class MainPage : ContentPage
     {
-        InitializeComponent();
-        BindingContext = new MainPageViewModel(); 
+        public MainPage()
+        {
+            InitializeComponent();
+            BindingContext = new MainPageViewModel();
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            // Controlla se il token esiste
+            var token = await SecureStorage.GetAsync("jwt_token");
+            if (string.IsNullOrEmpty(token))
+            {
+                // Se il token manca, reindirizza alla pagina di Login
+                await Shell.Current.GoToAsync("//LoginPage");
+                return;
+            }
+
+            // Se il token è presente, carica i dati tramite il ViewModel
+            if (BindingContext is MainPageViewModel viewModel)
+            {
+                await viewModel.LoadDataAsync();
+            }
+        }
     }
 }
