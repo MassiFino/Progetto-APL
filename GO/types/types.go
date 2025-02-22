@@ -85,9 +85,9 @@ type ReviewReq struct {
 	Username string `json:"Username"`
 }
 type ReviewResp struct {
-	Comment   string  `json:"review"`    // Il campo "review" sarà trattato come stringa
-	Rating    float64 `json:"rating"`    // Rating come numero decimale
-	CreatedAt string  `json:"createdAt"` // Timestamp convertito come stringa
+	Comment   string  `json:"review"`
+	Rating    float64 `json:"rating"`
+	CreatedAt string  `json:"createdAt"`
 }
 
 type DeleteBookingRequest struct {
@@ -185,7 +185,7 @@ type Review struct {
 	Username  string  `json:"Username"`
 	Comment   string  `json:"Comment"`
 	Rating    float64 `json:"Rating"`
-	CreatedAt string  `json:"CreatedAt"` // Nuovo campo per la data di creazione
+	CreatedAt string  `json:"CreatedAt"`
 }
 
 type GetRoomsReviewsRequest struct {
@@ -276,7 +276,6 @@ type GetInterestsRequest struct {
 	Username string `json:"Username"`
 }
 
-// InterestResponse definisce la struttura dei dati di un interesse da restituire al client
 type InterestResponse struct {
 	InterestID   int     `json:"InterestID"`
 	Username     string  `json:"Username"`
@@ -288,11 +287,25 @@ type InterestResponse struct {
 
 type DeleteInterestRequest struct {
 	InterestID int    `json:"InterestID"`
-	Username   string `json:"Username"` // Questo campo potrà essere impostato dal middleware o dal handler se necessario
+	Username   string `json:"Username"`
 }
 
 type UpdateRoomPriceRequest struct {
 	RoomID   int     `json:"RoomID"`
 	NewPrice float64 `json:"NewPrice"`
-	Username string  `json:"Username"` // Verrà passato dal client (da Python)
+	Username string  `json:"Username"`
+}
+
+type HotelBookingsRequest struct {
+	HotelID int `json:"HotelID"`
+}
+
+type BookingHotelResponse struct {
+	BookingID    int     `json:"bookingID"`
+	RoomID       int     `json:"roomID"`
+	Username     string  `json:"username"`
+	CheckInDate  string  `json:"checkInDate"`
+	CheckOutDate string  `json:"checkOutDate"`
+	TotalAmount  float64 `json:"totalAmount"`
+	RoomName     string  `json:"roomName"`
 }

@@ -141,6 +141,17 @@ namespace Interfaccia_C_.ViewModel
 
         public ICommand UpdateRoomPriceCommand => new Command<Room>(async (room) => await OnUpdateRoomPrice(room));
 
+        private ObservableCollection<Booking> _bookings = new ObservableCollection<Booking>();
+        public ObservableCollection<Booking> Bookings
+        {
+            get => _bookings;
+            set
+            {
+                _bookings = value;
+                OnPropertyChanged();
+            }
+        }
+
 
 
         // Costruttore che accetta un oggetto Hotel
@@ -417,6 +428,42 @@ namespace Interfaccia_C_.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Errore", error, "OK");
             }
         }
+
+
+        public async Task LoadBookingsAsync()
+        {
+            try
+            {
+                using var client = new HttpClient();
+                var payload = JsonSerializer.Serialize(new { HotelID = this.HotelID });
+                var content = new StringContent(payload, Encoding.UTF8, "application/json");
+
+                var response = await client.PostAsync("http://localhost:9000/getHotelBookings", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseJson = await response.Content.ReadAsStringAsync();
+                    var bookings = JsonSerializer.Deserialize<List<Booking>>(responseJson);
+                    if (bookings != null)
+                    {
+                        Bookings.Clear();
+                        foreach (var booking in bookings)
+                        {
+                            Bookings.Add(booking);
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.WriteLine("Errore nel caricamento delle prenotazioni: " + response.StatusCode);
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Eccezione durante il caricamento delle prenotazioni: " + ex.Message);
+            }
+        }
+
 
     }
 }

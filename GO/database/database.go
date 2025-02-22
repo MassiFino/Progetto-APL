@@ -46,7 +46,7 @@ func CheckUserCredentials(db *sql.DB, username, password string) (bool, error, s
 		return false, err, ""
 	}
 
-	// Controllo della password (non crittografata)
+	// Controllo della password
 	if storedPassword == password {
 		return true, nil, Role
 	}
@@ -92,10 +92,8 @@ func RegisterUser(db *sql.DB, username, password, email, role string, pImage *st
 	return nil
 }
 
-// Funzione che recupera i dati dell'utente dal database in base all'email
 func GetUser(db *sql.DB, username string) (*types.UserResponse, error) {
 	var user types.UserResponse
-	// Assumendo che la tabella users abbia colonna points (INT DEFAULT 0)
 	query := `SELECT Username, Email, ProfileImage, Role, points FROM users WHERE Username = ?`
 
 	err := db.QueryRow(query, username).Scan(
@@ -160,7 +158,6 @@ func GetHotelsHost(db *sql.DB, username string) ([]types.HotelResponse, error) {
 func GetBookings(db *sql.DB, username string) ([]types.BookingResponse, error) {
 	fmt.Printf("Cerco prenotazioni per l'utente: %s\n", username)
 
-	// Query per ottenere i dettagli della prenotazione, incluso il percorso dell'immagine
 	query := `
     SELECT 
         b.BookingID,
@@ -180,7 +177,6 @@ func GetBookings(db *sql.DB, username string) ([]types.BookingResponse, error) {
     WHERE b.Username = ?;  -- Filtro per l'utente
     `
 
-	// Esegui la query
 	rows, err := db.Query(query, username)
 	if err != nil {
 		return nil, fmt.Errorf("errore durante l'esecuzione della query: %v", err)
@@ -209,7 +205,7 @@ func GetBookings(db *sql.DB, username string) ([]types.BookingResponse, error) {
 		booking.RoomName = roomName
 		booking.HotelName = hotelName
 		booking.HotelLocation = hotelLocation
-		booking.RoomImage = roomImage // Assegna l'immagine della stanza
+		booking.RoomImage = roomImage
 
 		// Aggiungi la prenotazione alla lista
 		bookings = append(bookings, booking)
@@ -237,22 +233,20 @@ func AddReview(db *sql.DB, roomID int, username, review string, rating int) erro
 }
 
 func GetReview(db *sql.DB, roomID int, username string) (*types.ReviewResp, error) {
-	// Query per selezionare il commento, rating e il CreatedAt (timestamp) per la roomID e username specificati
 	query := "SELECT review, rating, CreatedAt FROM reviews WHERE roomID = ? AND Username = ? LIMIT 1"
 	fmt.Printf("Sto cercando le recensioni")
 
 	// Esegui la query
 	row := db.QueryRow(query, roomID, username)
 
-	// Crea una struttura per memorizzare il commento, il rating e la data di creazione
 	var review types.ReviewResp
-	var createdAt string // Variabile temporanea per memorizzare la data come stringa
+	var createdAt string
 
 	// Scansiona il risultato nella struttura
 	err := row.Scan(&review.Comment, &review.Rating, &createdAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			// Nessuna recensione trovata, restituisci una struttura vuota
+			// Nessuna recensione trovata, restituisce una struttura vuota
 			return &types.ReviewResp{}, nil
 		}
 		log.Printf("Errore durante la scansione della recensione: %v", err)
@@ -262,7 +256,6 @@ func GetReview(db *sql.DB, roomID int, username string) (*types.ReviewResp, erro
 	// Assegna la data di creazione (CreatedAt) alla struttura ReviewResp
 	review.CreatedAt = createdAt
 
-	// Restituisci la recensione trovata con il commento, il rating e la data di creazione
 	return &review, nil
 }
 
@@ -321,7 +314,6 @@ func GetMeteFromDB(db *sql.DB) ([]types.ResponseMeta, error) {
 		var m types.ResponseMeta
 
 		var servicesStr string
-		// L'ordine degli Scan deve corrispondere all'ordine dei campi selezionati
 		if err := rows.Scan(&m.HotelID, &m.Name, &m.Location, &m.Description, &servicesStr, &m.MediaVoto, &m.Images, &m.NumeroHotel, &m.PrezzoMedio, &m.NumeroPrenotazioni); err != nil {
 			return nil, err
 		}
@@ -619,7 +611,7 @@ func GetHotelReviews(db *sql.DB, hotelID int) ([]types.Review, error) {
 			rev.CreatedAt = createdAt.String
 		}
 
-		// Aggiungi il record solo se contiene dati utili
+		// se i campi non sono vuoti, aggiungi la recensione alla lista
 		if strings.TrimSpace(rev.Comment) != "" || rev.Rating != 0 {
 			reviews = append(reviews, rev)
 		}
@@ -985,4 +977,48 @@ func UpdateRoomPrice(db *sql.DB, roomID int, newPrice float64, username string) 
 		return fmt.Errorf("errore durante l'aggiornamento del prezzo: %w", err)
 	}
 	return nil
+}
+
+func GetHotelBookings(db *sql.DB, hotelID int) ([]types.BookingHotelResponse, error) {
+	query := `
+        SELECT 
+            b.BookingID,
+            b.Username,
+            b.RoomID,
+            b.CheckInDate,
+            b.CheckOutDate,
+            b.TotalAmount,
+            r.Name AS RoomName
+        FROM bookings b
+        JOIN rooms r ON b.RoomID = r.RoomID
+        JOIN hotels h ON r.HotelID = h.HotelID
+        WHERE h.HotelID = ?
+    `
+	rows, err := db.Query(query, hotelID)
+	if err != nil {
+		return nil, fmt.Errorf("errore durante l'esecuzione della query: %v", err)
+	}
+	defer rows.Close()
+
+	var bookings []types.BookingHotelResponse
+	for rows.Next() {
+		var booking types.BookingHotelResponse
+		err := rows.Scan(
+			&booking.BookingID,
+			&booking.Username,
+			&booking.RoomID,
+			&booking.CheckInDate,
+			&booking.CheckOutDate,
+			&booking.TotalAmount,
+			&booking.RoomName,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("errore durante la scansione della riga: %v", err)
+		}
+		bookings = append(bookings, booking)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("errore durante l'iterazione delle righe: %v", err)
+	}
+	return bookings, nil
 }

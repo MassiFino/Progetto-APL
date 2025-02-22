@@ -10,7 +10,6 @@ import jwt
 
 app = FastAPI()
 security = HTTPBearer()
-#current_username = None
 
 class LoginRequest(BaseModel):
     Username: str
@@ -126,6 +125,9 @@ class UpdateRoomPriceRequest(BaseModel):
     RoomID: int
     NewPrice: float
 
+class HotelBookingsRequest(BaseModel):
+    HotelID: int
+
 @app.post("/login")
 def login(request: LoginRequest):
 
@@ -135,7 +137,7 @@ def login(request: LoginRequest):
 
     
     print("Username dell'utente loggato:", request.Username)
-    #Se email e password sono valide, procedi con il login
+
     payload = {"Username": request.Username, "Password": request.Password}
     print("Payload inviato:", payload)
     try:
@@ -172,14 +174,12 @@ def signup(request: SignupRequest):
     if not password_valida:
         raise HTTPException(status_code=400, detail=messaggio_password)
 
-    #current_username = request.Username
     print("Username dell'utente loggato:", request.Username)
     
     payload = {"Username": request.Username, "Email": request.Email, "Password": request.Password, "PImage": request.PImage, "Role": request.Role}
     print("Payload inviato:", payload)
     
     try:
-        #print("Payload inviato:", request.dict())
         response = connect_go("signup", request.dict())
         print(response)
 
@@ -204,10 +204,10 @@ def signup(request: SignupRequest):
 @app.post("/getUserData")
 def get_user_data(credentials: HTTPAuthorizationCredentials = Depends(security)):
     try:
-        # 1) Prendi il token dall'header (Bearer <token>)
+        #Prendo il token dall'header (Bearer <token>)
         token = credentials.credentials
 
-        # 2) Decodifica per ottenere i claims
+        # Decodifica per ottenere i claims
         payload = decode_jwt_token(token)
 
         # 3) Recupera l'username dai claims
@@ -215,7 +215,6 @@ def get_user_data(credentials: HTTPAuthorizationCredentials = Depends(security))
         if not username:
             raise HTTPException(status_code=400, detail="Claim 'username' mancante")
 
-        # 4) Ora chiami Go con quell'username
         response = connect_go("getUserData", {"Username": username})
         return response
     except jwt.ExpiredSignatureError:
@@ -230,10 +229,8 @@ def get_user_data(credentials: HTTPAuthorizationCredentials = Depends(security))
     try:
         token = credentials.credentials
 
-        # 2) Decodifica per ottenere i claims
         payload = decode_jwt_token(token)
 
-        # 3) Recupera l'username dai claims
         username = payload.get("username")
         if not username:
             raise HTTPException(status_code=400, detail="Claim 'username' mancante")
@@ -253,10 +250,8 @@ def get_user_data(credentials: HTTPAuthorizationCredentials = Depends(security))
     try:
         token = credentials.credentials
 
-        # 2) Decodifica per ottenere i claims
         payload = decode_jwt_token(token)
 
-        # 3) Recupera l'username dai claims
         username = payload.get("username")
         if not username:
             raise HTTPException(status_code=400, detail="Claim 'username' mancante")
@@ -274,18 +269,15 @@ def get_user_data(credentials: HTTPAuthorizationCredentials = Depends(security))
 @app.post("/addReview")
 def add_review(request: addReviewRequest):
     try:
-        # Invia la recensione al servizio Go
         response = connect_go("addReview", request.dict())
         
-        # Se l'inserimento della recensione ha avuto successo, calcola i punti
         if response.get("status") == "success":
-            review_text = request.Comment  # Assicurati che il campo sia "Comment"
+            review_text = request.Comment  
             username = request.Username
 
-            # Calcola i punti per la recensione (funzione definita in Utilis)
+            # Calcola i punti per la recensione
             points_review = assign_points_for_review(review_text)
 
-            # Aggiorna i punti dell'utente nel sistema
             update_payload = {
                 "Username": username,
                 "PointsToAdd": points_review
@@ -316,13 +308,11 @@ def get_review(request: getReviewsRequest):
 def delete_booking(request: DeleteBookingRequest):
     try:
         
-        # Prepara il payload da inviare al servizio (o direttamente usalo per eliminare)
         response = connect_go("deleteBooking", request.dict())
         return response
     except Exception as e:
         raise HTTPException(status_code=502, detail=str(e))
 
-# Endpoint per eliminare una recensione
 @app.post("/deleteReview")
 def delete_review(request: DeleteReviewRequest):
     try:
@@ -371,10 +361,8 @@ def add_room_hotel(
 ):
     try:
         print("funzione addRoomHotel")
-        # 1. Estrai il token dall'header
         token = credentials.credentials
 
-        # 2. Decodifica il token per ottenere i claims
         payload_token = decode_jwt_token(token)
         username = payload_token.get("username")
 
@@ -382,15 +370,10 @@ def add_room_hotel(
             raise HTTPException(status_code=400, detail="Claim 'username' mancante nel token")
 
         print ("richiesta: " + str(request.dict()))
-        # 3. Prepara il payload da inviare al servizio Go
         data = request.dict()
-        # Aggiungi il campo UserHost (o come lo chiami tu nel servizio Go)
         data["HostHotel"] = username
 
-        # Se il campo Services deve essere una stringa (es. separata da virgole), puoi fare:
-        # data["Services"] = ",".join(data["Services"])
         print("Data da inviare a Go:", data)
-        # 4. Invia la richiesta al servizio Go
         response = connect_go("addRoomHotel", data)
         return response
 
@@ -409,7 +392,6 @@ def add_room(
     try:
     
         print ("richiesta: " + str(request.dict()))
-        # 3. Prepara il payload da inviare al servizio Go
 
         response = connect_go("addRoom", request.dict())
         return response
@@ -419,7 +401,6 @@ def add_room(
 
 @app.post("/searchHotels")
 def search_hotels(request: SearchRequest):
-    # Stampa i parametri per debug
     print("Parametri ricevuti:", request.dict())
 
     try:
@@ -436,7 +417,6 @@ def search_hotels(request: SearchRequest):
 @app.post("/getRooms")
 def get_rooms(request: GetRoomsReviewsRequest):
     try:
-        # Inoltra la richiesta al backend Go
         response = connect_go("getRooms", request.dict())
         print(response)
 
@@ -466,7 +446,6 @@ def get_available_rooms(request: AvailableRoomsRequest, credentials: HTTPAuthori
 
         data = request.dict()
         data["Username"] = username
-        # Inoltra la richiesta al backend Go usando connect_go
         response = connect_go("getAvailableRooms", data)
 
         print("Risposta ricevuta:", response)
@@ -509,21 +488,17 @@ def get_rooms_user(request: GetRoomsReviewsRequest, credentials: HTTPAuthorizati
 def add_booking(request: BookingRequest, credentials: HTTPAuthorizationCredentials = Depends(security)):
     token = credentials.credentials
     try:
-        # Decodifica il token per estrarre lo username
         payload = decode_jwt_token(token)
         username = payload.get("username")
         if not username:
             raise HTTPException(status_code=400, detail="Username non trovato nei claims")
     
-        # Aggiungi lo username al payload da inoltrare al servizio Go
         data = request.dict()
         data["Username"] = username
-        # Inoltra la richiesta al servizio Go tramite connect_go
         response = connect_go("addBooking", data)
 
         if response.get("status") == "success":
-            # 2) Calcola i punti
-            #    Prendendo i dati dalla request
+            # Calcola i punti
             total_amount = request.TotalAmount
             room_type = request.RoomType
             guests = request.Guests
@@ -557,18 +532,17 @@ def preview_discount(
     request: PreviewDiscountRequest,
     credentials: HTTPAuthorizationCredentials = Depends(security)  # <--- Serve per ottenerlo
 ):
-    # 1) Decodifica token
     token = credentials.credentials
     payload = decode_jwt_token(token)
     username = payload.get("username")
     if not username:
         raise HTTPException(status_code=400, detail="Username non presente nel token")
 
-    # 2) Recupera i punti da Go
+    # Recupera i punti da Go
     user_data = connect_go("getUserData", {"Username": username})
     current_points = user_data.get("Points", 0)
 
-    # 3) Calcolo sconto
+    # Calcolo sconto
     discounted_price, points_used = apply_discount_by_points_euro(
         request.TotalAmount,
         current_points
@@ -588,8 +562,7 @@ def set_interest(request: SetInterestRequest, credentials: HTTPAuthorizationCred
     if not username:
         raise HTTPException(status_code=400, detail="Username non trovato nei claims")
     
-    # Inoltra la richiesta al servizio Go
-    # Aggiungi lo username al payload se necessario
+
     data = request.dict()
     data["Username"] = username
     print(f"interessi data: {data}")
@@ -677,7 +650,6 @@ def get_cost_chart(credentials: HTTPAuthorizationCredentials = Depends(security)
 
 @app.post("/getAveragePrice")
 def get_average_price(request: AveragePriceRequest,credentials: HTTPAuthorizationCredentials = Depends(security)):
-    # Estrai il token e decodifica il payload
     token = credentials.credentials
     payload = decode_jwt_token(token)
     username = payload.get("username")
@@ -700,7 +672,6 @@ def get_interests(credentials: HTTPAuthorizationCredentials = Depends(security))
     if not username:
         raise HTTPException(status_code=400, detail="Username non trovato nei claims")
     
-    # Prepara il payload per Go (lo username è sufficiente)
     data = {"Username": username}
 
     print("data: " + str(data))
@@ -719,13 +690,11 @@ def delete_interest(request: DeleteInterestRequest, credentials: HTTPAuthorizati
     if not username:
         raise HTTPException(status_code=400, detail="Username non trovato nei claims")
     
-    # Prepara il payload: aggiungi anche lo username se necessario
     data = request.dict()
     data["Username"] = username
     print(f"delete interesse data: {data}")
     
     try:
-        # Utilizza la funzione connect_go per inoltrare la richiesta al servizio Go
         response = connect_go("deleteInterest", data)
         print(f"Risposta ricevuta da Go (deleteInterest): {response}")
         return response
@@ -740,7 +709,6 @@ def update_room_price(request: UpdateRoomPriceRequest, credentials: HTTPAuthoriz
     if not username:
         raise HTTPException(status_code=400, detail="Username non presente nei claims")
     
-    # Prepara il payload per il servizio Go: aggiunge lo username
     data = request.dict()
     data["Username"] = username
     print(f"Richiesta update prezzo: {data}")
@@ -749,4 +717,15 @@ def update_room_price(request: UpdateRoomPriceRequest, credentials: HTTPAuthoriz
         response = connect_go("updateRoomPrice", data)
         return response
     except Exception as e:
+        raise HTTPException(status_code=502, detail=str(e))
+
+
+@app.post("/getHotelBookings")
+def get_hotel_bookings(request: HotelBookingsRequest):
+    print("Parametri ricevuti per getHotelBookings:", request.dict())
+    try:
+        response = connect_go("getHotelBookings", request.dict())
+        print("Risposta da getHotelBookings: " + str(response))
+        return response
+    except ConnectionError as e:
         raise HTTPException(status_code=502, detail=str(e))

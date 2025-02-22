@@ -36,6 +36,7 @@ public partial class HotelHostPage : ContentPage, IQueryAttributable
         {
             await viewModel.LoadRoomsAsync();
             await viewModel.LoadReviewsAsync();
+            await viewModel.LoadBookingsAsync();
         }
     }
 }

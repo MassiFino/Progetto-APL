@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:model="clr-namespace:Interfaccia_C_.Model"
              x:Class="Interfaccia_C_.HotelHostPage"
              x:Name="HotelHostPageViewRoot"
              Title="Dettagli Hotel"
@@ -241,6 +242,60 @@
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
             </Border>
+            <!-- Sezione Prenotazioni -->
+            <Label Text="Prenotazioni" 
+       FontSize="20" 
+       FontAttributes="Bold" 
+       TextColor="Black" 
+       HorizontalOptions="Center" 
+       Margin="0,10"/>
+
+            <CollectionView ItemsSource="{Binding Bookings}" 
+                BackgroundColor="AliceBlue" 
+                Margin="10">
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical" Span="1" 
+                         HorizontalItemSpacing="5" 
+                         VerticalItemSpacing="5"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:Booking">
+                        <Border Padding="10" 
+                    Margin="5" 
+                    BackgroundColor="LightYellow" 
+                    Stroke="DarkOrange" 
+                    StrokeShape="RoundRectangle 10">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="{Binding username}" 
+                           FontSize="16" 
+                           FontAttributes="Bold"/>
+                                <Label FontSize="14">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Stanza: "/>
+                                            <Span Text="{Binding roomName}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                                <Label FontSize="14">
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <Span Text="Dal: "/>
+                                            <Span Text="{Binding checkInDate, StringFormat='{0:dd/MM/yyyy}'}"/>
+                                            <Span Text=" - Al: "/>
+                                            <Span Text="{Binding checkOutDate, StringFormat='{0:dd/MM/yyyy}'}"/>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+
+                                <Label Text="{Binding totalAmount, StringFormat='€ {0:F2}'}" 
+                           FontSize="14"/>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
 
             <!-- Recensioni degli ospiti -->
             <Label Text="Recensioni degli ospiti"

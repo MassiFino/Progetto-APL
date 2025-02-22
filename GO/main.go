@@ -48,7 +48,6 @@ func LogInHandler(w http.ResponseWriter, r *http.Request) {
 	// Verifica le credenziali dell'utente
 	valid, err, Role := database.CheckUserCredentials(db, req.Username, req.Password)
 	if err != nil {
-		// Gestisce l'errore interno del server
 		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
 		return
 	}
@@ -63,9 +62,8 @@ func LogInHandler(w http.ResponseWriter, r *http.Request) {
 	// Login riuscito
 	w.Header().Set("Content-Type", "application/json")
 	response := fmt.Sprintf(`{"status": "success","message": "Login effettuato con successo!","role": "%s"}`, Role)
-	fmt.Println(response) // Usa fmt.Println invece di fmt.Printf per stampare la risposta
+	fmt.Println(response)
 
-	// Scrivi la risposta JSON con w.Write
 	w.Write([]byte(response))
 }
 
@@ -115,7 +113,6 @@ func getUserDataHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
 		return
 	}
-	// Definiamo una struttura per l'email che riceviamo nel corpo della richiesta
 	var req types.UserRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -124,8 +121,7 @@ func getUserDataHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Printf("Data utente ricevuta: %+v\n", req)
-	//fmt.Printf("Dati ricevuti: %+v\n", req)
-	// Recupera i dati dell'utente dal database usando la funzione GetUser
+
 	user, err := database.GetUser(db, req.Username)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Errore durante la ricerca dell'utente: %v", err), http.StatusInternalServerError)
@@ -155,7 +151,6 @@ func getHotelsHostHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Definiamo una struttura per l'email che riceviamo nel corpo della richiesta
 	var req types.UserRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -165,14 +160,12 @@ func getHotelsHostHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("Username ricevuta: %+v\n", req.Username)
 
-	// Recupera gli hotel dal database usando la funzione getHotelsByHost
 	hotels, err := database.GetHotelsHost(db, req.Username)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Errore durante la ricerca degli hotel: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	// Se non sono stati trovati hotel, restituisci comunque una risposta di successo con lista vuota
 	if len(hotels) == 0 {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)             // Risposta con successo
@@ -185,7 +178,6 @@ func getHotelsHostHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Hotel trovati: ", hotels)
 
-	// Rispondi con i dati degli hotel in formato JSON
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	err = json.NewEncoder(w).Encode(hotels)
@@ -194,13 +186,11 @@ func getHotelsHostHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func getBookingsHandler(w http.ResponseWriter, r *http.Request) {
-	// Verifica che il metodo sia POST
 	if r.Method != http.MethodPost {
 		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
 		return
 	}
 
-	// Definiamo una struttura per l'email che riceviamo nel corpo della richiesta
 	var req types.UserRequest
 	err := json.NewDecoder(r.Body).Decode(&req)
 	if err != nil {
@@ -209,14 +199,12 @@ func getBookingsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf("email ricevuta: %+v\n", req.Username)
 
-	// Recupera le prenotazioni dal database usando la funzione getBookings
 	bookings, err := database.GetBookings(db, req.Username)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Errore durante la ricerca delle prenotazioni: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	// Se non sono state trovate prenotazioni, restituisci comunque una risposta di successo con lista vuota
 	if len(bookings) == 0 {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)               // Risposta con successo
@@ -227,12 +215,11 @@ func getBookingsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Stampa delle prenotazioni trovate per il debug
+	// Stampa prenotazioni trovate per il debug
 	for i, booking := range bookings {
 		fmt.Printf("Prenotazione #%d: %+v\n", i+1, booking)
 	}
 
-	// Rispondi con i dati delle prenotazioni in formato JSON
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	err = json.NewEncoder(w).Encode(bookings)
@@ -264,14 +251,12 @@ func addReviewHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Aggiunta della recensione riuscita
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status": "success", "message": "Recensione aggiunta con successo!"}`))
 
 }
 
 func getReviewsHandler(w http.ResponseWriter, r *http.Request) {
-	// Verifica che la richiesta sia di tipo POST
 	if r.Method != http.MethodPost {
 		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
 		return
@@ -287,23 +272,19 @@ func getReviewsHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("Dati ricevuti: %+v\n", req)
 
-	// Chiama la funzione GetReview per ottenere la recensione dalla base di dati
 	review, err := database.GetReview(db, req.RoomID, req.Username)
 	if err != nil {
 		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
 		return
 	}
 
-	// Se non viene trovata la recensione
 	if review == nil {
-		// Restituisci una risposta JSON con la recensione non trovata
 		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK) // Status 200 OK anche se non sono state trovate recensioni
+		w.WriteHeader(http.StatusOK)
 		w.Write([]byte(`{"status": "success", "message": "Nessuna recensione trovata"}`))
 		return
 	}
 
-	// Se la recensione è trovata, restituisci i dettagli della recensione
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	err = json.NewEncoder(w).Encode(review) // Restituisce la recensione
@@ -325,7 +306,6 @@ func deleteBookingHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Esegui la query di cancellazione
 	err := database.DeleteBooking(db, req.BookingID, req.Username)
 
 	if err != nil {
@@ -333,13 +313,10 @@ func deleteBookingHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Risposta JSON per la cancellazione della prenotazione
-
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status": "success", "message": "Prenotazione eliminata con successo"}`))
 }
 
-// Handler per eliminare una recensione
 func deleteReviewHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
@@ -352,7 +329,6 @@ func deleteReviewHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Esegui la query di cancellazione
 	err := database.DeleteReview(db, req.RoomID, req.Username)
 
 	if err != nil {
@@ -371,14 +347,12 @@ func getMeteGettonateHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Recupera le mete dal database
 	mete, err := database.GetMeteFromDB(db)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Errore nel recupero delle mete: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	// Calcola il punteggio per ciascuna meta
 	meteConPunteggio := utils.CalcolaPunteggi(mete)
 
 	w.Header().Set("Content-Type", "application/json")
@@ -421,15 +395,12 @@ func addRoomHotelHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("Dati ricevuti: %+v\n", req)
 
-	//devo passare l'host
-	// Aggiungi la stanza all'hotel
 	err = database.AddRoomHotel(db, req.HotelName, req.Location, req.Description, req.Services, req.HostHotel, req.HotelImagePath, req.RoomName, req.RoomDescription, req.PricePerNight, req.MaxGuests, req.RoomType, req.RoomImagePath)
 	if err != nil {
 		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
 		return
 	}
 
-	// Aggiunta della stanza riuscita
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status": "success", "message": "Stanza aggiunta con successo!"}`))
 }
@@ -450,14 +421,12 @@ func addRoomHadler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Printf("Dati ricevuti: %+v\n", req)
 
-	// Aggiungi la stanza all'hotel
 	err = database.AddRoom(db, req.HotelName, req.RoomName, req.RoomDescription, req.PricePerNight, req.MaxGuests, req.RoomType, req.RoomImagePath)
 	if err != nil {
 		http.Error(w, "Errore interno del server", http.StatusInternalServerError)
 		return
 	}
 
-	// Aggiunta della stanza riuscita
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(`{"status": "success", "message": "Stanza aggiunta con successo!"}`))
 }
@@ -469,7 +438,6 @@ func searchHotelsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	//da implementare l'ordinamento se richiesto
 	var orderBy string
 	if req.OrderBy != nil {
 		orderBy = *req.OrderBy
@@ -490,7 +458,7 @@ func searchHotelsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Ordina esternamente i risultati in base al criterio selezionato
+	// Ordina i risultati in base al criterio selezionato
 	results = utils.OrderResults(results, orderBy)
 
 	w.Header().Set("Content-Type", "application/json")
@@ -514,7 +482,6 @@ func getRoomsHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(rooms)
 }
 
-// Handler per ottenere le recensioni per l’hotel
 func getHotelReviewsHandler(w http.ResponseWriter, r *http.Request) {
 	var req types.GetRoomsReviewsRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
@@ -548,7 +515,6 @@ func getAvailableRoomsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Chiama la funzione del package database per ottenere le stanze disponibili
 	rooms, err := database.GetAvailableRooms(db, req.HotelID, req.CheckOutDate, req.CheckInDate, req.Username)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Errore nel recupero delle stanze disponibili: %v", err), http.StatusInternalServerError)
@@ -567,14 +533,12 @@ func getRoomsUserHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Decodifica il corpo della richiesta (che ora contiene anche Username)
 	var req types.GetRoomsUserRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
 		return
 	}
 
-	// Usa il campo Username dal payload
 	rooms, err := database.GetRoomsUser(db, req.HotelID, req.Username)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Errore nel recupero delle stanze: %v", err), http.StatusInternalServerError)
@@ -597,27 +561,23 @@ func addBookingHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Inserisce la prenotazione nel database
 	if err := database.AddBooking(db, req.Username, req.RoomID, req.CheckInDate, req.CheckOutDate, req.TotalAmount, req.Status); err != nil {
 		http.Error(w, fmt.Sprintf("Errore durante l'inserimento della prenotazione: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	// Recupera l'email dell'host
 	hostEmail, err := database.GetHostEmailByRoomID(db, req.RoomID)
 	if err != nil {
 		http.Error(w, "Errore nel recupero dell'email dell'host", http.StatusInternalServerError)
 		return
 	}
 
-	// Recupera i dettagli della stanza (nome della stanza e dell'hotel)
 	roomName, hotelName, err := database.GetRoomDetails(db, req.RoomID)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Errore nel recupero dei dettagli della stanza: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	// Invia email di notifica all'host con i dettagli della prenotazione
 	subject := "Nuova prenotazione ricevuta"
 	body := fmt.Sprintf("Hai ricevuto una nuova prenotazione da %s per la stanza '%s' dell'hotel '%s'.", req.Username, roomName, hotelName)
 	if err := utils.SendEmail(hostEmail, subject, body); err != nil {
@@ -692,7 +652,6 @@ func deleteRoomHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Chiama la funzione per eliminare la stanza
 	err := database.DeleteRoom(db, req.RoomID, req.Username)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Errore durante l'eliminazione della stanza: %v", err), http.StatusInternalServerError)
@@ -715,7 +674,6 @@ func updateHotelDescriptionHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Aggiorna la descrizione dell'hotel (verificando che il proprietario sia corretto)
 	err := database.UpdateHotelDescription(db, req.HotelID, req.NewDescription, req.Username)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Errore durante l'aggiornamento della descrizione: %v", err), http.StatusInternalServerError)
@@ -738,14 +696,12 @@ func getCostDataHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Recupera i dati di costo dal database usando il package database
 	costs, err := database.GetCostData(db, req.Username)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Errore nel recupero dei dati di costo: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	// Imposta l'header e restituisce i dati in formato JSON
 	w.Header().Set("Content-Type", "application/json")
 	if err := json.NewEncoder(w).Encode(costs); err != nil {
 		http.Error(w, "Errore nella codifica della risposta JSON", http.StatusInternalServerError)
@@ -811,13 +767,11 @@ func DeleteInterestHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf("Richiesta di cancellazione interesse ricevuta: %+v\n", req)
 
-	// Chiamata alla funzione che elimina l'interesse dal database
 	if err := database.DeleteInterest(db, req.InterestID, req.Username); err != nil {
 		http.Error(w, fmt.Sprintf("Errore durante l'eliminazione dell'interesse: %v", err), http.StatusInternalServerError)
 		return
 	}
 
-	// Prepara la risposta JSON
 	response := map[string]interface{}{
 		"status":  "ok",
 		"message": "Interesse eliminato con successo",
@@ -839,7 +793,6 @@ func UpdateRoomPriceHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Printf("Richiesta di aggiornamento prezzo ricevuta: %+v\n", req)
 
-	// Chiamata alla funzione che aggiorna il prezzo nel database
 	if err := database.UpdateRoomPrice(db, req.RoomID, req.NewPrice, req.Username); err != nil {
 		http.Error(w, fmt.Sprintf("Errore durante l'aggiornamento del prezzo: %v", err), http.StatusInternalServerError)
 		return
@@ -853,11 +806,39 @@ func UpdateRoomPriceHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(response)
 }
 
+func getHotelBookingsHandler(w http.ResponseWriter, r *http.Request) {
+
+	if r.Method != http.MethodPost {
+		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
+		return
+	}
+
+	var req types.HotelBookingsRequest
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		http.Error(w, "Errore nel parsing JSON", http.StatusBadRequest)
+		return
+	}
+
+	fmt.Printf("Richiesta di prenotazioni per hotel con ID: %d\n", req.HotelID)
+
+	bookings, err := database.GetHotelBookings(db, req.HotelID)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Errore durante il recupero delle prenotazioni: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(bookings); err != nil {
+		http.Error(w, fmt.Sprintf("Errore nella codifica della risposta JSON: %v", err), http.StatusInternalServerError)
+		return
+	}
+}
+
 func main() {
-	db = initializeDatabase()            // Inizializza la connessione al database
-	defer db.Close()                     // Chiude la connessione al termine del server
-	utils.InitializeEmail()              // Inizializza il sistema di email
-	utils.StartNotificationScheduler(db) // Avvia il sistema di notifiche
+	db = initializeDatabase()
+	defer db.Close()
+	utils.InitializeEmail()
+	utils.StartNotificationScheduler(db)
 	utils.StartPeriodicRatingUpdate(db, 10*time.Minute)
 
 	http.HandleFunc("/login", LogInHandler)
@@ -888,6 +869,7 @@ func main() {
 	http.HandleFunc("/deleteInterest", DeleteInterestHandler)
 	http.HandleFunc("/updateRoomPrice", UpdateRoomPriceHandler)
 	http.HandleFunc("/getRoomsUser", getRoomsUserHandler)
+	http.HandleFunc("/getHotelBookings", getHotelBookingsHandler)
 
 	port := "8080"
 	fmt.Printf("Server in ascolto su http://localhost:%s\n", port)
