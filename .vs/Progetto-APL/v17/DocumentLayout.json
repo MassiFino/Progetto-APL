@@ -1,12 +1,71 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\Massi\\Progetto-APL2\\Progetto-APL\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl2\\progetto-apl\\interfaccia_c#\\viewmodel\\mainpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\viewmodel\\mainpageviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl2\\progetto-apl\\interfaccia_c#\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\mainpage.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|c:\\users\\massi\\progetto-apl2\\progetto-apl\\interfaccia_c#\\model\\hotel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DA12D6D4-0CA7-45A7-8FA0-CA9C8C4463D8}|Interfaccia_C#\\Interfaccia_C_.csproj|solutionrelative:interfaccia_c#\\model\\hotel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Hotel.cs",
+              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL2\\Progetto-APL\\Interfaccia_C#\\Model\\Hotel.cs",
+              "RelativeDocumentMoniker": "Interfaccia_C#\\Model\\Hotel.cs",
+              "ToolTip": "C:\\Users\\Massi\\Progetto-APL2\\Progetto-APL\\Interfaccia_C#\\Model\\Hotel.cs",
+              "RelativeToolTip": "Interfaccia_C#\\Model\\Hotel.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAA5wA8AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-24T18:00:08.938Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainPage.xaml",
+              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL2\\Progetto-APL\\Interfaccia_C#\\MainPage.xaml",
+              "RelativeDocumentMoniker": "Interfaccia_C#\\MainPage.xaml",
+              "ToolTip": "C:\\Users\\Massi\\Progetto-APL2\\Progetto-APL\\Interfaccia_C#\\MainPage.xaml",
+              "RelativeToolTip": "Interfaccia_C#\\MainPage.xaml",
+              "ViewState": "AgIAAIMAAAAAAAAAAAAAwIsAAABBAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-02-24T17:51:25.926Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "MainPageViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\Massi\\Progetto-APL2\\Progetto-APL\\Interfaccia_C#\\ViewModel\\MainPageViewModel.cs",
+              "RelativeDocumentMoniker": "Interfaccia_C#\\ViewModel\\MainPageViewModel.cs",
+              "ToolTip": "C:\\Users\\Massi\\Progetto-APL2\\Progetto-APL\\Interfaccia_C#\\ViewModel\\MainPageViewModel.cs",
+              "RelativeToolTip": "Interfaccia_C#\\ViewModel\\MainPageViewModel.cs",
+              "ViewState": "AgIAAEYAAAAAAAAAAAAmwE0AAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-24T17:51:13.121Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }

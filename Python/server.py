@@ -324,12 +324,12 @@ def delete_review(request: DeleteReviewRequest):
         raise HTTPException(status_code=502, detail=str(e))
 
 #Massi
-@app.post("/getMeteGettonate")
+@app.post("/getHotelGettonati")
 def get_mete_gettonate():
     try:
 
         print("Chiamata a getMeteGettonate")
-        response = connect_go("getMeteGettonate", {})
+        response = connect_go("getHotelGettonati", {})
 
         mete_ordinate = sorted(response, key=lambda m: m["Punteggio"], reverse=True)
 

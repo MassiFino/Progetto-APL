@@ -32,8 +32,7 @@ func CalcolaPunteggi(mete []types.ResponseMeta) []MetaConPunteggio {
 			prezzo = 1
 		}
 
-		punteggio := float64(m.NumeroHotel)*1.0 +
-			float64(m.NumeroPrenotazioni)*2.0 +
+		punteggio := float64(m.NumeroPrenotazioni)*2.0 +
 			m.MediaVoto*3.0 -
 			(prezzo/100)*1.0
 

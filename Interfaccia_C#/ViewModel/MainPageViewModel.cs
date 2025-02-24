@@ -73,7 +73,7 @@ namespace Interfaccia_C_.ViewModel
                 Debug.WriteLine("Chiamata a GetMeteGettonate");
                 var content = new StringContent("{}", Encoding.UTF8, "application/json");
 
-                var response = await _httpClient.PostAsync("http://localhost:9000/getMeteGettonate", content);
+                var response = await _httpClient.PostAsync("http://localhost:9000/getHotelGettonati", content);
                 if (!response.IsSuccessStatusCode)
                 {
                     string errorMsg = await response.Content.ReadAsStringAsync();

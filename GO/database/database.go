@@ -281,26 +281,24 @@ func DeleteReview(db *sql.DB, roomID int, username string) error {
 	return nil
 }
 
-func GetMeteFromDB(db *sql.DB) ([]types.ResponseMeta, error) {
+func GetHotelGettonatiFromDB(db *sql.DB) ([]types.ResponseMeta, error) {
 	query := `
         SELECT 
-            h.HotelID,
-            h.Name,
-            h.Location,
-            h.Description,
-            h.Services,
-            COALESCE(h.Rating, 0) AS Rating,
+            h.HotelID, 
+            h.Name, 
+            h.Location, 
+            h.Description, 
+            h.Services, 
+            COALESCE(h.Rating, 0) AS Rating, 
             h.Images,
-            COUNT(DISTINCT h.HotelID) AS NumeroHotel,
-            AVG(r.PricePerNight) AS PrezzoMedio,
+            AVG(r.PricePerNight) AS PrezzoMedio, 
             COUNT(b.BookingID) AS NumeroPrenotazioni
         FROM hotels h
         JOIN rooms r ON h.HotelID = r.HotelID
         LEFT JOIN bookings b ON r.RoomID = b.RoomID
         LEFT JOIN reviews rv ON r.RoomID = rv.RoomID
-        GROUP BY 
-            h.HotelID, h.Name, h.Location, h.Description, h.Services, h.Rating, h.Images
-        ORDER BY NumeroHotel DESC
+        GROUP BY h.HotelID, h.Name, h.Location, h.Description, h.Services, h.Rating, h.Images
+        ORDER BY NumeroPrenotazioni DESC
         LIMIT 10;
     `
 	rows, err := db.Query(query)
@@ -309,27 +307,23 @@ func GetMeteFromDB(db *sql.DB) ([]types.ResponseMeta, error) {
 	}
 	defer rows.Close()
 
-	var mete []types.ResponseMeta
+	var hotels []types.ResponseMeta
 	for rows.Next() {
 		var m types.ResponseMeta
-
 		var servicesStr string
-		if err := rows.Scan(&m.HotelID, &m.Name, &m.Location, &m.Description, &servicesStr, &m.MediaVoto, &m.Images, &m.NumeroHotel, &m.PrezzoMedio, &m.NumeroPrenotazioni); err != nil {
+		if err := rows.Scan(&m.HotelID, &m.Name, &m.Location, &m.Description, &servicesStr, &m.MediaVoto, &m.Images, &m.PrezzoMedio, &m.NumeroPrenotazioni); err != nil {
 			return nil, err
 		}
-
-		// Trasforma la stringa dei servizi in un array di stringhe
-
 		m.Services = strings.Split(servicesStr, ",")
 		for i, s := range m.Services {
 			m.Services[i] = strings.TrimSpace(s)
 		}
-		mete = append(mete, m)
+		hotels = append(hotels, m)
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
-	return mete, nil
+	return hotels, nil
 }
 
 func GetOfferteImperdibili(db *sql.DB) ([]types.ResponseOffertaImperdibile, error) {

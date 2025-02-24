@@ -13,7 +13,6 @@ namespace Interfaccia_C_.Model
         public string ServiziStringa { get; set; }
         public string Images { get; set; }  // Stringa che contiene il path dell'immagine
         public float Prezzo { get; set; }
-        public int NumeroHotel { get; set; }
         public int NumeroPrenotazioni { get; set; }
 
     }

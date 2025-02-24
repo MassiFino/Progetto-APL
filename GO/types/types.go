@@ -107,7 +107,6 @@ type ResponseMeta struct {
 	Description        string   `json:"Description"`
 	Services           []string `json:"Services"`
 	Images             string   `json:"Images"`
-	NumeroHotel        int      `json:"NumeroHotel"`
 	PrezzoMedio        float64  `json:"Prezzo"`
 	NumeroPrenotazioni int      `json:"NumeroPrenotazioni"`
 	MediaVoto          float64  `json:"Rating"`

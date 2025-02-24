@@ -340,14 +340,14 @@ func deleteReviewHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(`{"status": "success", "message": "Recensione eliminata con successo"}`))
 }
 
-func getMeteGettonateHandler(w http.ResponseWriter, r *http.Request) {
+func getHotelGettonatiHandler(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != http.MethodPost {
 		http.Error(w, "Metodo non supportato", http.StatusMethodNotAllowed)
 		return
 	}
 
-	mete, err := database.GetMeteFromDB(db)
+	mete, err := database.GetHotelGettonatiFromDB(db)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Errore nel recupero delle mete: %v", err), http.StatusInternalServerError)
 		return
@@ -850,7 +850,7 @@ func main() {
 	http.HandleFunc("/getReviews", getReviewsHandler)
 	http.HandleFunc("/deleteBooking", deleteBookingHandler)
 	http.HandleFunc("/deleteReview", deleteReviewHandler)
-	http.HandleFunc("/getMeteGettonate", getMeteGettonateHandler)
+	http.HandleFunc("/getHotelGettonati", getHotelGettonatiHandler)
 	http.HandleFunc("/getOfferteImperdibili", getOfferteImperdibiliHandler)
 	http.HandleFunc("/addRoomHotel", addRoomHotelHandler)
 	http.HandleFunc("/addRoom", addRoomHadler)

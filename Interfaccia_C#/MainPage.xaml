@@ -139,14 +139,6 @@
                                        HorizontalTextAlignment="Center"
                                        LineBreakMode="WordWrap"/>
 
-                                <!-- RIGA 3: Numero hotel -->
-                                <Label Grid.Row="3"
-                                       Text="{Binding NumeroHotel, StringFormat='Numero hotel: {0}'}"
-                                       FontSize="16"
-                                       TextColor="#004d40"
-                                       HorizontalTextAlignment="Center"
-                                       LineBreakMode="WordWrap"/>
-
                                 <!-- RIGA 4: Prezzo -->
                                 <Label Grid.Row="4"
                                        Text="{Binding Prezzo, StringFormat='Prezzo: {0:C}'}"
