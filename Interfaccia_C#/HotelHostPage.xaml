@@ -268,33 +268,35 @@
                             <VerticalStackLayout Spacing="5">
                                 <Label Text="{Binding username}" 
                            FontSize="16" 
-                           FontAttributes="Bold"/>
-                                <Label FontSize="14">
+                           FontAttributes="Bold" 
+                           TextColor="Black"/>
+                                <Label FontSize="14" TextColor="Black">
                                     <Label.FormattedText>
                                         <FormattedString>
-                                            <Span Text="Stanza: "/>
-                                            <Span Text="{Binding roomName}"/>
+                                            <Span Text="Stanza: " TextColor="Black"/>
+                                            <Span Text="{Binding roomName}" TextColor="Black"/>
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>
-                                <Label FontSize="14">
+                                <Label FontSize="14" TextColor="Black">
                                     <Label.FormattedText>
                                         <FormattedString>
-                                            <Span Text="Dal: "/>
-                                            <Span Text="{Binding checkInDate, StringFormat='{0:dd/MM/yyyy}'}"/>
-                                            <Span Text=" - Al: "/>
-                                            <Span Text="{Binding checkOutDate, StringFormat='{0:dd/MM/yyyy}'}"/>
+                                            <Span Text="Dal: " TextColor="Black"/>
+                                            <Span Text="{Binding checkInDate, StringFormat='{0:dd/MM/yyyy}'}" TextColor="Black"/>
+                                            <Span Text=" - Al: " TextColor="Black"/>
+                                            <Span Text="{Binding checkOutDate, StringFormat='{0:dd/MM/yyyy}'}" TextColor="Black"/>
                                         </FormattedString>
                                     </Label.FormattedText>
                                 </Label>
 
                                 <Label Text="{Binding totalAmount, StringFormat='€ {0:F2}'}" 
-                           FontSize="14"/>
+                           FontSize="14" TextColor="Black"/>
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
+
 
 
             <!-- Recensioni degli ospiti -->
