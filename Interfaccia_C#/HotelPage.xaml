@@ -235,7 +235,7 @@
                                                     Command="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.PrenotaStanzaCommand}"
                                                     CommandParameter="{Binding .}"
                                                     IsVisible="{Binding Source={x:Reference HotelPageViewRoot}, Path=BindingContext.IsSearchMode}"
-                                                    IsEnabled="{Binding CanBook}"/>
+                                                    />
                                         </VerticalStackLayout>
                                         <!-- Colonna 2: Controllo per interesse -->
                                         <Grid Grid.Column="2"

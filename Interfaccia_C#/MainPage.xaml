@@ -13,17 +13,17 @@
 
     <ScrollView>
         <VerticalStackLayout Margin="10"
-                Spacing="20">
+                             Spacing="20">
 
             <!-- Intestazione con sfondo accattivante -->
             <Frame BackgroundColor="#003366"
-                    CornerRadius="20"
-                    Padding="20"
-                    HasShadow="True">
+                   CornerRadius="20"
+                   Padding="20"
+                   HasShadow="True">
                 <VerticalStackLayout Spacing="10">
                     <Label Text="🏨 Trova l'hotel perfetto per il tuo viaggio! 🌍"
                            FontSize="24"
-                            FontAttributes="Bold"
+                           FontAttributes="Bold"
                            HorizontalOptions="Center"
                            TextColor="White"/>
                     <Button Text="🔍 Cerca Offerte"
@@ -39,37 +39,37 @@
 
             <!-- Separator Line -->
             <BoxView HeightRequest="2"
-                    BackgroundColor="#cccccc"/>
+                     BackgroundColor="#cccccc"/>
 
             <!-- Sezione Offerte Imperdibili -->
             <Label Text="🔥 Offerte Imperdibili 🔥"
-                    FontSize="22"
-                    FontAttributes="Bold"
-                    TextColor="#d32f2f"
-                    HorizontalOptions="Center"/>
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="#d32f2f"
+                   HorizontalOptions="Center"/>
             <CollectionView ItemsSource="{Binding OfferteImperdibili}"
-                    HeightRequest="400">
+                            HeightRequest="400">
                 <CollectionView.ItemsLayout>
                     <LinearItemsLayout Orientation="Horizontal"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="model:Hotel">
                         <Frame BackgroundColor="#ffcc80"
-                                CornerRadius="15"
-                                Padding="15"
-                                HasShadow="True"
-                                WidthRequest="250">
+                               CornerRadius="15"
+                               Padding="15"
+                               HasShadow="True"
+                               WidthRequest="250">
                             <VerticalStackLayout>
                                 <Image Source="{Binding ImageSource}"
-                                        HeightRequest="250"
-                                        Aspect="AspectFill"/>
+                                       HeightRequest="250"
+                                       Aspect="AspectFill"/>
                                 <Label Text="{Binding Name}"
-                                        FontAttributes="Bold"
-                                        TextColor="#b71c1c"
-                                        FontSize="18"/>
+                                       FontAttributes="Bold"
+                                       TextColor="#b71c1c"
+                                       FontSize="18"/>
                                 <Label Text="{Binding Prezzo, StringFormat='Prezzo: {0} €'}"
-                                TextColor="#b71c1c"
-                                        FontSize="16"/>
+                                       TextColor="#b71c1c"
+                                       FontSize="16"/>
                                 <Button Text="Scopri Offerta"
                                         BackgroundColor="#e53935"
                                         TextColor="White"
@@ -85,7 +85,7 @@
 
             <!-- Separator Line -->
             <BoxView HeightRequest="2"
-                    BackgroundColor="#cccccc"/>
+                     BackgroundColor="#cccccc"/>
             <Label Text="🌍 Mete più Gettonate 🌍"
                    FontSize="22"
                    FontAttributes="Bold"
@@ -93,11 +93,11 @@
                    HorizontalOptions="Center"/>
 
             <CollectionView ItemsSource="{Binding MeteGettonate}"
-                            HeightRequest="400"
+                            HeightRequest="450"
                             Margin="10">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"
-                            Span="2"
+                                     Span="2"
                                      HorizontalItemSpacing="10"
                                      VerticalItemSpacing="10"/>
                 </CollectionView.ItemsLayout>
@@ -108,41 +108,54 @@
                                Padding="10"
                                HasShadow="True"
                                WidthRequest="200"
-                               HeightRequest="300">
+                               HeightRequest="320">
                             <Frame.GestureRecognizers>
                                 <TapGestureRecognizer
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainPageViewModel}}, Path=GuardaOffertaCommand}"
                                     CommandParameter="{Binding .}"/>
                             </Frame.GestureRecognizers>
-                            <Grid RowDefinitions="Auto, Auto, Auto, Auto"
-                                    ColumnDefinitions="*">
+                            <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto"
+                                  ColumnDefinitions="*">
                                 <!-- RIGA 0: Immagine -->
                                 <Image Source="{Binding ImageSource}"
                                        HeightRequest="200"
-                                       Aspect="AspectFit"/>
+                                       Aspect="AspectFit"
+                                       Grid.Row="0"/>
+
                                 <!-- RIGA 1: Nome dell'hotel -->
                                 <Label Grid.Row="1"
-                                        Text="{Binding Name}"
+                                       Text="{Binding Name}"
                                        FontAttributes="Bold"
                                        FontSize="18"
                                        TextColor="#004d40"
                                        HorizontalTextAlignment="Center"
                                        LineBreakMode="TailTruncation"/>
-                                <!-- RIGA 2: Numero hotel -->
+
+                                <!-- RIGA 2: Location -->
                                 <Label Grid.Row="2"
+                                       Text="{Binding Location, StringFormat='Location: {0}'}"
+                                       FontSize="16"
+                                       TextColor="#004d40"
+                                       HorizontalTextAlignment="Center"
+                                       LineBreakMode="WordWrap"/>
+
+                                <!-- RIGA 3: Numero hotel -->
+                                <Label Grid.Row="3"
                                        Text="{Binding NumeroHotel, StringFormat='Numero hotel: {0}'}"
                                        FontSize="16"
                                        TextColor="#004d40"
                                        HorizontalTextAlignment="Center"
                                        LineBreakMode="WordWrap"/>
-                                <!-- RIGA 3: Prezzo -->
-                                <Label Grid.Row="3"
+
+                                <!-- RIGA 4: Prezzo -->
+                                <Label Grid.Row="4"
                                        Text="{Binding Prezzo, StringFormat='Prezzo: {0:C}'}"
                                        FontSize="16"
                                        TextColor="#004d40"
                                        HorizontalTextAlignment="Center"
                                        LineBreakMode="WordWrap"/>
                             </Grid>
+
                         </Frame>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

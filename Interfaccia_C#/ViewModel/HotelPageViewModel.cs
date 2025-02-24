@@ -77,8 +77,6 @@ namespace Interfaccia_C_.ViewModel
         public class Room : INotifyPropertyChanged
         {
 
-            private bool _canBook = true;
-
             public int RoomID { get; set; }
             public string RoomName { get; set; }
             public string RoomDescription { get; set; }
@@ -90,18 +88,6 @@ namespace Interfaccia_C_.ViewModel
             public ImageSource ImageSource { get; set; }
 
 
-            public bool CanBook
-            {
-                get => _canBook;
-                set
-                {
-                    if (_canBook != value)
-                    {
-                        _canBook = value;
-                        OnPropertyChanged();
-                    }
-                }
-            }
 
             private bool _isInterestSet = false;
             public bool IsInterestSet

@@ -948,7 +948,7 @@ namespace Interfaccia_C_.ViewModel
             IsAddRoomVisible = true;
         }
 
-
+//massi
         private async Task<(string imagePath, string imageName)> UploadImageAsync(string folder, string pickerTitle)
         {
             try
@@ -984,7 +984,7 @@ namespace Interfaccia_C_.ViewModel
             return (null, null);
         }
 
-
+//massi
         private async Task OnUploadAdditionalRoomImage()
         {
             var (imagePath, imageName) = await UploadImageAsync("RoomPictures", "Seleziona un'immagine per la seconda stanza");
