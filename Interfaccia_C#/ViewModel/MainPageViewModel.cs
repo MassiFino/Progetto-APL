@@ -172,6 +172,8 @@ namespace Interfaccia_C_.ViewModel
                 Debug.WriteLine($"Errore nel recupero delle offerte imperdibili: {ex.Message}");
             }
         }
+
+        //Dario
         public ImageSource GetImageSource(string imagePath)
         {
             if (File.Exists(imagePath))

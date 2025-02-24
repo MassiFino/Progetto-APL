@@ -139,7 +139,7 @@ namespace Interfaccia_C_.ViewModel
         }
 
      
-
+        //Massi
         private async Task ApplicaSconto()
         {
             try
@@ -219,7 +219,7 @@ namespace Interfaccia_C_.ViewModel
             }
 
         }
-
+        //Massi
         private async Task PrenotaStanza(Booking booking)
         {
             var token = await SecureStorage.GetAsync("jwt_token");

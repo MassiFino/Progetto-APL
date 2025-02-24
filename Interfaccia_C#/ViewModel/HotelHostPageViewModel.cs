@@ -322,7 +322,7 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-
+        //Massi
         private async Task OnDeleteRoom(Room room)
         {
             var token = await SecureStorage.GetAsync("jwt_token");
@@ -345,6 +345,7 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
+        //Massi
         private async Task OnEditHotelDescription()
         {
             string newDescription = await Application.Current.MainPage.DisplayPromptAsync("Modifica Descrizione", "Inserisci la nuova descrizione dell'hotel:");
@@ -374,6 +375,7 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
+        //Dario
         private async Task OnAddRoom()
         {
             var navParams = new Dictionary<string, object>
@@ -392,6 +394,7 @@ namespace Interfaccia_C_.ViewModel
             await Shell.Current.GoToAsync("AddRoomPage", navParams);
         }
 
+        //Massi
         private async Task OnUpdateRoomPrice(Room room)
         {
             string input = await Application.Current.MainPage.DisplayPromptAsync(

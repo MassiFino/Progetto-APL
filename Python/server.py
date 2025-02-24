@@ -323,6 +323,7 @@ def delete_review(request: DeleteReviewRequest):
     except Exception as e:
         raise HTTPException(status_code=502, detail=str(e))
 
+#Massi
 @app.post("/getMeteGettonate")
 def get_mete_gettonate():
     try:
@@ -337,7 +338,9 @@ def get_mete_gettonate():
         return mete_ordinate
     except ConnectionError as e:
         raise HTTPException(status_code=502, detail=str(e))
-    
+
+
+ #Massi   
 @app.post("/getOfferteImperdibili")
 def get_offerte_imperdibili():
     try:

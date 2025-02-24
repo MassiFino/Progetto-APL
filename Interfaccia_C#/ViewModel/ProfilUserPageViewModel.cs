@@ -194,6 +194,7 @@ namespace Interfaccia_C_.ViewModel
 
 
         // Metodo per ottenere l'immagine del profilo
+        //Dario
         public ImageSource GetImageSource(string imagePath)
         {
             if (File.Exists(imagePath))
@@ -351,6 +352,8 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
+
+        //Massi
         private async Task OnLasciaRecensione(Booking booking)
         {
             if (booking == null) return;
@@ -371,6 +374,7 @@ namespace Interfaccia_C_.ViewModel
             booking.IsReviewVisible = true;
         }
 
+        //Massi
         private async Task OnInviaRecensione(Booking booking)
         {
             if (booking == null) return;
@@ -418,7 +422,7 @@ namespace Interfaccia_C_.ViewModel
         }
 
 
-
+        //Dario
 
         public async Task FetchReviewData(Booking booking)
         {
@@ -426,7 +430,6 @@ namespace Interfaccia_C_.ViewModel
             {
                 var token = await SecureStorage.GetAsync("jwt_token");
 
-                // Crea il payload con i dati necessari
                 var payload = new
                 {
                     Username = booking.username,
@@ -501,7 +504,7 @@ namespace Interfaccia_C_.ViewModel
         }
 
 
-
+        //Massi
         private async Task OnEliminaPrenotazione(Booking booking)
         {
             if (booking == null) return;
@@ -551,6 +554,7 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
+        //Massi
         private async Task OnEliminaRecensione(Booking booking)
         {
             if (booking == null) return;
@@ -593,7 +597,7 @@ namespace Interfaccia_C_.ViewModel
                 await Application.Current.MainPage.DisplayAlert("Errore", ex.Message, "OK");
             }
         }
-
+        //Massi
         public async Task LoadCostChartAsync()
         {
             try
@@ -653,6 +657,7 @@ namespace Interfaccia_C_.ViewModel
         }
 
 
+        //Massi
         public async Task LoadInterestsAsync()
         {
             try
@@ -686,6 +691,7 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
+        //Massi
         private async Task DeleteInterestAsync(Interest interest)
         {
             var token = await SecureStorage.GetAsync("jwt_token");

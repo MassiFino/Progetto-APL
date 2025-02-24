@@ -6,6 +6,8 @@ import io
 import base64
 import matplotlib.pyplot as plt
 
+
+#Massi
 def verifica_email(email):
     try:
         # Validazione dell'email
@@ -17,7 +19,7 @@ def verifica_email(email):
         print(str(e))
         return False, "L'email non è valida."
 
-
+#Massi
 def verifica_password(password):
 
     lunghezza_minima = 8
@@ -43,7 +45,7 @@ def verifica_password(password):
     
     return True, "La password è valida."
 
-
+#Massi
 def connect_go(endpoint, pl={}):
     if not isinstance(pl, dict):
         raise TypeError("Il payload deve essere un dizionario.")
@@ -58,7 +60,7 @@ def connect_go(endpoint, pl={}):
     except requests.exceptions.RequestException as e:
         raise ConnectionError(f"Errore nella connessione al server Go: {e}")
 
-
+#Massi
 def assign_points_for_booking(
     total_amount: float, 
     room_type: str,
@@ -128,6 +130,8 @@ def assign_points_for_booking(
 
     return total_points
 
+
+#Massi
 def assign_points_for_review(review_text: str) -> int:
     """
     Calcolo punti per recensione 
@@ -158,6 +162,8 @@ def assign_points_for_review(review_text: str) -> int:
     points = base_points + bonus_for_length
     return points
 
+
+#Massi
 def apply_discount_by_points_euro(total_amount: float, user_points: int) -> tuple[float, int]:
     """
     Ogni punto vale 0.10€ di sconto,
@@ -177,6 +183,7 @@ def apply_discount_by_points_euro(total_amount: float, user_points: int) -> tupl
     return discounted_price, points_used
 
 
+#Massi
 def create_cost_chart(cost_data):
     """
     cost_data: una lista di dizionari con le chiavi "month" e "cost"

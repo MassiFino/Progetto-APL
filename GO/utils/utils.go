@@ -19,8 +19,10 @@ type MetaConPunteggio struct {
 }
 
 // Calcola il punteggio per ogni meta.
-//
+
 //	punteggio = (NumeroHotel * 1.0) + (NumeroPrenotazioni * 2.0) + (MediaVoto * 3.0) - (PrezzoMedio * 1.0)
+//
+// Massi
 func CalcolaPunteggi(mete []types.ResponseMeta) []MetaConPunteggio {
 	var risultati []MetaConPunteggio
 	for _, m := range mete {
@@ -43,6 +45,7 @@ func CalcolaPunteggi(mete []types.ResponseMeta) []MetaConPunteggio {
 	return risultati
 }
 
+// Massi
 func OrderResults(results []types.SearchResponse, orderBy string) []types.SearchResponse {
 
 	switch orderBy {
@@ -66,6 +69,7 @@ func OrderResults(results []types.SearchResponse, orderBy string) []types.Search
 	return results
 }
 
+// Dario
 func StartPeriodicRatingUpdate(db *sql.DB, interval time.Duration) {
 	ticker := time.NewTicker(interval)
 	go func() {
@@ -85,7 +89,7 @@ func StartPeriodicRatingUpdate(db *sql.DB, interval time.Duration) {
 }
 
 // ----------------------------------Funzioni di notifica----------------------------
-
+// Dario
 var emailDialer *gomail.Dialer
 
 func InitializeEmail() {
@@ -102,6 +106,7 @@ func SendEmail(to, subject, body string) error {
 	return emailDialer.DialAndSend(m)
 }
 
+// Dario
 func notifyInterests(db *sql.DB) {
 	interests, err := database.GetInterestsToNotify(db)
 	if err != nil {
@@ -126,6 +131,7 @@ func notifyInterests(db *sql.DB) {
 	}
 }
 
+// Dario
 func notifyUpcomingCheckIn(db *sql.DB) {
 	upcomingBookings, err := database.GetUpcomingCheckInBookings(db)
 	if err != nil {
@@ -144,6 +150,7 @@ func notifyUpcomingCheckIn(db *sql.DB) {
 	}
 }
 
+// Dario
 func StartNotificationScheduler(db *sql.DB) {
 	checkInTicker := time.NewTicker(24 * time.Hour)   // Notifica Check-in ogni 24 ore
 	interestsTicker := time.NewTicker(12 * time.Hour) // Notifica interessi ogni 24 ore

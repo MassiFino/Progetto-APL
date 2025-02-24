@@ -226,6 +226,7 @@ namespace Interfaccia_C_.ViewModel
 
         public ICommand SetInterestCommand { get; }
 
+        //Dario
         public HotelPageViewModel(Hotel hotel)
         {
             PrenotaStanzaCommand = new Command<Room>(async (roomSelezionata) =>
@@ -501,7 +502,7 @@ namespace Interfaccia_C_.ViewModel
             }
         }
 
-
+        //Massi
         private void ValidateSearchDates()
         {
 
@@ -523,7 +524,7 @@ namespace Interfaccia_C_.ViewModel
                 SearchErrorMessage = string.Empty;
             }
         }
-
+        //Massi
         private async Task OnSetInterest(Room selectedRoom)
         {
             var token = await SecureStorage.GetAsync("jwt_token");
